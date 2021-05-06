@@ -8,37 +8,38 @@
 import SpriteKit
 
 struct Vertex {
-    let id: UUID
+    let id = UUID()
     let name: String
-    let imageURL: URL?
-    var degree: UInt    // the number of edges falling on it.
+    var degree: UInt  // the number of edges falling on it.
     let node: SKShapeNode
 }
 
 extension Vertex {
     
-    init(name: String, imageURL: URL?, point: CGPoint) {
-        id     = UUID()
-        degree = 0
-        
-        self.imageURL = imageURL
-        self.name     = name
+    init(name: String, degree: UInt, image: UIImage?, point: CGPoint) {
+        self.name   = name
+        self.degree = degree
         
         // Node
         var circleNode: SKShapeNode {
-            let shapeNode         = SKShapeNode(circleOfRadius: 35)
+           // Circle
+            let shapeNode         = SKShapeNode(circleOfRadius: 35 + CGFloat(degree))
             shapeNode.position    = point
-            shapeNode.lineWidth   = 2.0
+            shapeNode.lineWidth   = 2
             shapeNode.strokeColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-            shapeNode.fillColor   = [#colorLiteral(red: 0.8941176471, green: 0.1882352941, blue: 0.1764705882, alpha: 1), #colorLiteral(red: 1, green: 0.5019607843, blue: 0.1411764706, alpha: 1), #colorLiteral(red: 1, green: 0.7294117647, blue: 0.4823529412, alpha: 1), #colorLiteral(red: 0.5333333333, green: 0.8666666667, blue: 0.5568627451, alpha: 1), #colorLiteral(red: 0.06274509804, green: 0.6431372549, blue: 0.2823529412, alpha: 1), #colorLiteral(red: 0.6549019608, green: 0.7764705882, blue: 0.9019607843, alpha: 1), #colorLiteral(red: 0, green: 0.462745098, blue: 0.6901960784, alpha: 1), #colorLiteral(red: 0.5960784314, green: 0.4078431373, blue: 0.7254901961, alpha: 1), #colorLiteral(red: 0.7764705882, green: 0.6862745098, blue: 0.8274509804, alpha: 1)].randomElement() ?? #colorLiteral(red: 0.8941176471, green: 0.1882352941, blue: 0.1764705882, alpha: 1)
             
-            shapeNode.physicsBody                  = SKPhysicsBody(circleOfRadius: 37)
+            shapeNode.physicsBody                  = SKPhysicsBody(circleOfRadius: 55 + CGFloat(degree))
             shapeNode.physicsBody?.isDynamic       = true
             shapeNode.physicsBody?.restitution     = 0
             shapeNode.physicsBody?.friction        = 0.3
             shapeNode.physicsBody?.linearDamping   = 0.5
             shapeNode.physicsBody?.allowsRotation  = false
             shapeNode.physicsBody?.categoryBitMask = GraphCategory.vertex.rawValue
+            
+            // Image
+            if let image = image {
+                shapeNode.addChild(SKSpriteNode(texture: SKTexture(image: image)))
+            }
             
             // Label
             let labelNode       = SKLabelNode()
@@ -49,14 +50,55 @@ extension Vertex {
             labelNode.horizontalAlignmentMode = .center
             shapeNode.addChild(labelNode)
             
-            // Image
-            if let url = imageURL {
-                log(.info, url)
-            }
-            
             return shapeNode
         }
         
         node = circleNode
+    }
+}
+
+final class Vertex2: SKShapeNode {
+    
+    // MARK: - Value
+    // MARK: Public
+    var degree: UInt = 0
+    
+    
+    // MARK: - Initialzer
+    init(image: UIImage? = nil, position: CGPoint = .zero) {
+        super.init()
+        
+        self.position = position
+        lineWidth = 2
+        strokeColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        
+        // PhysicsBody
+        physicsBody                  = SKPhysicsBody(circleOfRadius: 55 + CGFloat(degree))
+        physicsBody?.isDynamic       = true
+        physicsBody?.restitution     = 0
+        physicsBody?.friction        = 0.3
+        physicsBody?.linearDamping   = 0.5
+        physicsBody?.allowsRotation  = false
+        physicsBody?.categoryBitMask = GraphCategory.vertex.rawValue
+        
+        // Image
+        if let image = image {
+            addChild(SKSpriteNode(texture: SKTexture(image: image)))
+        }
+        
+        // Label
+        if let name = name, name != "" {
+            let labelNode       = SKLabelNode()
+            labelNode.text      = name
+            labelNode.fontName  = UIFont.systemFont(ofSize: 28, weight: .bold).fontName
+            labelNode.fontColor = .black
+            labelNode.verticalAlignmentMode   = .center
+            labelNode.horizontalAlignmentMode = .center
+            addChild(labelNode)
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

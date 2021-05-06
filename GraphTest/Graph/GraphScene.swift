@@ -14,14 +14,13 @@ final class GraphScene: SKScene {
     var isConnecting = false
     
     // MARK: Private
-    private var order: UInt = 0
     private let data = GraphData()
     private weak var selectedVertex: SKNode? = nil
     
     
     // MARK: - View Life Cycle
     override func didMove(to view: SKView) {
-       setWorld()
+        setWorld()
     }
     
     
@@ -42,8 +41,71 @@ final class GraphScene: SKScene {
         addChild(gravityField)
     }
     
+    private func add(position: CGPoint) {
+        var profileImage: UIImage {
+            [#imageLiteral(resourceName: "memoji1"),#imageLiteral(resourceName: "memoji2"),#imageLiteral(resourceName: "memoji3"),#imageLiteral(resourceName: "memoji4"),#imageLiteral(resourceName: "memoji5"),#imageLiteral(resourceName: "memoji6"),#imageLiteral(resourceName: "memoji7"),#imageLiteral(resourceName: "memoji8"),#imageLiteral(resourceName: "memoji9"),#imageLiteral(resourceName: "memoji10"),#imageLiteral(resourceName: "memoji11"),#imageLiteral(resourceName: "memoji12"),#imageLiteral(resourceName: "memoji13"),#imageLiteral(resourceName: "memoji14"),#imageLiteral(resourceName: "memoji15"),#imageLiteral(resourceName: "memoji16"),#imageLiteral(resourceName: "memoji17"),#imageLiteral(resourceName: "memoji18"),#imageLiteral(resourceName: "memoji19"),#imageLiteral(resourceName: "memoji20"),#imageLiteral(resourceName: "memoji21"),#imageLiteral(resourceName: "memoji22"),#imageLiteral(resourceName: "memoji23"),#imageLiteral(resourceName: "memoji24"),#imageLiteral(resourceName: "memoji25"),#imageLiteral(resourceName: "memoji26")].randomElement() ?? #imageLiteral(resourceName: "memoji1")
+        }
+        
+        var name: String {
+            ["Oliver", "Jake", "Noah", "James", "Jack", "Connor", "Liam", "John", "Harry", "Callum",
+             "Mason", "Robert", "Jacob", "Jacob", "Jacob", "Michael", "Charlie", "Kyle", "William", "William",
+             "Amelia", "Margaret", "Emma", "Mary", "Olivia", "Samantha", "Olivia", "Patricia", "Isla", "Bethany",
+             "Sophia", "Jennifer", "Emily", "Elizabeth", "Isabella", "Elizabeth", "Poppy", "Joanne", "Ava", "Linda"].randomElement() ?? "Oliver"
+        }
+        
+        let degree = 1
     
-    // MARK: - Touch
+        var circleNode: SKShapeNode {
+           // Circle
+            let shapeNode         = SKShapeNode(circleOfRadius: 55 + CGFloat(degree))
+            shapeNode.name        = name
+            shapeNode.position    = position
+            shapeNode.lineWidth   = 2
+            shapeNode.strokeColor = #colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)
+            
+            shapeNode.physicsBody                  = SKPhysicsBody(circleOfRadius: 65 + CGFloat(degree))
+            shapeNode.physicsBody?.isDynamic       = true
+            shapeNode.physicsBody?.restitution     = 0
+            shapeNode.physicsBody?.friction        = 0.3
+            shapeNode.physicsBody?.linearDamping   = 0.5
+            shapeNode.physicsBody?.allowsRotation  = false
+            shapeNode.physicsBody?.categoryBitMask = GraphCategory.vertex.rawValue
+            
+            // Image
+            let imageNode = SKSpriteNode(texture: SKTexture(image: profileImage))
+            imageNode.size     = CGSize(width: 98, height: 98)
+            imageNode.position = CGPoint(x: 0, y: 10)
+            shapeNode.addChild(imageNode)
+            
+            // Label
+            let labelNode       = SKLabelNode()
+            labelNode.text      = shapeNode.name
+            labelNode.position  = CGPoint(x: 0, y: -37)
+            labelNode.fontName  = "Avenir-Black"
+            labelNode.fontSize  = 12
+            labelNode.fontColor = .white
+            labelNode.verticalAlignmentMode   = .center
+            labelNode.horizontalAlignmentMode = .center
+            shapeNode.addChild(labelNode)
+            
+            return shapeNode
+        }
+        
+        addChild(circleNode)
+    }
+    
+    private func hold(node: SKNode?) {
+        guard let node = node as? SKShapeNode else { return }
+        
+        switch GraphCategory(rawValue: node.physicsBody?.categoryBitMask ?? 0) ?? .none {
+        case .none:     break
+        case .vertex:   selectedVertex = node
+        case .edge:     break
+        }
+    }
+    
+    
+    // MARK: - Event
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
@@ -54,22 +116,10 @@ final class GraphScene: SKScene {
             
         case false:
             switch atPoint(location) {
-            case let node as SKShapeNode:
-                switch GraphCategory(rawValue: node.physicsBody?.categoryBitMask ?? 0) ?? .none {
-                case .none:     break
-                case .vertex:   selectedVertex = node
-                case .edge:     break
-                }
-                
-            case let node as SKLabelNode:
-                selectedVertex = node.parent
-            
-            default:
-                let vertex = Vertex(name: "\(order)", imageURL: nil, point: location)
-                order += 1
-                
-                data.verticies.append(vertex)
-                addChild(vertex.node)
+            case let node as SKShapeNode:                                       hold(node: node)
+            case let node as SKSpriteNode where node.parent is SKShapeNode:     hold(node: node.parent)
+            case let node as SKLabelNode where node.parent is SKShapeNode:      hold(node: node.parent)
+            default:                                                            add(position: location)
             }
         }
     }

@@ -23,6 +23,7 @@
 		B7E7921026412F600043FB54 /* FramePreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7920F26412F600043FB54 /* FramePreferenceKey.swift */; };
 		B7E79214264134F80043FB54 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E79212264134F80043FB54 /* ViewExtension.swift */; };
 		B7E7921726413BB50043FB54 /* GraphCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7921626413BB50043FB54 /* GraphCategory.swift */; };
+		B7F8D3F526438722002B3BED /* ImageDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F8D3F426438722002B3BED /* ImageDataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		B7E7920F26412F600043FB54 /* FramePreferenceKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FramePreferenceKey.swift; sourceTree = "<group>"; };
 		B7E79212264134F80043FB54 /* ViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		B7E7921626413BB50043FB54 /* GraphCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphCategory.swift; sourceTree = "<group>"; };
+		B7F8D3F426438722002B3BED /* ImageDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				B7E7920326410B930043FB54 /* Logger */,
+				B7F8D3F326438722002B3BED /* Image */,
 				B7E7920E26412F600043FB54 /* PreferenceKey */,
 				B7E79211264134F80043FB54 /* Extension */,
 			);
@@ -167,6 +170,14 @@
 				B7E79212264134F80043FB54 /* ViewExtension.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		B7F8D3F326438722002B3BED /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				B7F8D3F426438722002B3BED /* ImageDataManager.swift */,
+			);
+			path = Image;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,6 +250,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B73A223D2640E0AE006CD531 /* ContentView.swift in Sources */,
+				B7F8D3F526438722002B3BED /* ImageDataManager.swift in Sources */,
 				B73A223B2640E0AE006CD531 /* ForceDirectedGraphApp.swift in Sources */,
 				B7E7921026412F600043FB54 /* FramePreferenceKey.swift in Sources */,
 				B73A225A264104D2006CD531 /* Edge.swift in Sources */,
