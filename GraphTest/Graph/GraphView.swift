@@ -41,38 +41,30 @@ struct GraphView: View {
             graphScene.data.isConnecting = isConnecting
                 
         }) {
-            switch isConnecting {
-            case true:
-                Image(systemName: "link")
-                    .resizable()
-                    .rotation3DEffect(Angle(degrees: 180), axis: (x: 1, y: 0, z: 0))
-                    .foregroundColor(.white)
-                    .frame(width: 36, height: 36)
-                    .padding(25)
-                    .background(Color(#colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)))
-                    .cornerRadius(66)
+            ZStack {
+                // Background
+                Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1))
                 
-            case false:
-                Image(systemName: "cursorarrow")
-                    .scaleEffect(2.2)
-                    .rotationEffect(Angle(degrees: -15))
-                    .offset(x: 3, y: -2)
-                    .foregroundColor(.white)
-                    .frame(width: 36, height: 36)
-                    .padding(25)
-                    .background(Color(#colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)))
-                    .cornerRadius(66)
+                // Image
+                switch isConnecting {
+                case true:
+                    Image(systemName: "link")
+                        .scaleEffect(1.5)
+                        .rotation3DEffect(Angle(degrees: 180), axis: (x: 1, y: 0, z: 0))
+                        .foregroundColor(.white)
+                    
+                case false:
+                    Image(systemName: "hand.tap.fill")
+                        .rotationEffect(Angle(degrees: -15))
+                        .scaleEffect(1.5)
+                        .foregroundColor(.white)
+                }
             }
+            .frame(width: 66, height: 66)
+            .cornerRadius(33)
         }
         .buttonStyle(style1)
     }
-    
-    // MARK: - Function
-    // MARK: Private
-    private func setScene(size: CGSize) {
-        
-    }
-    
 }
 
 #if DEBUG

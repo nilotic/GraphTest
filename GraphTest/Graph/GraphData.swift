@@ -68,7 +68,7 @@ final class GraphData {
         shapeNode.lineWidth   = 2
         shapeNode.strokeColor = #colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)
         
-        shapeNode.physicsBody                  = SKPhysicsBody(circleOfRadius: 65 + CGFloat(degree))
+        shapeNode.physicsBody                  = SKPhysicsBody(circleOfRadius: 75 + CGFloat(degree))
         shapeNode.physicsBody?.isDynamic       = true
         shapeNode.physicsBody?.restitution     = 0
         shapeNode.physicsBody?.friction        = 0.3
@@ -147,7 +147,7 @@ final class GraphData {
         
         // joint
         let joint = SKPhysicsJointSpring.joint(withBodyA: sourceBody, bodyB: targetBody, anchorA: source.position, anchorB: target.position)
-        joint.damping   = 0.1
+        joint.damping   = 0.3
         joint.frequency = 0.8
         
         joints.append(joint)
@@ -160,5 +160,4 @@ final class GraphData {
         
         return joint
     }
-    
 }
