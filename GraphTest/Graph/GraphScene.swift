@@ -28,11 +28,17 @@ final class GraphScene: SKScene {
     // MARK: Private
     private func setWorld() {
         scene?.backgroundColor = .clear
+        
+        #if DEBUG
+        // scene?.view?.showsFields = true
+        // scene?.view?.showsFPS   = true
+        #endif
+        
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         
         // Gravity
         physicsWorld.gravity = .zero
-        addChild(data.gravityField)
+        addChild(data.gravityField)        
         
         // Links
         addChild(data.links)

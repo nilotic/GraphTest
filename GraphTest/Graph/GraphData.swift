@@ -38,13 +38,12 @@ final class GraphData {
     }()
     
     var gravityField: SKFieldNode {
-        let gravityField = SKFieldNode.radialGravityField()
-        gravityField.position      = .zero
-        gravityField.strength      = 1
-        gravityField.falloff       = 0
-        gravityField.minimumRadius = 0.005
+        let field = SKFieldNode.radialGravityField()
+        field.strength      = 1
+        field.falloff       = 0
+        field.minimumRadius = 0.005
         
-        return gravityField
+        return field
     }
     
     var profileImage: UIImage {
