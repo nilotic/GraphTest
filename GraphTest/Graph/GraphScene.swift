@@ -15,7 +15,19 @@ final class GraphScene: SKScene {
     
     // MARK: Private
     private let data = GraphData()
-    private weak var selectedVertex: SKNode? = nil
+    
+    private weak var sourceNode: SKNode? = nil
+    private weak var targetNode: SKNode? = nil
+    
+    private lazy var line: SKShapeNode = {
+        let node = SKShapeNode()
+        node.strokeColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        node.lineWidth   = 3.5
+        node.isHidden    = true
+        
+        addChild(node)
+        return node
+    }()
     
     
     // MARK: - View Life Cycle
@@ -58,6 +70,7 @@ final class GraphScene: SKScene {
         var circleNode: SKShapeNode {
            // Circle
             let shapeNode         = SKShapeNode(circleOfRadius: 55 + CGFloat(degree))
+            shapeNode.fillColor   = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
             shapeNode.name        = name
             shapeNode.position    = position
             shapeNode.lineWidth   = 2
@@ -99,9 +112,34 @@ final class GraphScene: SKScene {
         
         switch GraphCategory(rawValue: node.physicsBody?.categoryBitMask ?? 0) ?? .none {
         case .none:     break
-        case .vertex:   selectedVertex = node
+        case .vertex:   sourceNode = node
         case .edge:     break
         }
+    }
+    
+    private func connect(node: SKNode?) {
+        var targetNode: SKShapeNode? {
+            switch node {
+            case let node as SKShapeNode:   return node
+            case let node as SKSpriteNode:  return node.parent as? SKShapeNode
+            case let node as SKLabelNode:   return node.parent as? SKShapeNode
+            default:                        return nil
+            }
+        }
+        
+        guard let sourceNode = sourceNode, let targetNode = targetNode, GraphCategory(rawValue: targetNode.physicsBody?.categoryBitMask ?? 0) == .vertex else { return }
+        let path = CGMutablePath()
+        path.move(to: sourceNode.position)
+        path.addLine(to: targetNode.position)
+        
+        
+        let lineNode = SKShapeNode()
+        lineNode.strokeColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        lineNode.lineWidth   = 3.5
+        lineNode.path        = path
+        lineNode.zPosition   = -1
+        
+        addChild(lineNode)
     }
     
     
@@ -109,27 +147,45 @@ final class GraphScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
+        line.isHidden = !isConnecting
         
-        switch isConnecting {
-        case true:
-            break
-            
-        case false:
-            switch atPoint(location) {
-            case let node as SKShapeNode:                                       hold(node: node)
-            case let node as SKSpriteNode where node.parent is SKShapeNode:     hold(node: node.parent)
-            case let node as SKLabelNode where node.parent is SKShapeNode:      hold(node: node.parent)
-            default:                                                            add(position: location)
-            }
+        switch atPoint(location) {
+        case let node as SKShapeNode:                                       hold(node: node)
+        case let node as SKSpriteNode where node.parent is SKShapeNode:     hold(node: node.parent)
+        case let node as SKLabelNode where node.parent is SKShapeNode:      hold(node: node.parent)
+        
+        default:
+            guard !isConnecting else { return }
+            add(position: location)
         }
     }
     
     override public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let node = selectedVertex, let location = touches.first?.location(in: self) else { return }
-        node.run(SKAction.move(to: location, duration: 0.1))
+        guard let node = sourceNode, let location = touches.first?.location(in: self) else { return }
+        
+        switch isConnecting {
+        case true:
+            let path = CGMutablePath()
+            path.move(to: node.position)
+            path.addLine(to: location)
+            
+            line.path = path
+            
+        case false:
+            node.run(SKAction.move(to: location, duration: 0.1))
+        }
     }
     
     override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        selectedVertex = nil
+        switch isConnecting {
+        case true:
+            line.isHidden = true
+            
+            guard let location = touches.first?.location(in: self) else { return }
+            connect(node: atPoint(location))
+            
+        case false:
+            sourceNode = nil
+        }
     }
 }
