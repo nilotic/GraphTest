@@ -13,17 +13,15 @@
 		B73A22422640E0AF006CD531 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B73A22412640E0AF006CD531 /* Preview Assets.xcassets */; };
 		B73A22502640E6EA006CD531 /* GraphScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73A224F2640E6EA006CD531 /* GraphScene.swift */; };
 		B73A225526410282006CD531 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73A225426410282006CD531 /* GraphView.swift */; };
-		B73A22582641045F006CD531 /* Vertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73A22572641045F006CD531 /* Vertex.swift */; };
-		B73A225A264104D2006CD531 /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73A2259264104D2006CD531 /* Edge.swift */; };
-		B73A225C264107C2006CD531 /* GraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73A225B264107C2006CD531 /* GraphData.swift */; };
 		B7E7920626410B930043FB54 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7920426410B930043FB54 /* Logger.swift */; };
 		B7E7920726410B930043FB54 /* LogType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7920526410B930043FB54 /* LogType.swift */; };
 		B7E7920C26412EB30043FB54 /* ButtonStyle1.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7920A26412EB30043FB54 /* ButtonStyle1.swift */; };
 		B7E7920D26412EB30043FB54 /* ButtonStyle1Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7920B26412EB30043FB54 /* ButtonStyle1Data.swift */; };
 		B7E7921026412F600043FB54 /* FramePreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7920F26412F600043FB54 /* FramePreferenceKey.swift */; };
 		B7E79214264134F80043FB54 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E79212264134F80043FB54 /* ViewExtension.swift */; };
-		B7E7921726413BB50043FB54 /* GraphCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7921626413BB50043FB54 /* GraphCategory.swift */; };
 		B7F8D3F526438722002B3BED /* ImageDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F8D3F426438722002B3BED /* ImageDataManager.swift */; };
+		B7F8D3F82643C3E7002B3BED /* GraphCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F8D3F72643C3E7002B3BED /* GraphCategory.swift */; };
+		B7F8D3FB2643C414002B3BED /* GraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F8D3FA2643C414002B3BED /* GraphData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,17 +33,15 @@
 		B73A22432640E0AF006CD531 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B73A224F2640E6EA006CD531 /* GraphScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphScene.swift; sourceTree = "<group>"; };
 		B73A225426410282006CD531 /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
-		B73A22572641045F006CD531 /* Vertex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vertex.swift; sourceTree = "<group>"; };
-		B73A2259264104D2006CD531 /* Edge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Edge.swift; sourceTree = "<group>"; };
-		B73A225B264107C2006CD531 /* GraphData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphData.swift; sourceTree = "<group>"; };
 		B7E7920426410B930043FB54 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		B7E7920526410B930043FB54 /* LogType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogType.swift; sourceTree = "<group>"; };
 		B7E7920A26412EB30043FB54 /* ButtonStyle1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonStyle1.swift; sourceTree = "<group>"; };
 		B7E7920B26412EB30043FB54 /* ButtonStyle1Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonStyle1Data.swift; sourceTree = "<group>"; };
 		B7E7920F26412F600043FB54 /* FramePreferenceKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FramePreferenceKey.swift; sourceTree = "<group>"; };
 		B7E79212264134F80043FB54 /* ViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
-		B7E7921626413BB50043FB54 /* GraphCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphCategory.swift; sourceTree = "<group>"; };
 		B7F8D3F426438722002B3BED /* ImageDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDataManager.swift; sourceTree = "<group>"; };
+		B7F8D3F72643C3E7002B3BED /* GraphCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphCategory.swift; sourceTree = "<group>"; };
+		B7F8D3FA2643C414002B3BED /* GraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,20 +99,10 @@
 			children = (
 				B73A225426410282006CD531 /* GraphView.swift */,
 				B73A224F2640E6EA006CD531 /* GraphScene.swift */,
-				B73A225B264107C2006CD531 /* GraphData.swift */,
-				B73A225626410445006CD531 /* Model */,
+				B7F8D3FA2643C414002B3BED /* GraphData.swift */,
+				B7F8D3F92643C3EA002B3BED /* Model */,
 			);
 			path = Graph;
-			sourceTree = "<group>";
-		};
-		B73A225626410445006CD531 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				B73A22572641045F006CD531 /* Vertex.swift */,
-				B73A2259264104D2006CD531 /* Edge.swift */,
-				B7E7921626413BB50043FB54 /* GraphCategory.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		B7E7920226410B850043FB54 /* Util */ = {
@@ -178,6 +164,14 @@
 				B7F8D3F426438722002B3BED /* ImageDataManager.swift */,
 			);
 			path = Image;
+			sourceTree = "<group>";
+		};
+		B7F8D3F92643C3EA002B3BED /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B7F8D3F72643C3E7002B3BED /* GraphCategory.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -253,12 +247,10 @@
 				B7F8D3F526438722002B3BED /* ImageDataManager.swift in Sources */,
 				B73A223B2640E0AE006CD531 /* ForceDirectedGraphApp.swift in Sources */,
 				B7E7921026412F600043FB54 /* FramePreferenceKey.swift in Sources */,
-				B73A225A264104D2006CD531 /* Edge.swift in Sources */,
+				B7F8D3FB2643C414002B3BED /* GraphData.swift in Sources */,
 				B7E7920D26412EB30043FB54 /* ButtonStyle1Data.swift in Sources */,
-				B73A225C264107C2006CD531 /* GraphData.swift in Sources */,
+				B7F8D3F82643C3E7002B3BED /* GraphCategory.swift in Sources */,
 				B73A22502640E6EA006CD531 /* GraphScene.swift in Sources */,
-				B73A22582641045F006CD531 /* Vertex.swift in Sources */,
-				B7E7921726413BB50043FB54 /* GraphCategory.swift in Sources */,
 				B73A225526410282006CD531 /* GraphView.swift in Sources */,
 				B7E7920C26412EB30043FB54 /* ButtonStyle1.swift in Sources */,
 				B7E7920626410B930043FB54 /* Logger.swift in Sources */,

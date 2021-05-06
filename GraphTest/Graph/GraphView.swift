@@ -38,7 +38,7 @@ struct GraphView: View {
     private var editButton: some View {
         Button(action: {
             isConnecting = !isConnecting
-            graphScene.isConnecting = isConnecting
+            graphScene.data.isConnecting = isConnecting
                 
         }) {
             switch isConnecting {
