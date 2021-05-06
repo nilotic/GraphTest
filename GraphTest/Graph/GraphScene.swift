@@ -16,22 +16,30 @@ final class GraphScene: SKScene {
     // MARK: Private
     private var order: UInt = 0
     private let data = GraphData()
-    private weak var selectedNode: SKNode? = nil
+    private weak var selectedVertex: SKNode? = nil
     
     
     // MARK: - View Life Cycle
     override func didMove(to view: SKView) {
+       setWorld()
+    }
+    
+    
+    // MARK: - Function
+    // MARK: Private
+    private func setWorld() {
         scene?.backgroundColor = .clear
         physicsWorld.gravity = .zero
-        
-        let gravityField = SKFieldNode.radialGravityField()
-        gravityField.position        = CGPoint(x: size.width / 2, y: size.height / 2)
-        gravityField.strength        = 2
-        gravityField.minimumRadius   = Float(size.height / 2)
-        gravityField.categoryBitMask = 2
-        addChild(gravityField)
-        
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
+        
+        // Gravity
+        let gravityField = SKFieldNode.radialGravityField()
+        gravityField.position      = .zero
+        gravityField.strength      = 1
+        gravityField.falloff       = 0
+        gravityField.minimumRadius = 0.005
+        
+        addChild(gravityField)
     }
     
     
@@ -48,16 +56,13 @@ final class GraphScene: SKScene {
             switch atPoint(location) {
             case let node as SKShapeNode:
                 switch GraphCategory(rawValue: node.physicsBody?.categoryBitMask ?? 0) ?? .none {
-                case .none:
-                    break
-                    
-                case .vertex:
-                    node.physicsBody?.fieldBitMask = 0
-                    selectedNode = node
-                    
-                case .edge:
-                    break
+                case .none:     break
+                case .vertex:   selectedVertex = node
+                case .edge:     break
                 }
+                
+            case let node as SKLabelNode:
+                selectedVertex = node.parent
             
             default:
                 let vertex = Vertex(name: "\(order)", imageURL: nil, point: location)
@@ -70,12 +75,11 @@ final class GraphScene: SKScene {
     }
     
     override public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let node = selectedNode, let touch = touches.first else { return }
-        node.position = touch.location(in: self)
+        guard let node = selectedVertex, let location = touches.first?.location(in: self) else { return }
+        node.run(SKAction.move(to: location, duration: 0.1))
     }
     
     override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        selectedNode?.physicsBody?.fieldBitMask = 2
-        selectedNode = nil
+        selectedVertex = nil
     }
 }
