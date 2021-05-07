@@ -1,8 +1,8 @@
 //
 //  GraphTestApp.swift
-//  GraphTest
 //
 //  Created by Den Jo on 2021/05/04.
+//  Copyright © nilotic. All rights reserved.
 //
 
 import SwiftUI
@@ -11,7 +11,7 @@ import SwiftUI
 struct GraphTestApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TabbarView()
         }
     }
 }

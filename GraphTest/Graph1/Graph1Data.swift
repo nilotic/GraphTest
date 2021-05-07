@@ -1,13 +1,13 @@
 //
-//  GraphData.swift
-//  GraphTest
+//  Graph1Data.swift
 //
 //  Created by Den Jo on 2021/05/04.
+//  Copyright © nilotic. All rights reserved.
 //
 
 import SpriteKit
 
-final class GraphData {
+final class Graph1Data {
     
     // MARK: - Value
     // MARK: Public
@@ -52,7 +52,7 @@ final class GraphData {
     
     var name: String {
         ["Oliver", "Jake", "Noah", "James", "Jack", "Connor", "Liam", "John", "Harry", "Callum",
-         "Mason", "Robert", "Jacob", "Jacob", "Jacob", "Michael", "Charlie", "Kyle", "William", "William",
+         "Mason", "Robert", "Jacob", "Michael", "Charlie", "Kyle", "William",
          "Amelia", "Margaret", "Emma", "Mary", "Olivia", "Samantha", "Olivia", "Patricia", "Isla", "Bethany",
          "Sophia", "Jennifer", "Emily", "Elizabeth", "Isabella", "Elizabeth", "Poppy", "Joanne", "Ava", "Linda"].randomElement() ?? "Oliver"
     }
@@ -60,14 +60,14 @@ final class GraphData {
     var circleNode: SKShapeNode {
         let degree = 0
         
-       // Circle
+        // Circle
         let shapeNode         = SKShapeNode(circleOfRadius: 55 + CGFloat(degree))
         shapeNode.fillColor   = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         shapeNode.name        = name
         shapeNode.lineWidth   = 2
         shapeNode.strokeColor = #colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)
         
-        shapeNode.physicsBody                  = SKPhysicsBody(circleOfRadius: 75 + CGFloat(degree))
+        shapeNode.physicsBody                  = SKPhysicsBody(circleOfRadius: 65 + CGFloat(degree))
         shapeNode.physicsBody?.isDynamic       = true
         shapeNode.physicsBody?.restitution     = 0
         shapeNode.physicsBody?.friction        = 0.3

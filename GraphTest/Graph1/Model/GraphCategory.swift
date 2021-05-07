@@ -1,8 +1,8 @@
 //
 //  GraphCategory.swift
-//  GraphTest
 //
 //  Created by Den Jo on 2021/05/04.
+//  Copyright © nilotic. All rights reserved.
 //
 
 import Foundation

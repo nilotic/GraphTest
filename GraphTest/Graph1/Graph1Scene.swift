@@ -1,17 +1,17 @@
 //
-//  GraphScene.swift
-//  GraphTest
+//  Graph1Scene.swift
 //
 //  Created by Den Jo on 2021/05/04.
+//  Copyright © nilotic. All rights reserved.
 //
 
 import SpriteKit
 
-final class GraphScene: SKScene {
+final class Graph1Scene: SKScene {
     
     // MARK: - Value
     // MARK: Public
-    let data = GraphData()
+    let data = Graph1Data()
     
    
     // MARK: - View Life Cycle
@@ -27,18 +27,15 @@ final class GraphScene: SKScene {
     // MARK: - Function
     // MARK: Private
     private func setWorld() {
+        // Scene
         scene?.backgroundColor = .clear
-        
-        #if DEBUG
-        // scene?.view?.showsFields = true
-        // scene?.view?.showsFPS   = true
-        #endif
-        
-        physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
+        scene?.view?.showsFPS  = true
+        // scene?.view?.showsFields  = true
+        // scene?.view?.showsPhysics = true
         
         // Gravity
         physicsWorld.gravity = .zero
-        addChild(data.gravityField)        
+        addChild(data.gravityField)
         
         // Links
         addChild(data.links)

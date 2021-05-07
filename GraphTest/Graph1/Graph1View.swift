@@ -1,18 +1,18 @@
 //
-//  GraphView.swift
-//  GraphTest
+//  Graph1View.swift
 //
 //  Created by Den Jo on 2021/05/04.
+//  Copyright © nilotic. All rights reserved.
 //
 
 import SwiftUI
 import SpriteKit
 
-struct GraphView: View {
+struct Graph1View: View {
     
     // MARK: - Value
     // MARK: Private
-    private let graphScene = GraphScene()
+    private let graphScene = Graph1Scene()
     private let style1 = ButtonStyle1()
     
     @State private var isConnecting = false
@@ -31,7 +31,6 @@ struct GraphView: View {
             editButton
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 30))
         }
-        .edgesIgnoringSafeArea([.horizontal, .bottom])
     }
     
     // MARK: Private
@@ -68,10 +67,10 @@ struct GraphView: View {
 }
 
 #if DEBUG
-struct GraphView_Previews: PreviewProvider {
+struct GraphView1_Previews: PreviewProvider {
     
     static var previews: some View {
-        let view = GraphView()
+        let view = Graph1View()
         
         Group {
             view
