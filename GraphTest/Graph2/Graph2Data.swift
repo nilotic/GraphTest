@@ -40,7 +40,7 @@ final class Graph2Data {
     
     var gravityField: SKFieldNode {
         let field = SKFieldNode.radialGravityField()
-        field.strength      = 1
+        field.strength      = 1.2
         field.falloff       = 0
         field.minimumRadius = 0.005
         
@@ -147,9 +147,9 @@ final class Graph2Data {
         shapeNode.strokeColor = #colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)
         shapeNode.userData    = ["type": NodeType.vertex]
         
-        shapeNode.physicsBody                  = SKPhysicsBody(circleOfRadius: 75)
+        shapeNode.physicsBody                  = SKPhysicsBody(circleOfRadius: 55)
         shapeNode.physicsBody?.isDynamic       = true
-        shapeNode.physicsBody?.restitution     = 0
+        shapeNode.physicsBody?.restitution     = 0.3
         shapeNode.physicsBody?.friction        = 0.3
         shapeNode.physicsBody?.linearDamping   = 0.5
         shapeNode.physicsBody?.allowsRotation  = false
@@ -219,8 +219,6 @@ final class Graph2Data {
             log(.error, error.localizedDescription)
         }
     }
-    
-    
     
     func update() {
         guard !joints.isEmpty else { return }

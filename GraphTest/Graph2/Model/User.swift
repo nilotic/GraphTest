@@ -7,9 +7,10 @@
 
 import Foundation
 
-struct User: Decodable {
+struct User: Decodable, Vertex {
     let id: String
     let name: String
     let imageName: String
+    let priority: UInt
     let graphs: [Graph]
 }

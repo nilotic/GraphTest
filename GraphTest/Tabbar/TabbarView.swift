@@ -29,6 +29,12 @@ struct TabbarView: View {
                     TabbarItem(type: .graph2, selection: $selection)
                 }
                 .tag(TabbarType.graph2)
+            
+            Graph3View()
+                .tabItem {
+                    TabbarItem(type: .graph3, selection: $selection)
+                }
+                .tag(TabbarType.graph3)
         }
     }
 }
