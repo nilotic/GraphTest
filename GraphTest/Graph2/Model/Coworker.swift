@@ -5,11 +5,25 @@
 //  Copyright © nilotic. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
-struct Coworker: Vertex, Decodable {
+struct Coworker: Decodable, Identifiable, Vertex {
     let id: String
     let name: String
     let imageName: String
     let priority: UInt
+}
+
+extension Coworker: Hashable {
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
+extension Coworker: Equatable {
+    
+    static func ==(lhs: Coworker, rhs: Coworker) -> Bool {
+        lhs.id == rhs.id
+    }
 }

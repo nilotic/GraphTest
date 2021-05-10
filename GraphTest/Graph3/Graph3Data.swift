@@ -11,7 +11,7 @@ final class Graph3Data: ObservableObject {
     
     // MARK: - Value
     // MARK: Public
-    @Published var vertexes = [Vertex]()
+    @Published var vertexes = [Item]()
     @Published var edges    = [GraphEdge]()
     
     
@@ -22,10 +22,10 @@ final class Graph3Data: ObservableObject {
         
         do {
             let data = try JSONDecoder().decode(GraphResponse.self, from: try Data(contentsOf: url))
-            var vertexes = [Vertex]()
+            var vertexes = [Item]()
 
             // User
-            vertexes.append(data.user)
+            vertexes.append(Item(data: data.user))
             
 
             // Graph
@@ -44,6 +44,11 @@ final class Graph3Data: ObservableObject {
                 // Edge
                 
 //                edges.append(joint)
+            }
+            
+            DispatchQueue.main.async {
+                self.vertexes = vertexes
+                
             }
     
         } catch {

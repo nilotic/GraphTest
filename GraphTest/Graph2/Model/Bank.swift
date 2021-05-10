@@ -5,11 +5,25 @@
 //  Copyright © nilotic. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
-struct Bank: Vertex, Decodable {
+struct Bank: Decodable, Identifiable, Vertex {
     let id: String
     let name: String
     let imageName: String
     let priority: UInt
+}
+
+extension Bank: Hashable {
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
+extension Bank: Equatable {
+    
+    static func ==(lhs: Bank, rhs: Bank) -> Bool {
+        lhs.id == rhs.id
+    }
 }

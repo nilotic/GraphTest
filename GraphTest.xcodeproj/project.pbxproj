@@ -12,6 +12,7 @@
 		B73A22422640E0AF006CD531 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B73A22412640E0AF006CD531 /* Preview Assets.xcassets */; };
 		B73A22502640E6EA006CD531 /* Graph1Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73A224F2640E6EA006CD531 /* Graph1Scene.swift */; };
 		B73A225526410282006CD531 /* Graph1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73A225426410282006CD531 /* Graph1View.swift */; };
+		B76B73A226492F0C00CE7B55 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76B73A126492F0C00CE7B55 /* Item.swift */; };
 		B77FE41526450F4000EDB7FE /* TabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE41426450F4000EDB7FE /* TabbarView.swift */; };
 		B77FE41826450F4800EDB7FE /* TabbarType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE41726450F4800EDB7FE /* TabbarType.swift */; };
 		B77FE41B26450F5100EDB7FE /* TabbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE41A26450F5100EDB7FE /* TabbarItem.swift */; };
@@ -39,6 +40,7 @@
 		B7F0F0BB264909D600380E82 /* Graph3View.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F0F0BA264909D600380E82 /* Graph3View.swift */; };
 		B7F0F0BD26490AE100380E82 /* Graph3Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F0F0BC26490AE100380E82 /* Graph3Data.swift */; };
 		B7F0F0C226490E1F00380E82 /* GraphEdge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F0F0C126490E1F00380E82 /* GraphEdge.swift */; };
+		B7F0F0C82649219E00380E82 /* UserVertexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F0F0C72649219E00380E82 /* UserVertexView.swift */; };
 		B7F8D3F526438722002B3BED /* ImageDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F8D3F426438722002B3BED /* ImageDataManager.swift */; };
 		B7F8D3F82643C3E7002B3BED /* GraphCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F8D3F72643C3E7002B3BED /* GraphCategory.swift */; };
 		B7F8D3FB2643C414002B3BED /* Graph1Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F8D3FA2643C414002B3BED /* Graph1Data.swift */; };
@@ -52,6 +54,7 @@
 		B73A22432640E0AF006CD531 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B73A224F2640E6EA006CD531 /* Graph1Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graph1Scene.swift; sourceTree = "<group>"; };
 		B73A225426410282006CD531 /* Graph1View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graph1View.swift; sourceTree = "<group>"; };
+		B76B73A126492F0C00CE7B55 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		B77FE41426450F4000EDB7FE /* TabbarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabbarView.swift; sourceTree = "<group>"; };
 		B77FE41726450F4800EDB7FE /* TabbarType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabbarType.swift; sourceTree = "<group>"; };
 		B77FE41A26450F5100EDB7FE /* TabbarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabbarItem.swift; sourceTree = "<group>"; };
@@ -79,6 +82,7 @@
 		B7F0F0BA264909D600380E82 /* Graph3View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graph3View.swift; sourceTree = "<group>"; };
 		B7F0F0BC26490AE100380E82 /* Graph3Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graph3Data.swift; sourceTree = "<group>"; };
 		B7F0F0C126490E1F00380E82 /* GraphEdge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphEdge.swift; sourceTree = "<group>"; };
+		B7F0F0C72649219E00380E82 /* UserVertexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVertexView.swift; sourceTree = "<group>"; };
 		B7F8D3F426438722002B3BED /* ImageDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDataManager.swift; sourceTree = "<group>"; };
 		B7F8D3F72643C3E7002B3BED /* GraphCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphCategory.swift; sourceTree = "<group>"; };
 		B7F8D3FA2643C414002B3BED /* Graph1Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Graph1Data.swift; sourceTree = "<group>"; };
@@ -147,6 +151,14 @@
 			path = Graph1;
 			sourceTree = "<group>";
 		};
+		B76B73A026492F0C00CE7B55 /* HashableItem */ = {
+			isa = PBXGroup;
+			children = (
+				B76B73A126492F0C00CE7B55 /* Item.swift */,
+			);
+			path = HashableItem;
+			sourceTree = "<group>";
+		};
 		B77FE41326450F2D00EDB7FE /* Tabbar */ = {
 			isa = PBXGroup;
 			children = (
@@ -207,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				B7E7920326410B930043FB54 /* Logger */,
+				B76B73A026492F0C00CE7B55 /* HashableItem */,
 				B7F8D3F326438722002B3BED /* Image */,
 				B7E7920E26412F600043FB54 /* PreferenceKey */,
 				B7E79211264134F80043FB54 /* Extension */,
@@ -261,7 +274,7 @@
 			children = (
 				B7F0F0BA264909D600380E82 /* Graph3View.swift */,
 				B7F0F0BC26490AE100380E82 /* Graph3Data.swift */,
-				B7F0F0C126490E1F00380E82 /* GraphEdge.swift */,
+				B7F0F0C42649202900380E82 /* View */,
 				B7F0F0C32649136800380E82 /* Model */,
 			);
 			path = Graph3;
@@ -270,8 +283,17 @@
 		B7F0F0C32649136800380E82 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				B7F0F0C126490E1F00380E82 /* GraphEdge.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		B7F0F0C42649202900380E82 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B7F0F0C72649219E00380E82 /* UserVertexView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		B7F8D3F326438722002B3BED /* Image */ = {
@@ -362,6 +384,7 @@
 			files = (
 				B77FE42B26452B0200EDB7FE /* Graph.swift in Sources */,
 				B7F8D3F526438722002B3BED /* ImageDataManager.swift in Sources */,
+				B76B73A226492F0C00CE7B55 /* Item.swift in Sources */,
 				B77FE43326452E2C00EDB7FE /* Card.swift in Sources */,
 				B73A223B2640E0AE006CD531 /* GraphTestApp.swift in Sources */,
 				B7E7921026412F600043FB54 /* FramePreferenceKey.swift in Sources */,
@@ -375,6 +398,7 @@
 				B7F8D3F82643C3E7002B3BED /* GraphCategory.swift in Sources */,
 				B73A22502640E6EA006CD531 /* Graph1Scene.swift in Sources */,
 				B77FE43926452E7200EDB7FE /* Coworker.swift in Sources */,
+				B7F0F0C82649219E00380E82 /* UserVertexView.swift in Sources */,
 				B77FE42926452ACA00EDB7FE /* User.swift in Sources */,
 				B7F0F0BB264909D600380E82 /* Graph3View.swift in Sources */,
 				B77FE41526450F4000EDB7FE /* TabbarView.swift in Sources */,

@@ -5,12 +5,36 @@
 //  Copyright © nilotic. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
-struct User: Decodable, Vertex {
+struct User: Decodable, Identifiable, Vertex {
     let id: String
     let name: String
     let imageName: String
     let priority: UInt
     let graphs: [Graph]
 }
+
+extension User: Hashable {
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
+extension User: Equatable {
+    
+    static func ==(lhs: User, rhs: User) -> Bool {
+        lhs.id == rhs.id
+    }
+}
+
+
+#if DEBUG
+extension User {
+    
+    static var placeholder: User {
+        User(id: "0", name: "Oliver", imageName: "memoji1", priority: 0, graphs: [])
+    }
+}
+#endif

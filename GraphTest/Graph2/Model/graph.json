@@ -3,6 +3,7 @@
         "id": "nilotic",
         "name": "Den",
         "imageName": "memoji27",
+        "priority": 0,
         "graphs": [
             {
                 "id": "bank",
