@@ -107,7 +107,7 @@ struct Graph3View: View {
                     .offset(CGSize(width: proxy.size.width / 2, height: proxy.size.height / 2))
                     .trim(from: 0, to: isLineAnimated ? 1 : 0)
                     .stroke(Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), lineWidth: 4)
-                    .animation(isLineAnimated ? Animation.easeOut(duration: 0.38).delay(0.1 + 0.1 * TimeInterval(i)) : nil)
+                    .animation(isLineAnimated ? Animation.easeOut(duration: 0.5).delay(0.1 + 0.1 * TimeInterval(i)) : nil)
                 }
                 .zIndex(-1)
                 .rotationEffect(.degrees(isRotationAnimated ? 360 : 0))
