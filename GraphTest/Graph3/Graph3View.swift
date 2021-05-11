@@ -12,6 +12,7 @@ struct Graph3View: View {
     // MARK: - Value
     // MARK: Private
     @ObservedObject private var data = Graph3Data()
+    @State private var isAnimating = false
     
     
     // MARK: - View
@@ -26,6 +27,7 @@ struct Graph3View: View {
         }
         .onAppear {
             data.request()
+            isAnimating = true
         }
     }
     
@@ -67,16 +69,48 @@ struct Graph3View: View {
     private var graph: some View {
         GeometryReader { proxy in
             ZStack(alignment: .center)  {
+                
                 // Vertex
                 ForEach(data.vertexes) { vertex in
                     switch vertex.data {
-                    case let data as User:
-                        UserVertexView(data: data)
-                    
-                    default:
-                        Text("")
+                    case let data as User:  UserVertexView(data: data)
+                    default:                Text("")
                     }
                 }
+                
+                BankVertexView(data: Bank(id: "", name: "SC", imageName: "sc", priority: 5))
+                    .rotationEffect(.degrees(isAnimating ? -360 : 0))
+                    .offset(x: 0, y: min(proxy.size.width, proxy.size.height) / 10 * 6)
+                    .rotationEffect(.degrees(isAnimating ? 360 : 0))
+                    .animation(Animation.linear(duration: 25).repeatForever(autoreverses: false))
+
+                CardVertexView(data: Card(id: "", name: "VISA", imageName: "visa", priority: 4))
+                    .rotationEffect(.degrees(isAnimating ? -360 : 0))
+                    .offset(x: min(proxy.size.width, proxy.size.height) / 10 * 3, y: 0)
+                    .rotationEffect(.degrees(isAnimating ? 360 : 0))
+                    .animation(Animation.linear(duration: 30).repeatForever(autoreverses: false))
+
+                MobileVertexView(data: Mobile(id: "", name: "at&t", imageName: "at&t", priority: 3))
+                    .rotationEffect(.degrees(isAnimating ? -360 : 0))
+                    .offset(x: min(proxy.size.width, proxy.size.height) / 10 * 4 * cos(.pi / 6 * 8),
+                            y: min(proxy.size.width, proxy.size.height) / 10 * 4 * sin(.pi / 6 * 8))
+                    .rotationEffect(.degrees(isAnimating ? 360 : 0))
+                    .animation(Animation.linear(duration: 30).repeatForever(autoreverses: false))
+                
+                InsuranceVertexView(data: Insurance(id: "0", name: "AIG", imageName: "aig", priority: 5))
+                    .rotationEffect(.degrees(isAnimating ? -360 : 0))
+                    .offset(x: min(proxy.size.width, proxy.size.height) / 10 * 4 * cos(.pi / 6 * 5),
+                            y: min(proxy.size.width, proxy.size.height) / 10 * 4 * sin(.pi / 6 * 5))
+                    .rotationEffect(.degrees(isAnimating ? 360 : 0))
+                    .animation(Animation.linear(duration: 30).repeatForever(autoreverses: false))
+                
+                CoworkerVertexView(data: Coworker(id: "0", name: "Elizabeth", imageName: "memoji11", priority: 2))
+                    .rotationEffect(.degrees(isAnimating ? -360 : 0))
+                    .offset(x: min(proxy.size.width, proxy.size.height) / 10 * 6 * cos(.pi / 6 * 10),
+                            y: min(proxy.size.width, proxy.size.height) / 10 * 6 * sin(.pi / 6 * 10))
+                    .rotationEffect(.degrees(isAnimating ? 360 : 0))
+                    .animation(Animation.linear(duration: 20).repeatForever(autoreverses: false))
+
             }
             .frame(width: proxy.size.width, height: proxy.size.height)
         }

@@ -40,7 +40,7 @@ struct CoworkerVertexView: View {
                 Image(data.imageName)
                     .resizable()
                     .frame(width: 48 + offset, height: 48 + offset)
-                    .padding(.bottom, 20 - (CGFloat(data.priority) * 4) )
+                    .padding(.bottom, 20 - (CGFloat(data.priority) * 2))
                 
                 Text(data.name)
                     .font(.system(size: 12 - (CGFloat(data.priority)), weight: .bold))
