@@ -52,8 +52,7 @@ struct BankVertexView: View {
         .rotationEffect(.degrees(isAnimating ? -360 : 0))
         .offset(x: data.point.x, y: data.point.y)
         .rotationEffect(.degrees(isAnimating ? 360 : 0))
-        .animation(Animation.linear(duration: 25).repeatForever(autoreverses: false))
-
+        .animation(isAnimating ? Animation.linear(duration: 25).repeatForever(autoreverses: false) : nil)
     }
 }
 

@@ -11,7 +11,7 @@ struct Graph3View: View {
     
     // MARK: - Value
     // MARK: Private
-    @ObservedObject private var data = Graph3Data()
+    @StateObject private var data = Graph3Data()
     @State private var isAnimating = false
     
     
@@ -26,7 +26,10 @@ struct Graph3View: View {
             .frame(width: proxy.size.width, height: proxy.size.height)
             .onAppear {
                 data.request(size: proxy.size)
-                isAnimating = true
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    isAnimating = true
+                }
             }
         }
     }
@@ -34,7 +37,7 @@ struct Graph3View: View {
     // MARK: Private
     private var guideLine: some View {
         GeometryReader { proxy in
-            ZStack(alignment: .center)  {
+            ZStack(alignment: .center) {
                 // Bound
                 Color(.clear)
                     .border(Color.gray, width: 1)
@@ -68,7 +71,7 @@ struct Graph3View: View {
     
     private var graph: some View {
         GeometryReader { proxy in
-            ZStack(alignment: .center)  {
+            ZStack(alignment: .center) {   
                 ForEach(data.vertexes, id: \.id) { vertex in
                     switch vertex {
                     case let data as UserVertex:        UserVertexView(data: data)
