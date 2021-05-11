@@ -15,6 +15,8 @@ struct BankVertexView: View {
     @Binding var isAnimating: Bool
     
     // MARK: Private
+    @State private var isScaled = false
+    
     private var offset: CGFloat {
         switch data.priority {
         case 0:     return 50
@@ -49,10 +51,17 @@ struct BankVertexView: View {
             }
             .clipped()
         }
+        .scaleEffect(isScaled ? 1 : 0)
+        .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
         .rotationEffect(.degrees(isAnimating ? -360 : 0))
         .offset(x: data.point.x, y: data.point.y)
         .rotationEffect(.degrees(isAnimating ? 360 : 0))
         .animation(isAnimating ? Animation.linear(duration: 25).repeatForever(autoreverses: false) : nil)
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                isScaled = true
+            }
+        }
     }
 }
 

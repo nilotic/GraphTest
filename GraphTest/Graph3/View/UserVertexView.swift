@@ -14,6 +14,8 @@ struct UserVertexView: View {
     let data: UserVertex
     
     // MARK: Private
+    @State private var isScaled = false
+    
     private var offset: CGFloat {
         switch data.priority {
         case 0:     return 50
@@ -47,6 +49,11 @@ struct UserVertexView: View {
                     .padding(.top, 70 - (CGFloat(data.priority) * 5))
             }
             .clipped()
+        }
+        .scaleEffect(isScaled ? 1 : 0)
+        .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
+        .onAppear {
+            isScaled = true
         }
     }
 }

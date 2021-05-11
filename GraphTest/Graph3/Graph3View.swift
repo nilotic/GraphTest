@@ -12,8 +12,8 @@ struct Graph3View: View {
     // MARK: - Value
     // MARK: Private
     @StateObject private var data = Graph3Data()
-    @State private var isAnimating = false
-    
+    @State private var isRotationAnimated = false
+    @State private var isScaleAnimated = false
     
     // MARK: - View
     // MARK: Public
@@ -28,7 +28,11 @@ struct Graph3View: View {
                 data.request(size: proxy.size)
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    isAnimating = true
+                    isScaleAnimated = true
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+                    isRotationAnimated = true
                 }
             }
         }
@@ -66,20 +70,21 @@ struct Graph3View: View {
                 }
             }
             .frame(width: proxy.size.width, height: proxy.size.height)
+            .opacity(0.5)
         }
     }
     
     private var graph: some View {
         GeometryReader { proxy in
-            ZStack(alignment: .center) {   
+            ZStack(alignment: .center) {
                 ForEach(data.vertexes, id: \.id) { vertex in
                     switch vertex {
                     case let data as UserVertex:        UserVertexView(data: data)
-                    case let data as BankVertex:        BankVertexView(data: data, isAnimating: $isAnimating)
-                    case let data as CardVertex:        CardVertexView(data: data, isAnimating: $isAnimating)
-                    case let data as InsuranceVertex:   InsuranceVertexView(data: data, isAnimating: $isAnimating)
-                    case let data as MobileVertex:      MobileVertexView(data: data, isAnimating: $isAnimating)
-                    case let data as CoworkerVertex:    CoworkerVertexView(data: data, isAnimating: $isAnimating)
+                    case let data as BankVertex:        BankVertexView(data: data, isAnimating: $isRotationAnimated)
+                    case let data as CardVertex:        CardVertexView(data: data, isAnimating: $isRotationAnimated)
+                    case let data as InsuranceVertex:   InsuranceVertexView(data: data, isAnimating: $isRotationAnimated)
+                    case let data as MobileVertex:      MobileVertexView(data: data, isAnimating: $isRotationAnimated)
+                    case let data as CoworkerVertex:    CoworkerVertexView(data: data, isAnimating: $isRotationAnimated)
                     default:                            Text("")
                     }
                 }
