@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct User: Decodable, Identifiable, Vertex {
+struct User: Decodable, Identifiable, Node {
     let id: String
     let name: String
     let imageName: String

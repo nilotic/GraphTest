@@ -1,5 +1,5 @@
 // 
-//  Card.swift
+//  CardNode.swift
 //
 //  Created by Den Jo on 2021/05/07.
 //  Copyright © nilotic. All rights reserved.
@@ -7,32 +7,32 @@
 
 import SwiftUI
 
-struct Card: Decodable, Identifiable, Vertex {
+struct CardNode: Node, Decodable, Identifiable {
     let id: String
     let name: String
     let imageName: String
     let priority: UInt
 }
 
-extension Card: Hashable {
+extension CardNode: Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }
 
-extension Card: Equatable {
+extension CardNode: Equatable {
     
-    static func ==(lhs: Card, rhs: Card) -> Bool {
+    static func ==(lhs: CardNode, rhs: CardNode) -> Bool {
         lhs.id == rhs.id
     }
 }
 
 #if DEBUG
-extension Card {
+extension CardNode {
     
-    static var placeholder: Card {
-        Card(id: "0", name: "VISA", imageName: "visa", priority: 0)
+    static var placeholder: CardNode {
+        CardNode(id: "0", name: "VISA", imageName: "visa", priority: 0)
     }
 }
 #endif

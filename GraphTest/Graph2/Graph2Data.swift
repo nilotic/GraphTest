@@ -47,18 +47,18 @@ final class Graph2Data {
         return field
     }
     
-    var profileImage: UIImage {
-        [#imageLiteral(resourceName: "memoji1"),#imageLiteral(resourceName: "memoji2"),#imageLiteral(resourceName: "memoji3"),#imageLiteral(resourceName: "memoji4"),#imageLiteral(resourceName: "memoji5"),#imageLiteral(resourceName: "memoji6"),#imageLiteral(resourceName: "memoji7"),#imageLiteral(resourceName: "memoji8"),#imageLiteral(resourceName: "memoji9"),#imageLiteral(resourceName: "memoji10"),#imageLiteral(resourceName: "memoji11"),#imageLiteral(resourceName: "memoji12"),#imageLiteral(resourceName: "memoji13"),#imageLiteral(resourceName: "memoji14"),#imageLiteral(resourceName: "memoji15"),#imageLiteral(resourceName: "memoji16"),#imageLiteral(resourceName: "memoji17"),#imageLiteral(resourceName: "memoji18"),#imageLiteral(resourceName: "memoji19"),#imageLiteral(resourceName: "memoji20"),#imageLiteral(resourceName: "memoji21"),#imageLiteral(resourceName: "memoji22"),#imageLiteral(resourceName: "memoji23"),#imageLiteral(resourceName: "memoji24"),#imageLiteral(resourceName: "memoji25"),#imageLiteral(resourceName: "memoji26")].randomElement() ?? #imageLiteral(resourceName: "memoji1")
-    }
+    let coworkerNode = { (position: CGPoint) -> SKShapeNode in
+        var profileImage: UIImage {
+            [#imageLiteral(resourceName: "memoji1"),#imageLiteral(resourceName: "memoji2"),#imageLiteral(resourceName: "memoji3"),#imageLiteral(resourceName: "memoji4"),#imageLiteral(resourceName: "memoji5"),#imageLiteral(resourceName: "memoji6"),#imageLiteral(resourceName: "memoji7"),#imageLiteral(resourceName: "memoji8"),#imageLiteral(resourceName: "memoji9"),#imageLiteral(resourceName: "memoji10"),#imageLiteral(resourceName: "memoji11"),#imageLiteral(resourceName: "memoji12"),#imageLiteral(resourceName: "memoji13"),#imageLiteral(resourceName: "memoji14"),#imageLiteral(resourceName: "memoji15"),#imageLiteral(resourceName: "memoji16"),#imageLiteral(resourceName: "memoji17"),#imageLiteral(resourceName: "memoji18"),#imageLiteral(resourceName: "memoji19"),#imageLiteral(resourceName: "memoji20"),#imageLiteral(resourceName: "memoji21"),#imageLiteral(resourceName: "memoji22"),#imageLiteral(resourceName: "memoji23"),#imageLiteral(resourceName: "memoji24"),#imageLiteral(resourceName: "memoji25"),#imageLiteral(resourceName: "memoji26")].randomElement() ?? #imageLiteral(resourceName: "memoji1")
+        }
     
-    var name: String {
-        ["Oliver", "Jake", "Noah", "James", "Jack", "Connor", "Liam", "John", "Harry", "Callum",
-         "Mason", "Robert", "Jacob", "Jacob", "Jacob", "Michael", "Charlie", "Kyle", "William", "William",
-         "Amelia", "Margaret", "Emma", "Mary", "Olivia", "Samantha", "Olivia", "Patricia", "Isla", "Bethany",
-         "Sophia", "Jennifer", "Emily", "Elizabeth", "Isabella", "Elizabeth", "Poppy", "Joanne", "Ava", "Linda"].randomElement() ?? "Oliver"
-    }
-    
-    var circleNode: SKShapeNode {
+        var name: String {
+            ["Oliver", "Jake", "Noah", "James", "Jack", "Connor", "Liam", "John", "Harry", "Callum",
+             "Mason", "Robert", "Jacob", "Jacob", "Jacob", "Michael", "Charlie", "Kyle", "William", "William",
+             "Amelia", "Margaret", "Emma", "Mary", "Olivia", "Samantha", "Olivia", "Patricia", "Isla", "Bethany",
+             "Sophia", "Jennifer", "Emily", "Elizabeth", "Isabella", "Elizabeth", "Poppy", "Joanne", "Ava", "Linda"].randomElement() ?? "Oliver"
+        }
+        
         let degree = 0
         
         // Circle
@@ -67,6 +67,7 @@ final class Graph2Data {
         shapeNode.name        = name
         shapeNode.lineWidth   = 2
         shapeNode.strokeColor = #colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)
+        shapeNode.position    = position
         
         shapeNode.physicsBody                  = SKPhysicsBody(circleOfRadius: 65 + CGFloat(degree))
         shapeNode.physicsBody?.isDynamic       = true
@@ -96,7 +97,6 @@ final class Graph2Data {
         return shapeNode
     }
     
-    
     // MARK: Private
     private let userNode = { (user: User) -> SKShapeNode in
         // Circle
@@ -105,7 +105,6 @@ final class Graph2Data {
         shapeNode.name        = user.name
         shapeNode.lineWidth   = 2
         shapeNode.strokeColor = #colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)
-        shapeNode.userData    = ["type": NodeType.user]
         
         shapeNode.physicsBody                  = SKPhysicsBody(circleOfRadius: 75)
         shapeNode.physicsBody?.isDynamic       = true
@@ -138,14 +137,13 @@ final class Graph2Data {
         return shapeNode
     }
     
-    private let vertexNode = { (vertex: Vertex) -> SKShapeNode in
+    private let circleNode = { (vertex: Node) -> SKShapeNode in
         // Circle
         let shapeNode         = SKShapeNode(circleOfRadius: 55)
         shapeNode.fillColor   = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         shapeNode.name        = vertex.name
         shapeNode.lineWidth   = 2
         shapeNode.strokeColor = #colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)
-        shapeNode.userData    = ["type": NodeType.vertex]
         
         shapeNode.physicsBody                  = SKPhysicsBody(circleOfRadius: 55)
         shapeNode.physicsBody?.isDynamic       = true
@@ -197,10 +195,10 @@ final class Graph2Data {
             let radius = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) / 2 - 75
             
             for (i, graph) in data.user.graphs.enumerated() {
-                guard let vertex = graph.vertexes.sorted(by: { $0.priority < $1.priority }).first else { continue }
+                guard let vertex = graph.nodes.sorted(by: { $0.priority < $1.priority }).first else { continue }
                 
                 // Node
-                let node = vertexNode(vertex)
+                let node = circleNode(vertex)
                 node.position = CGPoint(x: radius * cos(unit * CGFloat(i)), y: radius * sin(unit * CGFloat(i)))
                 nodes.append(node)
                 

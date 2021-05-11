@@ -9,7 +9,7 @@ import Foundation
 
 struct Graph {
     let id: String
-    let vertexes: [Vertex]
+    let nodes: [Node]
     let type: GraphType
 }
 
@@ -17,7 +17,7 @@ extension Graph: Decodable {
     
     private enum Key: String, CodingKey {
         case id
-        case vertexes
+        case nodes
         case type
     }
     
@@ -31,11 +31,11 @@ extension Graph: Decodable {
             self.type = type
             
             switch type {
-            case .bank:         vertexes = try container.decode([Bank].self,      forKey: .vertexes)
-            case .card:         vertexes = try container.decode([Card].self,      forKey: .vertexes)
-            case .insurance:    vertexes = try container.decode([Insurance].self, forKey: .vertexes)
-            case .mobile:       vertexes = try container.decode([Mobile].self,    forKey: .vertexes)
-            case .coworker:     vertexes = try container.decode([Coworker].self,  forKey: .vertexes)
+            case .bank:         nodes = try container.decode([BankNode].self,      forKey: .nodes)
+            case .card:         nodes = try container.decode([CardNode].self,      forKey: .nodes)
+            case .insurance:    nodes = try container.decode([InsuranceNode].self, forKey: .nodes)
+            case .mobile:       nodes = try container.decode([MobileNode].self,    forKey: .nodes)
+            case .coworker:     nodes = try container.decode([CoworkerNode].self,  forKey: .nodes)
             }
             
         } catch { throw error }

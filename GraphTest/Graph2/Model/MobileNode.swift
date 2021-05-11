@@ -1,5 +1,5 @@
 // 
-//  Mobile.swift
+//  MobileNode.swift
 //
 //  Created by Den Jo on 2021/05/07.
 //  Copyright © nilotic. All rights reserved.
@@ -7,30 +7,30 @@
 
 import Foundation
 
-struct Mobile: Decodable, Identifiable, Vertex {
+struct MobileNode: Node, Decodable, Identifiable {
     let id: String
     let name: String
     let imageName: String
     let priority: UInt
 }
 
-extension Mobile: Hashable {
+extension MobileNode: Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }
 
-extension Mobile: Equatable {
+extension MobileNode: Equatable {
     
-    static func ==(lhs: Mobile, rhs: Mobile) -> Bool {
+    static func ==(lhs: MobileNode, rhs: MobileNode) -> Bool {
         lhs.id == rhs.id
     }
 }
 
-extension Mobile {
+extension MobileNode {
     
-    static var placeholder: Mobile {
-        Mobile(id: "0", name: "at&t", imageName: "at&t", priority: 0)
+    static var placeholder: MobileNode {
+        MobileNode(id: "0", name: "at&t", imageName: "at&t", priority: 0)
     }
 }

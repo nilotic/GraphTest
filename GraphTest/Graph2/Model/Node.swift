@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Vertex {
+protocol Node {
     var id: String { get }
     var name: String { get }
     var imageName: String { get }

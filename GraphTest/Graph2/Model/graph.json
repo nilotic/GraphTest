@@ -7,7 +7,7 @@
         "graphs": [
             {
                 "id": "bank",
-                "vertexes": [
+                "nodes": [
                     {
                         "id": "bank0",
                         "name": "Atom",
@@ -43,7 +43,7 @@
             },
             {
                 "id": "card",
-                "vertexes": [
+                "nodes": [
                     {
                         "id": "card0",
                         "name": "AMEX",
@@ -79,7 +79,7 @@
             },
             {
                 "id": "insurance",
-                "vertexes": [
+                "nodes": [
                     {
                         "id": "insurance0",
                         "name": "AIG",
@@ -115,7 +115,7 @@
             },
             {
                 "id": "mobile",
-                "vertexes": [
+                "nodes": [
                     {
                         "id": "mobile0",
                         "name": "at&t",
@@ -150,44 +150,8 @@
                 "type": "mobile"
             },
             {
-                "id": "card",
-                "vertexes": [
-                    {
-                        "id": "card0",
-                        "name": "AMEX",
-                        "imageName": "amex",
-                        "priority": 2
-                    },
-                    {
-                        "id": "card1",
-                        "name": "Apple",
-                        "imageName": "apple",
-                        "priority": 3
-                    },
-                    {
-                        "id": "card2",
-                        "name": "Discover",
-                        "imageName": "discover",
-                        "priority": 4
-                    },
-                    {
-                        "id": "card3",
-                        "name": "Master",
-                        "imageName": "master",
-                        "priority": 1
-                    },
-                    {
-                        "id": "card4",
-                        "name": "VISA",
-                        "imageName": "visa",
-                        "priority": 0
-                    }
-                ],
-                "type": "card"
-            },
-            {
                 "id": "coworker",
-                "vertexes": [
+                "nodes": [
                     {
                         "id": "coworker0",
                         "name": "Oliver",

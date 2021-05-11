@@ -17,7 +17,7 @@ final class Graph3Data: ObservableObject {
     
     // MARK: - Function
     // MARK: Public
-    func request() {
+    func request(size: CGSize) {
         guard let url = Bundle.main.url(forResource: "graph", withExtension: "json") else { return }
         
         do {
@@ -33,7 +33,7 @@ final class Graph3Data: ObservableObject {
             let radius = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) / 2 - 75
 
             for (i, graph) in data.user.graphs.enumerated() {
-                guard let vertex = graph.vertexes.sorted(by: { $0.priority < $1.priority }).first else { continue }
+                guard let vertex = graph.nodes.sorted(by: { $0.priority < $1.priority }).first else { continue }
 
                 // Node
 //                let node = vertexNode(vertex)

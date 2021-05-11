@@ -11,7 +11,7 @@ struct MobileVertexView: View {
     
     // MARK: - Value
     // MARK: Public
-    let data: Mobile
+    let data: MobileNode
     
     // MARK: Private
     private var offset: CGFloat {

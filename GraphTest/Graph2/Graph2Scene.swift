@@ -66,10 +66,7 @@ final class Graph2Scene: SKScene {
         
         default:
             guard !data.isConnecting else { return }
-            let circleNode = data.circleNode
-            circleNode.position = location
-            
-            addChild(circleNode)
+            addChild(data.coworkerNode(location))
         }
     }
     

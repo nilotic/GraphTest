@@ -1,5 +1,5 @@
 // 
-//  Insurance.swift
+//  BankNode.swift
 //
 //  Created by Den Jo on 2021/05/07.
 //  Copyright © nilotic. All rights reserved.
@@ -7,32 +7,32 @@
 
 import SwiftUI
 
-struct Insurance: Decodable, Identifiable, Vertex {
+struct BankNode: Node, Decodable, Identifiable {
     let id: String
     let name: String
     let imageName: String
     let priority: UInt
 }
 
-extension Insurance: Hashable {
+extension BankNode: Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }
 
-extension Insurance: Equatable {
+extension BankNode: Equatable {
     
-    static func ==(lhs: Insurance, rhs: Insurance) -> Bool {
+    static func ==(lhs: BankNode, rhs: BankNode) -> Bool {
         lhs.id == rhs.id
     }
 }
 
 #if DEBUG
-extension Insurance {
+extension BankNode {
     
-    static var placeholder: Insurance {
-        Insurance(id: "0", name: "AIG", imageName: "aig", priority: 0)
+    static var placeholder: BankNode {
+        BankNode(id: "0", name: "SC", imageName: "sc", priority: 0)
     }
 }
 #endif

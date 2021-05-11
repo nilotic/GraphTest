@@ -11,7 +11,7 @@ struct BankVertexView: View {
     
     // MARK: - Value
     // MARK: Public
-    let data: Bank
+    let data: BankNode
     
     // MARK: Private
     private var offset: CGFloat {

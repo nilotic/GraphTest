@@ -12,6 +12,7 @@
 		B73A22422640E0AF006CD531 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B73A22412640E0AF006CD531 /* Preview Assets.xcassets */; };
 		B73A22502640E6EA006CD531 /* Graph1Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73A224F2640E6EA006CD531 /* Graph1Scene.swift */; };
 		B73A225526410282006CD531 /* Graph1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73A225426410282006CD531 /* Graph1View.swift */; };
+		B76414D6264A5095005EFF13 /* Vertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76414D5264A5095005EFF13 /* Vertex.swift */; };
 		B76416C9264A048C00475F06 /* BankVertexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76416C8264A048C00475F06 /* BankVertexView.swift */; };
 		B76416CB264A06F600475F06 /* CardVertexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76416CA264A06F600475F06 /* CardVertexView.swift */; };
 		B76416CD264A075100475F06 /* InsuranceVertexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76416CC264A075100475F06 /* InsuranceVertexView.swift */; };
@@ -28,14 +29,13 @@
 		B77FE4272645297500EDB7FE /* GraphResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE4262645297500EDB7FE /* GraphResponse.swift */; };
 		B77FE42926452ACA00EDB7FE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE42826452ACA00EDB7FE /* User.swift */; };
 		B77FE42B26452B0200EDB7FE /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE42A26452B0200EDB7FE /* Graph.swift */; };
-		B77FE42D26452C0D00EDB7FE /* Vertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE42C26452C0D00EDB7FE /* Vertex.swift */; };
-		B77FE42F26452C6600EDB7FE /* Bank.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE42E26452C6600EDB7FE /* Bank.swift */; };
+		B77FE42D26452C0D00EDB7FE /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE42C26452C0D00EDB7FE /* Node.swift */; };
+		B77FE42F26452C6600EDB7FE /* BankNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE42E26452C6600EDB7FE /* BankNode.swift */; };
 		B77FE43126452D2900EDB7FE /* GraphType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE43026452D2900EDB7FE /* GraphType.swift */; };
-		B77FE43326452E2C00EDB7FE /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE43226452E2C00EDB7FE /* Card.swift */; };
-		B77FE43526452E4900EDB7FE /* Insurance.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE43426452E4900EDB7FE /* Insurance.swift */; };
-		B77FE43726452E5900EDB7FE /* Mobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE43626452E5900EDB7FE /* Mobile.swift */; };
-		B77FE43926452E7200EDB7FE /* Coworker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE43826452E7200EDB7FE /* Coworker.swift */; };
-		B77FE43B2645353400EDB7FE /* NodeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE43A2645353400EDB7FE /* NodeType.swift */; };
+		B77FE43326452E2C00EDB7FE /* CardNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE43226452E2C00EDB7FE /* CardNode.swift */; };
+		B77FE43526452E4900EDB7FE /* InsuranceNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE43426452E4900EDB7FE /* InsuranceNode.swift */; };
+		B77FE43726452E5900EDB7FE /* MobileNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE43626452E5900EDB7FE /* MobileNode.swift */; };
+		B77FE43926452E7200EDB7FE /* CoworkerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE43826452E7200EDB7FE /* CoworkerNode.swift */; };
 		B7E7920626410B930043FB54 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7920426410B930043FB54 /* Logger.swift */; };
 		B7E7920726410B930043FB54 /* LogType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7920526410B930043FB54 /* LogType.swift */; };
 		B7E7920C26412EB30043FB54 /* ButtonStyle1.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7920A26412EB30043FB54 /* ButtonStyle1.swift */; };
@@ -59,6 +59,7 @@
 		B73A22432640E0AF006CD531 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B73A224F2640E6EA006CD531 /* Graph1Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graph1Scene.swift; sourceTree = "<group>"; };
 		B73A225426410282006CD531 /* Graph1View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graph1View.swift; sourceTree = "<group>"; };
+		B76414D5264A5095005EFF13 /* Vertex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vertex.swift; sourceTree = "<group>"; };
 		B76416C8264A048C00475F06 /* BankVertexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankVertexView.swift; sourceTree = "<group>"; };
 		B76416CA264A06F600475F06 /* CardVertexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardVertexView.swift; sourceTree = "<group>"; };
 		B76416CC264A075100475F06 /* InsuranceVertexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsuranceVertexView.swift; sourceTree = "<group>"; };
@@ -75,14 +76,13 @@
 		B77FE4262645297500EDB7FE /* GraphResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphResponse.swift; sourceTree = "<group>"; };
 		B77FE42826452ACA00EDB7FE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B77FE42A26452B0200EDB7FE /* Graph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graph.swift; sourceTree = "<group>"; };
-		B77FE42C26452C0D00EDB7FE /* Vertex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vertex.swift; sourceTree = "<group>"; };
-		B77FE42E26452C6600EDB7FE /* Bank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bank.swift; sourceTree = "<group>"; };
+		B77FE42C26452C0D00EDB7FE /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		B77FE42E26452C6600EDB7FE /* BankNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankNode.swift; sourceTree = "<group>"; };
 		B77FE43026452D2900EDB7FE /* GraphType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphType.swift; sourceTree = "<group>"; };
-		B77FE43226452E2C00EDB7FE /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
-		B77FE43426452E4900EDB7FE /* Insurance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Insurance.swift; sourceTree = "<group>"; };
-		B77FE43626452E5900EDB7FE /* Mobile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mobile.swift; sourceTree = "<group>"; };
-		B77FE43826452E7200EDB7FE /* Coworker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coworker.swift; sourceTree = "<group>"; };
-		B77FE43A2645353400EDB7FE /* NodeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeType.swift; sourceTree = "<group>"; };
+		B77FE43226452E2C00EDB7FE /* CardNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardNode.swift; sourceTree = "<group>"; };
+		B77FE43426452E4900EDB7FE /* InsuranceNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsuranceNode.swift; sourceTree = "<group>"; };
+		B77FE43626452E5900EDB7FE /* MobileNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileNode.swift; sourceTree = "<group>"; };
+		B77FE43826452E7200EDB7FE /* CoworkerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoworkerNode.swift; sourceTree = "<group>"; };
 		B7E7920426410B930043FB54 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		B7E7920526410B930043FB54 /* LogType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogType.swift; sourceTree = "<group>"; };
 		B7E7920A26412EB30043FB54 /* ButtonStyle1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonStyle1.swift; sourceTree = "<group>"; };
@@ -214,13 +214,12 @@
 				B77FE42826452ACA00EDB7FE /* User.swift */,
 				B77FE42A26452B0200EDB7FE /* Graph.swift */,
 				B77FE43026452D2900EDB7FE /* GraphType.swift */,
-				B77FE43A2645353400EDB7FE /* NodeType.swift */,
-				B77FE42C26452C0D00EDB7FE /* Vertex.swift */,
-				B77FE42E26452C6600EDB7FE /* Bank.swift */,
-				B77FE43226452E2C00EDB7FE /* Card.swift */,
-				B77FE43426452E4900EDB7FE /* Insurance.swift */,
-				B77FE43626452E5900EDB7FE /* Mobile.swift */,
-				B77FE43826452E7200EDB7FE /* Coworker.swift */,
+				B77FE42C26452C0D00EDB7FE /* Node.swift */,
+				B77FE42E26452C6600EDB7FE /* BankNode.swift */,
+				B77FE43226452E2C00EDB7FE /* CardNode.swift */,
+				B77FE43426452E4900EDB7FE /* InsuranceNode.swift */,
+				B77FE43626452E5900EDB7FE /* MobileNode.swift */,
+				B77FE43826452E7200EDB7FE /* CoworkerNode.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -293,6 +292,7 @@
 		B7F0F0C32649136800380E82 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				B76414D5264A5095005EFF13 /* Vertex.swift */,
 				B7F0F0C126490E1F00380E82 /* GraphEdge.swift */,
 			);
 			path = Model;
@@ -401,22 +401,23 @@
 				B7F8D3F526438722002B3BED /* ImageDataManager.swift in Sources */,
 				B76416CD264A075100475F06 /* InsuranceVertexView.swift in Sources */,
 				B76B73A226492F0C00CE7B55 /* Item.swift in Sources */,
-				B77FE43326452E2C00EDB7FE /* Card.swift in Sources */,
+				B77FE43326452E2C00EDB7FE /* CardNode.swift in Sources */,
 				B73A223B2640E0AE006CD531 /* GraphTestApp.swift in Sources */,
 				B7E7921026412F600043FB54 /* FramePreferenceKey.swift in Sources */,
 				B7F8D3FB2643C414002B3BED /* Graph1Data.swift in Sources */,
 				B76416D3264A084F00475F06 /* CoworkerVertexView.swift in Sources */,
 				B7E7920D26412EB30043FB54 /* ButtonStyle1Data.swift in Sources */,
 				B77FE43126452D2900EDB7FE /* GraphType.swift in Sources */,
-				B77FE43526452E4900EDB7FE /* Insurance.swift in Sources */,
+				B77FE43526452E4900EDB7FE /* InsuranceNode.swift in Sources */,
 				B7F0F0C226490E1F00380E82 /* GraphEdge.swift in Sources */,
 				B77FE41B26450F5100EDB7FE /* TabbarItem.swift in Sources */,
-				B77FE42F26452C6600EDB7FE /* Bank.swift in Sources */,
+				B77FE42F26452C6600EDB7FE /* BankNode.swift in Sources */,
 				B7F8D3F82643C3E7002B3BED /* GraphCategory.swift in Sources */,
 				B73A22502640E6EA006CD531 /* Graph1Scene.swift in Sources */,
-				B77FE43926452E7200EDB7FE /* Coworker.swift in Sources */,
+				B77FE43926452E7200EDB7FE /* CoworkerNode.swift in Sources */,
 				B7F0F0C82649219E00380E82 /* UserVertexView.swift in Sources */,
 				B77FE42926452ACA00EDB7FE /* User.swift in Sources */,
+				B76414D6264A5095005EFF13 /* Vertex.swift in Sources */,
 				B7F0F0BB264909D600380E82 /* Graph3View.swift in Sources */,
 				B76416D0264A07C900475F06 /* MobileVertexView.swift in Sources */,
 				B77FE41526450F4000EDB7FE /* TabbarView.swift in Sources */,
@@ -425,14 +426,13 @@
 				B76416CB264A06F600475F06 /* CardVertexView.swift in Sources */,
 				B77FE41E2645157400EDB7FE /* Graph2View.swift in Sources */,
 				B7F0F0BD26490AE100380E82 /* Graph3Data.swift in Sources */,
-				B77FE43726452E5900EDB7FE /* Mobile.swift in Sources */,
+				B77FE43726452E5900EDB7FE /* MobileNode.swift in Sources */,
 				B77FE41826450F4800EDB7FE /* TabbarType.swift in Sources */,
-				B77FE42D26452C0D00EDB7FE /* Vertex.swift in Sources */,
+				B77FE42D26452C0D00EDB7FE /* Node.swift in Sources */,
 				B7E7920C26412EB30043FB54 /* ButtonStyle1.swift in Sources */,
 				B77FE4272645297500EDB7FE /* GraphResponse.swift in Sources */,
 				B7E7920626410B930043FB54 /* Logger.swift in Sources */,
 				B76416C9264A048C00475F06 /* BankVertexView.swift in Sources */,
-				B77FE43B2645353400EDB7FE /* NodeType.swift in Sources */,
 				B7E7920726410B930043FB54 /* LogType.swift in Sources */,
 				B77FE4202645157E00EDB7FE /* Graph2Scene.swift in Sources */,
 				B7E79214264134F80043FB54 /* ViewExtension.swift in Sources */,
