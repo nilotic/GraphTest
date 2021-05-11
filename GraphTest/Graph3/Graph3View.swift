@@ -12,8 +12,11 @@ struct Graph3View: View {
     // MARK: - Value
     // MARK: Private
     @StateObject private var data = Graph3Data()
+
+    @State private var isScaleAnimated    = false
+    @State private var isLineAnimated     = false
     @State private var isRotationAnimated = false
-    @State private var isScaleAnimated = false
+
     
     // MARK: - View
     // MARK: Public
@@ -32,6 +35,10 @@ struct Graph3View: View {
                 }
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+                    isLineAnimated = true
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     isRotationAnimated = true
                 }
             }
@@ -66,7 +73,7 @@ struct Graph3View: View {
                         
                     }
                     .stroke(Color(#colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1)))
-                    .rotationEffect(Angle(degrees: 15 * Double($0)))
+                    .rotationEffect(.degrees(15 * Double($0)))
                 }
             }
             .frame(width: proxy.size.width, height: proxy.size.height)
@@ -77,6 +84,7 @@ struct Graph3View: View {
     private var graph: some View {
         GeometryReader { proxy in
             ZStack(alignment: .center) {
+                // Vertex
                 ForEach(data.vertexes, id: \.id) { vertex in
                     switch vertex {
                     case let data as UserVertex:        UserVertexView(data: data)
@@ -88,6 +96,22 @@ struct Graph3View: View {
                     default:                            Text("")
                     }
                 }
+                
+                
+                // Edge
+                ForEach(Array(data.edges.enumerated()), id: \.element) { (i, edge) in
+                    Path { path in
+                        path.move(to: edge.source.point)
+                        path.addLine(to: edge.target.point)
+                    }
+                    .offset(CGSize(width: proxy.size.width / 2, height: proxy.size.height / 2))
+                    .trim(from: 0, to: isLineAnimated ? 1 : 0)
+                    .stroke(Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), lineWidth: 4)
+                    .animation(isLineAnimated ? Animation.easeOut(duration: 0.38).delay(0.1 + 0.1 * TimeInterval(i)) : nil)
+                }
+                .zIndex(-1)
+                .rotationEffect(.degrees(isRotationAnimated ? 360 : 0))
+                .animation(isRotationAnimated ? Animation.linear(duration: 30).repeatForever(autoreverses: false) : nil)
             }
             .frame(width: proxy.size.width, height: proxy.size.height)
         }
