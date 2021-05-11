@@ -27,3 +27,12 @@ extension Insurance: Equatable {
         lhs.id == rhs.id
     }
 }
+
+#if DEBUG
+extension Insurance {
+    
+    static var placeholder: Insurance {
+        Insurance(id: "0", name: "AIG", imageName: "aig", priority: 0)
+    }
+}
+#endif

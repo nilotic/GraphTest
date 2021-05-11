@@ -1,17 +1,17 @@
 // 
-//  UserVertexView.swift
+//  BankVertexView.swift
 //
-//  Created by Den Jo on 2021/05/10.
+//  Created by Den Jo on 2021/05/11.
 //  Copyright © nilotic. All rights reserved.
 //
 
 import SwiftUI
 
-struct UserVertexView: View {
+struct BankVertexView: View {
     
     // MARK: - Value
     // MARK: Public
-    let data: User
+    let data: Bank
     
     // MARK: Private
     private var offset: CGFloat {
@@ -52,10 +52,10 @@ struct UserVertexView: View {
 }
 
 #if DEBUG
-struct UserVertexView_Previews: PreviewProvider {
+struct BankVertexView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let view = UserVertexView(data: .placeholder)
+        let view = BankVertexView(data: .placeholder)
         
         Group {
             view

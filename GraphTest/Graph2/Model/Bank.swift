@@ -27,3 +27,12 @@ extension Bank: Equatable {
         lhs.id == rhs.id
     }
 }
+
+#if DEBUG
+extension Bank {
+    
+    static var placeholder: Bank {
+        Bank(id: "0", name: "SC", imageName: "sc", priority: 0)
+    }
+}
+#endif

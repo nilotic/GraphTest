@@ -27,3 +27,12 @@ extension Card: Equatable {
         lhs.id == rhs.id
     }
 }
+
+#if DEBUG
+extension Card {
+    
+    static var placeholder: Card {
+        Card(id: "0", name: "VISA", imageName: "visa", priority: 0)
+    }
+}
+#endif

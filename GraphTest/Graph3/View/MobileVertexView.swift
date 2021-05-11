@@ -1,17 +1,17 @@
 // 
-//  UserVertexView.swift
+//  MobileVertexView.swift
 //
-//  Created by Den Jo on 2021/05/10.
+//  Created by Den Jo on 2021/05/11.
 //  Copyright © nilotic. All rights reserved.
 //
 
 import SwiftUI
 
-struct UserVertexView: View {
+struct MobileVertexView: View {
     
     // MARK: - Value
     // MARK: Public
-    let data: User
+    let data: Mobile
     
     // MARK: Private
     private var offset: CGFloat {
@@ -52,10 +52,10 @@ struct UserVertexView: View {
 }
 
 #if DEBUG
-struct UserVertexView_Previews: PreviewProvider {
+struct MobileVertexView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let view = UserVertexView(data: .placeholder)
+        let view = MobileVertexView(data: .placeholder)
         
         Group {
             view

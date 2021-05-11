@@ -27,3 +27,10 @@ extension Mobile: Equatable {
         lhs.id == rhs.id
     }
 }
+
+extension Mobile {
+    
+    static var placeholder: Mobile {
+        Mobile(id: "0", name: "at&t", imageName: "at&t", priority: 0)
+    }
+}

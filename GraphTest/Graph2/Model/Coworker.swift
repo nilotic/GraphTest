@@ -27,3 +27,12 @@ extension Coworker: Equatable {
         lhs.id == rhs.id
     }
 }
+
+#if DEBUG
+extension Coworker {
+    
+    static var placeholder: Coworker {
+        Coworker(id: "0", name: "Elizabeth", imageName: "memoji11", priority: 0)
+    }
+}
+#endif
