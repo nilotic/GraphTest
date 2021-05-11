@@ -8,5 +8,5 @@
 import Foundation
 
 struct GraphResponse: Decodable {
-    let user: User
+    let user: UserNode
 }

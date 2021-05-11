@@ -1,5 +1,5 @@
 // 
-//  User.swift
+//  UserNode.swift
 //
 //  Created by Den Jo on 2021/05/07.
 //  Copyright © nilotic. All rights reserved.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct User: Decodable, Identifiable, Node {
+struct UserNode: Node, Decodable, Identifiable {
     let id: String
     let name: String
     let imageName: String
@@ -15,26 +15,26 @@ struct User: Decodable, Identifiable, Node {
     let graphs: [Graph]
 }
 
-extension User: Hashable {
+extension UserNode: Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }
 
-extension User: Equatable {
+extension UserNode: Equatable {
     
-    static func ==(lhs: User, rhs: User) -> Bool {
+    static func ==(lhs: UserNode, rhs: UserNode) -> Bool {
         lhs.id == rhs.id
     }
 }
 
 
 #if DEBUG
-extension User {
+extension UserNode {
     
-    static var placeholder: User {
-        User(id: "0", name: "Oliver", imageName: "memoji1", priority: 0, graphs: [])
+    static var placeholder: UserNode {
+        UserNode(id: "0", name: "Oliver", imageName: "memoji1", priority: 0, graphs: [])
     }
 }
 #endif

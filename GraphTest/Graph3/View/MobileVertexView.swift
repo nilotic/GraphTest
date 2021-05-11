@@ -11,7 +11,8 @@ struct MobileVertexView: View {
     
     // MARK: - Value
     // MARK: Public
-    let data: MobileNode
+    let data: MobileVertex
+    @Binding var isAnimating: Bool
     
     // MARK: Private
     private var offset: CGFloat {
@@ -48,6 +49,10 @@ struct MobileVertexView: View {
             }
             .clipped()
         }
+        .rotationEffect(.degrees(isAnimating ? -360 : 0))
+        .offset(x: data.point.x, y: data.point.y)
+        .rotationEffect(.degrees(isAnimating ? 360 : 0))
+        .animation(Animation.linear(duration: 25).repeatForever(autoreverses: false))
     }
 }
 
@@ -55,7 +60,7 @@ struct MobileVertexView: View {
 struct MobileVertexView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let view = MobileVertexView(data: .placeholder)
+        let view = MobileVertexView(data: .placeholder, isAnimating: .constant(false))
         
         Group {
             view

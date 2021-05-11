@@ -12,5 +12,5 @@ protocol Vertex {
     var name: String { get }
     var imageName: String { get }
     var priority: UInt { get }
-    var position: CGPoint { get set }
+    var point: CGPoint { get }
 }

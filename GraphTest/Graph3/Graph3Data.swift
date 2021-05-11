@@ -11,7 +11,7 @@ final class Graph3Data: ObservableObject {
     
     // MARK: - Value
     // MARK: Public
-    @Published var vertexes = [Item]()
+    @Published var vertexes = [Vertex]()
     @Published var edges    = [GraphEdge]()
     
     
@@ -22,33 +22,66 @@ final class Graph3Data: ObservableObject {
         
         do {
             let data = try JSONDecoder().decode(GraphResponse.self, from: try Data(contentsOf: url))
-            var vertexes = [Item]()
-
-            // User
-            vertexes.append(Item(data: data.user))
+            var vertexes = [Vertex]()
             
-
-            // Graph
-            let unit = CGFloat.pi * 2 / CGFloat(max(1, data.user.graphs.count))
-            let radius = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) / 2 - 75
-
-            for (i, graph) in data.user.graphs.enumerated() {
+            // User
+            let userVertex = UserVertex(data: data.user, point: .zero)
+            vertexes.append(userVertex)
+            
+            
+            // Edge
+            let length = min(size.width, size.height)
+            let unit = length / 10
+            
+            var edges = [GraphEdge]()
+            for graph in data.user.graphs {
                 guard let vertex = graph.nodes.sorted(by: { $0.priority < $1.priority }).first else { continue }
 
-                // Node
-//                let node = vertexNode(vertex)
-//                node.position = CGPoint(x: radius * cos(unit * CGFloat(i)), y: radius * sin(unit * CGFloat(i)))
-//                nodes.append(node)
-
-
-                // Edge
-                
-//                edges.append(joint)
+                switch vertex {
+                case let data as BankNode:
+                    let vertex = BankVertex(data: data, point: CGPoint(x: 0, y: unit * 6))
+                    vertexes.append(vertex)
+                    
+                    edges.append(GraphEdge(source: userVertex, target: vertex))
+                    
+                case let data as CardNode:
+                    let vertex = CardVertex(data: data, point: CGPoint(x: unit * 3, y: 0))
+                    vertexes.append(vertex)
+                    
+                    edges.append(GraphEdge(source: userVertex, target: vertex))
+                    
+                case let data as InsuranceNode:
+                    let radius = unit * 4
+                    let radian = CGFloat.pi / 6 * 8
+                    let vertex = InsuranceVertex(data: data, point: CGPoint(x: radius * cos(radian), y: radius * sin(radian)))
+                    vertexes.append(vertex)
+                    
+                    edges.append(GraphEdge(source: userVertex, target: vertex))
+                    
+                case let data as MobileNode:
+                    let radius = unit * 4
+                    let radian = CGFloat.pi / 6 * 5
+                    let vertex = MobileVertex(data: data, point: CGPoint(x: radius * cos(radian), y: radius * sin(radian)))
+                    vertexes.append(vertex)
+                    
+                    edges.append(GraphEdge(source: userVertex, target: vertex))
+                    
+                case let data as CoworkerNode:
+                    let radius = unit * 6
+                    let radian = CGFloat.pi / 6 * 10
+                    let vertex = CoworkerVertex(data: data, point: CGPoint(x: radius * cos(radian), y: radius * sin(radian)))
+                    vertexes.append(vertex)
+                    
+                    edges.append(GraphEdge(source: userVertex, target: vertex))
+                    
+                default:
+                    continue
+                }
             }
             
             DispatchQueue.main.async {
                 self.vertexes = vertexes
-                
+                self.edges    = edges
             }
     
         } catch {

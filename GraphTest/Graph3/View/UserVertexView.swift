@@ -11,7 +11,7 @@ struct UserVertexView: View {
     
     // MARK: - Value
     // MARK: Public
-    let data: User
+    let data: UserVertex
     
     // MARK: Private
     private var offset: CGFloat {

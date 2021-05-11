@@ -98,7 +98,7 @@ final class Graph2Data {
     }
     
     // MARK: Private
-    private let userNode = { (user: User) -> SKShapeNode in
+    private let userNode = { (user: UserNode) -> SKShapeNode in
         // Circle
         let shapeNode         = SKShapeNode(circleOfRadius: 55)
         shapeNode.fillColor   = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)

@@ -12,31 +12,31 @@
                         "id": "bank0",
                         "name": "Atom",
                         "imageName": "atom",
-                        "priority": 1
+                        "priority": 6
                     },
                     {
                         "id": "bank1",
                         "name": "Citi",
                         "imageName": "citi",
-                        "priority": 0
+                        "priority": 5
                     },
                     {
                         "id": "bank3",
                         "name": "HSBC",
                         "imageName": "hsbc",
-                        "priority": 2
+                        "priority": 7
                     },
                     {
                         "id": "bank4",
                         "name": "ING",
                         "imageName": "ing",
-                        "priority": 3
+                        "priority": 8
                     },
                     {
                         "id": "bank5",
                         "name": "SC",
                         "imageName": "sc",
-                        "priority": 4
+                        "priority": 9
                     }
                 ],
                 "type": "bank"
@@ -48,31 +48,31 @@
                         "id": "card0",
                         "name": "AMEX",
                         "imageName": "amex",
-                        "priority": 3
+                        "priority": 7
                     },
                     {
                         "id": "card1",
                         "name": "Apple",
                         "imageName": "apple",
-                        "priority": 4
+                        "priority": 8
                     },
                     {
                         "id": "card2",
                         "name": "Discover",
                         "imageName": "discover",
-                        "priority": 2
+                        "priority": 6
                     },
                     {
                         "id": "card3",
                         "name": "Master",
                         "imageName": "master",
-                        "priority": 1
+                        "priority": 5
                     },
                     {
                         "id": "card4",
                         "name": "VISA",
                         "imageName": "visa",
-                        "priority": 0
+                        "priority": 4
                     }
                 ],
                 "type": "card"
@@ -84,31 +84,31 @@
                         "id": "insurance0",
                         "name": "AIG",
                         "imageName": "aig",
-                        "priority": 0
+                        "priority": 5
                     },
                     {
                         "id": "insurance1",
                         "name": "Allianz",
                         "imageName": "allianz",
-                        "priority": 1
+                        "priority": 6
                     },
                     {
                         "id": "insurance2",
                         "name": "belfius",
                         "imageName": "belfius",
-                        "priority": 2
+                        "priority": 7
                     },
                     {
                         "id": "insurance3",
                         "name": "MAX for life",
                         "imageName": "maxForLife",
-                        "priority": 3
+                        "priority": 8
                     },
                     {
                         "id": "insurance4",
                         "name": "Prudential",
                         "imageName": "prudential",
-                        "priority": 4
+                        "priority": 9
                     }
                 ],
                 "type": "insurance"
@@ -120,31 +120,31 @@
                         "id": "mobile0",
                         "name": "at&t",
                         "imageName": "at&t",
-                        "priority": 0
+                        "priority": 3
                     },
                     {
                         "id": "mobile1",
                         "name": "Motorola",
                         "imageName": "motorola",
-                        "priority": 2
+                        "priority": 5
                     },
                     {
                         "id": "mobile2",
                         "name": "nokia",
                         "imageName": "nokia",
-                        "priority": 3
+                        "priority": 6
                     },
                     {
                         "id": "mobile3",
                         "name": "Samsung",
                         "imageName": "samsung",
-                        "priority": 1
+                        "priority": 4
                     },
                     {
                         "id": "mobile4",
                         "name": "sony",
                         "imageName": "sony",
-                        "priority": 4
+                        "priority": 7
                     }
                 ],
                 "type": "mobile"
@@ -156,31 +156,31 @@
                         "id": "coworker0",
                         "name": "Oliver",
                         "imageName": "memoji17",
-                        "priority": 2
+                        "priority": 4
                     },
                     {
                         "id": "coworker1",
                         "name": "Harry",
                         "imageName": "memoji4",
-                        "priority": 3
+                        "priority": 5
                     },
                     {
                         "id": "coworker2",
                         "name": "Linda",
                         "imageName": "memoji8",
-                        "priority": 4
+                        "priority": 6
                     },
                     {
                         "id": "coworker3",
                         "name": "Jacob",
                         "imageName": "memoji18",
-                        "priority": 1
+                        "priority": 3
                     },
                     {
                         "id": "coworker4",
                         "name": "Elizabeth",
                         "imageName": "memoji26",
-                        "priority": 0
+                        "priority": 2
                     }
                 ],
                 "type": "coworker"

@@ -11,7 +11,8 @@ struct BankVertexView: View {
     
     // MARK: - Value
     // MARK: Public
-    let data: BankNode
+    let data: BankVertex
+    @Binding var isAnimating: Bool
     
     // MARK: Private
     private var offset: CGFloat {
@@ -48,6 +49,11 @@ struct BankVertexView: View {
             }
             .clipped()
         }
+        .rotationEffect(.degrees(isAnimating ? -360 : 0))
+        .offset(x: data.point.x, y: data.point.y)
+        .rotationEffect(.degrees(isAnimating ? 360 : 0))
+        .animation(Animation.linear(duration: 25).repeatForever(autoreverses: false))
+
     }
 }
 
@@ -55,7 +61,7 @@ struct BankVertexView: View {
 struct BankVertexView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let view = BankVertexView(data: .placeholder)
+        let view = BankVertexView(data: .placeholder, isAnimating: .constant(false))
         
         Group {
             view

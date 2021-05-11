@@ -11,7 +11,8 @@ struct CoworkerVertexView: View {
     
     // MARK: - Value
     // MARK: Public
-    let data: CoworkerNode
+    let data: CoworkerVertex
+    @Binding var isAnimating: Bool
     
     // MARK: Private
     private var offset: CGFloat {
@@ -48,6 +49,10 @@ struct CoworkerVertexView: View {
             }
             .clipped()
         }
+        .rotationEffect(.degrees(isAnimating ? -360 : 0))
+        .offset(x: data.point.x, y: data.point.y)
+        .rotationEffect(.degrees(isAnimating ? 360 : 0))
+        .animation(Animation.linear(duration: 25).repeatForever(autoreverses: false))
     }
 }
 
@@ -55,7 +60,7 @@ struct CoworkerVertexView: View {
 struct CoworkerVertexView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let view = CoworkerVertexView(data: .placeholder)
+        let view = CoworkerVertexView(data: .placeholder, isAnimating: .constant(false))
         
         Group {
             view

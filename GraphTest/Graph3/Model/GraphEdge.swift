@@ -8,6 +8,6 @@
 import Foundation
 
 struct GraphEdge {
-    var source: Node
-    var target: Node
+    var source: Vertex
+    var target: Vertex
 }
