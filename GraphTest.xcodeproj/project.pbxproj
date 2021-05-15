@@ -42,6 +42,13 @@
 		B77FE43526452E4900EDB7FE /* InsuranceNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE43426452E4900EDB7FE /* InsuranceNode.swift */; };
 		B77FE43726452E5900EDB7FE /* MobileNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE43626452E5900EDB7FE /* MobileNode.swift */; };
 		B77FE43926452E7200EDB7FE /* CoworkerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE43826452E7200EDB7FE /* CoworkerNode.swift */; };
+		B7DAC028264FF5DF00A6EF5D /* GraphCapsule.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7DAC024264FF5DF00A6EF5D /* GraphCapsule.swift */; };
+		B7DAC029264FF5DF00A6EF5D /* HikeGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7DAC025264FF5DF00A6EF5D /* HikeGraph.swift */; };
+		B7DAC02A264FF5DF00A6EF5D /* HikeDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7DAC026264FF5DF00A6EF5D /* HikeDetail.swift */; };
+		B7DAC02B264FF5DF00A6EF5D /* HikeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7DAC027264FF5DF00A6EF5D /* HikeView.swift */; };
+		B7DAC02E264FF60800A6EF5D /* hikeData.json in Resources */ = {isa = PBXBuildFile; fileRef = B7DAC02C264FF60800A6EF5D /* hikeData.json */; };
+		B7DAC02F264FF60800A6EF5D /* Hike.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7DAC02D264FF60800A6EF5D /* Hike.swift */; };
+		B7DAC031264FF61600A6EF5D /* ModelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7DAC030264FF61600A6EF5D /* ModelData.swift */; };
 		B7E7920626410B930043FB54 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7920426410B930043FB54 /* Logger.swift */; };
 		B7E7920726410B930043FB54 /* LogType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7920526410B930043FB54 /* LogType.swift */; };
 		B7E7920C26412EB30043FB54 /* ButtonStyle1.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E7920A26412EB30043FB54 /* ButtonStyle1.swift */; };
@@ -95,6 +102,13 @@
 		B77FE43426452E4900EDB7FE /* InsuranceNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsuranceNode.swift; sourceTree = "<group>"; };
 		B77FE43626452E5900EDB7FE /* MobileNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileNode.swift; sourceTree = "<group>"; };
 		B77FE43826452E7200EDB7FE /* CoworkerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoworkerNode.swift; sourceTree = "<group>"; };
+		B7DAC024264FF5DF00A6EF5D /* GraphCapsule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphCapsule.swift; sourceTree = "<group>"; };
+		B7DAC025264FF5DF00A6EF5D /* HikeGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HikeGraph.swift; sourceTree = "<group>"; };
+		B7DAC026264FF5DF00A6EF5D /* HikeDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HikeDetail.swift; sourceTree = "<group>"; };
+		B7DAC027264FF5DF00A6EF5D /* HikeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HikeView.swift; sourceTree = "<group>"; };
+		B7DAC02C264FF60800A6EF5D /* hikeData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = hikeData.json; sourceTree = "<group>"; };
+		B7DAC02D264FF60800A6EF5D /* Hike.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hike.swift; sourceTree = "<group>"; };
+		B7DAC030264FF61600A6EF5D /* ModelData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelData.swift; sourceTree = "<group>"; };
 		B7E7920426410B930043FB54 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		B7E7920526410B930043FB54 /* LogType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogType.swift; sourceTree = "<group>"; };
 		B7E7920A26412EB30043FB54 /* ButtonStyle1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonStyle1.swift; sourceTree = "<group>"; };
@@ -236,6 +250,20 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		B7DAC023264FF5DF00A6EF5D /* Hikes */ = {
+			isa = PBXGroup;
+			children = (
+				B7DAC027264FF5DF00A6EF5D /* HikeView.swift */,
+				B7DAC02D264FF60800A6EF5D /* Hike.swift */,
+				B7DAC02C264FF60800A6EF5D /* hikeData.json */,
+				B7DAC030264FF61600A6EF5D /* ModelData.swift */,
+				B7DAC024264FF5DF00A6EF5D /* GraphCapsule.swift */,
+				B7DAC025264FF5DF00A6EF5D /* HikeGraph.swift */,
+				B7DAC026264FF5DF00A6EF5D /* HikeDetail.swift */,
+			);
+			path = Hikes;
+			sourceTree = "<group>";
+		};
 		B7E7920226410B850043FB54 /* Util */ = {
 			isa = PBXGroup;
 			children = (
@@ -295,6 +323,7 @@
 			children = (
 				B7F0F0BA264909D600380E82 /* Graph3View.swift */,
 				B7F0F0BC26490AE100380E82 /* Graph3Data.swift */,
+				B7DAC023264FF5DF00A6EF5D /* Hikes */,
 				B7F0F0C42649202900380E82 /* View */,
 				B7F0F0C32649136800380E82 /* Model */,
 			);
@@ -402,6 +431,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7DAC02E264FF60800A6EF5D /* hikeData.json in Resources */,
 				B77FE4252645273200EDB7FE /* graph.json in Resources */,
 				B73A22422640E0AF006CD531 /* Preview Assets.xcassets in Resources */,
 				B73A223F2640E0AF006CD531 /* Assets.xcassets in Resources */,
@@ -421,6 +451,7 @@
 				B76B73A226492F0C00CE7B55 /* Item.swift in Sources */,
 				B77FE43326452E2C00EDB7FE /* CardNode.swift in Sources */,
 				B73A223B2640E0AE006CD531 /* GraphTestApp.swift in Sources */,
+				B7DAC028264FF5DF00A6EF5D /* GraphCapsule.swift in Sources */,
 				B7E7921026412F600043FB54 /* FramePreferenceKey.swift in Sources */,
 				B7F8D3FB2643C414002B3BED /* Graph1Data.swift in Sources */,
 				B76416D3264A084F00475F06 /* CoworkerVertexView.swift in Sources */,
@@ -431,11 +462,14 @@
 				B77FE41B26450F5100EDB7FE /* TabbarItem.swift in Sources */,
 				B76414DE264A55C1005EFF13 /* InsuranceVertex.swift in Sources */,
 				B77FE42F26452C6600EDB7FE /* BankNode.swift in Sources */,
+				B7DAC031264FF61600A6EF5D /* ModelData.swift in Sources */,
 				B7F8D3F82643C3E7002B3BED /* GraphCategory.swift in Sources */,
 				B76414D8264A54BC005EFF13 /* UserVertex.swift in Sources */,
 				B76414DA264A5554005EFF13 /* BankVertex.swift in Sources */,
 				B73A22502640E6EA006CD531 /* Graph1Scene.swift in Sources */,
+				B7DAC029264FF5DF00A6EF5D /* HikeGraph.swift in Sources */,
 				B77FE43926452E7200EDB7FE /* CoworkerNode.swift in Sources */,
+				B7DAC02B264FF5DF00A6EF5D /* HikeView.swift in Sources */,
 				B7F0F0C82649219E00380E82 /* UserVertexView.swift in Sources */,
 				B77FE42926452ACA00EDB7FE /* UserNode.swift in Sources */,
 				B76414D6264A5095005EFF13 /* Vertex.swift in Sources */,
@@ -452,6 +486,7 @@
 				B77FE43726452E5900EDB7FE /* MobileNode.swift in Sources */,
 				B77FE41826450F4800EDB7FE /* TabbarType.swift in Sources */,
 				B77FE42D26452C0D00EDB7FE /* Node.swift in Sources */,
+				B7DAC02F264FF60800A6EF5D /* Hike.swift in Sources */,
 				B7E7920C26412EB30043FB54 /* ButtonStyle1.swift in Sources */,
 				B77FE4272645297500EDB7FE /* GraphResponse.swift in Sources */,
 				B7E7920626410B930043FB54 /* Logger.swift in Sources */,
@@ -460,6 +495,7 @@
 				B77FE4202645157E00EDB7FE /* Graph2Scene.swift in Sources */,
 				B76414E2264A5604005EFF13 /* CoworkerVertex.swift in Sources */,
 				B7E79214264134F80043FB54 /* ViewExtension.swift in Sources */,
+				B7DAC02A264FF5DF00A6EF5D /* HikeDetail.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

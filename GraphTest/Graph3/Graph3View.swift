@@ -16,11 +16,7 @@ struct Graph3View: View {
     @State private var isScaleAnimated    = false
     @State private var isLineAnimated     = false
     @State private var isRotationAnimated = false
-    @State private var scale: CGFloat     = 1
-    @State private var opacity: Double    = 1
-    @State private var offset: CGSize     = .zero
-    @State private var isCardsViewShown   = false
-    
+    @State private var isDetailViewShown = false
     
         
     // MARK: - View
@@ -82,7 +78,7 @@ struct Graph3View: View {
                 }
             }
             .frame(width: proxy.size.width, height: proxy.size.height)
-            .opacity(isCardsViewShown ? 0 : 0.5)
+            .opacity(0.5)
         }
     }
     
@@ -100,16 +96,11 @@ struct Graph3View: View {
                         
                     case let data as CardVertex:
                         CardVertexView(data: data, isAnimating: $isRotationAnimated)
-                            
-                            .gesture(DragGesture(minimumDistance: 0).onEnded({ value in
-                                withAnimation(.easeInOut(duration: 0.5)) {
-                                    isCardsViewShown = true
-                                    scale   = 3
-                                    opacity = 0
-                                    offset = CGSize(width: (60 - value.location.x) * scale, height: (60 - value.location.y) * scale)
+                            .onTapGesture {
+                                withAnimation(.spring()) {
+                                    isDetailViewShown = true
                                 }
-                            }))
-                            
+                            }
                         
                     case let data as InsuranceVertex:
                         InsuranceVertexView(data: data, isAnimating: $isRotationAnimated)
@@ -142,25 +133,20 @@ struct Graph3View: View {
                 .animation(isRotationAnimated ? Animation.linear(duration: 60).repeatForever(autoreverses: false) : nil)
             }
             .frame(width: proxy.size.width, height: proxy.size.height)
-            .scaleEffect(scale)
-            .opacity(opacity)
-            .offset(offset)
         }
     }
     
-    
     private var cardsView: some View {
         GeometryReader { proxy in
-            if isCardsViewShown {
-                Graph2View()
-                    .frame(width: isCardsViewShown ? proxy.size.width : 0, height: isCardsViewShown ? proxy.size.height : 0)
-                    // .matchedGeometryEffect(id: isCardsViewShown ? "cards" : "", in: namespace, properties: .size)
-                    .onTapGesture {
-                        withAnimation(.easeInOut(duration: 1)) {
-                            isCardsViewShown = false
-                        }
-                    }
-                
+            if isDetailViewShown {
+                VStack {
+                    Spacer()
+                    
+                    HikeView(hike: ModelData().hikes[0])
+                        .frame(alignment: .bottom)
+                }
+                .transition(.moveAndFade)
+                .frame(height: proxy.size.height)
             }
         }
     }
