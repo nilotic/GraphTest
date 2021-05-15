@@ -51,12 +51,12 @@ struct MobileVertexView: View {
             }
             .clipped()
         }
-        .scaleEffect(isScaled ? 1 : 0)
+        .scaleEffect(isScaled ? 1 : 0.001)
         .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
         .rotationEffect(.degrees(isAnimating ? -360 : 0))
         .offset(x: data.point.x, y: data.point.y)
         .rotationEffect(.degrees(isAnimating ? 360 : 0))
-        .animation(isAnimating ? Animation.linear(duration: 30).repeatForever(autoreverses: false) : nil)
+        .animation(isAnimating ? Animation.linear(duration: 60).repeatForever(autoreverses: false) : nil)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                 isScaled = true

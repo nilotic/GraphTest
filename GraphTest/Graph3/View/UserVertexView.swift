@@ -50,7 +50,7 @@ struct UserVertexView: View {
             }
             .clipped()
         }
-        .scaleEffect(isScaled ? 1 : 0)
+        .scaleEffect(isScaled ? 1 : 0.001)
         .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
         .onAppear {
             isScaled = true
