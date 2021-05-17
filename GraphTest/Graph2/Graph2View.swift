@@ -12,8 +12,8 @@ struct Graph2View: View {
     
     // MARK: - Value
     // MARK: Private
-    private let graphScene = Graph2Scene()
-    private let style1 = ButtonStyle1()
+    private let graphScene  = Graph2Scene()
+    private let buttonStyle = ButtonStyle1()
     
     @State private var isConnecting = false
     
@@ -62,7 +62,7 @@ struct Graph2View: View {
             .frame(width: 66, height: 66)
             .cornerRadius(33)
         }
-        .buttonStyle(style1)
+        .buttonStyle(buttonStyle)
     }
 }
 
