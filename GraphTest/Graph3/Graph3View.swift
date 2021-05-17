@@ -16,9 +16,9 @@ struct Graph3View: View {
     @State private var isScaleAnimated    = false
     @State private var isLineAnimated     = false
     @State private var isRotationAnimated = false
-    @State private var isDetailViewShown = false
+    @State private var isDetailViewShown  = false
     
-        
+    
     // MARK: - View
     // MARK: Public
     var body: some View {
@@ -89,27 +89,36 @@ struct Graph3View: View {
                 ForEach(data.vertexes, id: \.id) { vertex in
                     switch vertex {
                     case let data as UserVertex:
-                        UserVertexView(data: data)
+                        UserVertexView(data: data) {
+                            
+                        }
                         
                     case let data as BankVertex:
-                        BankVertexView(data: data, isAnimating: $isRotationAnimated)
+                        BankVertexView(data: data, isAnimating: $isRotationAnimated) {
+                            
+                        }
                         
                     case let data as CardVertex:
-                        CardVertexView(data: data, isAnimating: $isRotationAnimated)
-                            .onTapGesture {
-                                withAnimation(.spring()) {
-                                    isDetailViewShown = true
-                                }
+                        CardVertexView(data: data, isAnimating: $isRotationAnimated) {
+                            withAnimation(.spring()) {
+                                isDetailViewShown = true
                             }
+                        }
                         
                     case let data as InsuranceVertex:
-                        InsuranceVertexView(data: data, isAnimating: $isRotationAnimated)
+                        InsuranceVertexView(data: data, isAnimating: $isRotationAnimated) {
+                            
+                        }
 
                     case let data as MobileVertex:
-                        MobileVertexView(data: data, isAnimating: $isRotationAnimated)
+                        MobileVertexView(data: data, isAnimating: $isRotationAnimated) {
+                            
+                        }
 
                     case let data as CoworkerVertex:
-                        CoworkerVertexView(data: data, isAnimating: $isRotationAnimated)
+                        CoworkerVertexView(data: data, isAnimating: $isRotationAnimated) {
+                            
+                        }
                         
                     default:
                         Text("")
@@ -123,7 +132,6 @@ struct Graph3View: View {
                         path.move(to: edge.source.point)
                         path.addLine(to: edge.target.point)
                     }
-                    .offset(CGSize(width: proxy.size.width / 2, height: proxy.size.height / 2))
                     .trim(from: 0, to: isLineAnimated ? 1 : 0)
                     .stroke(Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), lineWidth: 4)
                     .animation(isLineAnimated ? Animation.easeInOut(duration: 0.38).delay(0.1 + 0.1 * TimeInterval(i)) : nil)

@@ -34,8 +34,8 @@ struct VertexButtonStyle: ButtonStyle {
             
             // Content View
             configuration.label
-                .scaleEffect(configuration.isPressed ? 0.87 : 1, anchor: anchor)
-                .animation(isAppeared ? .easeInOut(duration: 0.18) : nil)
+                .scaleEffect(configuration.isPressed ? 0.89 : 1, anchor: anchor)
+                .animation(isAppeared ? .easeInOut(duration: 0.17) : nil)
         }
     }
 }

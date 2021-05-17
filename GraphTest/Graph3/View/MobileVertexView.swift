@@ -10,11 +10,12 @@ import SwiftUI
 struct MobileVertexView: View {
     
     // MARK: - Value
-    // MARK: Public
-    let data: MobileVertex
-    @Binding var isAnimating: Bool
-    
     // MARK: Private
+    private let data: MobileVertex
+    private let style: VertexButtonStyle
+    private let action: (() -> Void)?
+    
+    @Binding private var isAnimating: Bool
     @State private var isScaled = false
     
     private var offset: CGFloat {
@@ -29,28 +30,41 @@ struct MobileVertexView: View {
     }
     
     
+    // MARK: - Initializer
+    init(data: MobileVertex, isAnimating: Binding<Bool>, action: (() -> Void)? = nil) {
+        self.data   = data
+        self.action = action
+        
+        _isAnimating = isAnimating
+        style = VertexButtonStyle(anchor: data.anchor)
+    }
+    
+    
     // MARK: - View
     // MARK: Public
     var body: some View {
-        ZStack {
-            Circle()
-                .stroke(Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)), lineWidth: 2)
-                .background(Circle().foregroundColor(Color.black))
-                .frame(width: 70 + offset, height: 70 + offset)
-                .padding()
-            
-            Group {
-                Image(data.imageName)
-                    .resizable()
-                    .frame(width: 48 + offset, height: 48 + offset)
-                    .padding(.bottom, 20 - (CGFloat(data.priority) * 2))
+        Button(action: { action?() }) {
+            ZStack {
+                Circle()
+                    .stroke(Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)), lineWidth: 2)
+                    .background(Circle().foregroundColor(Color.black))
+                    .frame(width: 70 + offset, height: 70 + offset)
+                    .padding()
                 
-                Text(data.name)
-                    .font(.system(size: 12 - (CGFloat(data.priority)), weight: .bold))
-                    .padding(.top, 70 - (CGFloat(data.priority) * 5))
+                Group {
+                    Image(data.imageName)
+                        .resizable()
+                        .frame(width: 48 + offset, height: 48 + offset)
+                        .padding(.bottom, 20 - (CGFloat(data.priority) * 2))
+                    
+                    Text(data.name)
+                        .font(.system(size: 12 - (CGFloat(data.priority)), weight: .bold))
+                        .padding(.top, 70 - (CGFloat(data.priority) * 5))
+                }
+                .clipped()
             }
-            .clipped()
         }
+        .buttonStyle(style)
         .scaleEffect(isScaled ? 1 : 0.001)
         .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
         .rotationEffect(.degrees(isAnimating ? -360 : 0))

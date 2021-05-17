@@ -26,7 +26,7 @@ final class Graph3Data: ObservableObject {
             var vertexes = [Vertex]()
             
             // User
-            let userVertex = UserVertex(data: data.user, point: center)
+            let userVertex = UserVertex(data: data.user, point: center, anchor: UnitPoint(x: center.x / size.width, y: center.y / size.height))
             vertexes.append(userVertex)
             
             
