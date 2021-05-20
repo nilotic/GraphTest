@@ -13,7 +13,8 @@ final class Graph3Data: ObservableObject {
     // MARK: Public
     @Published var vertexes = [Vertex]()
     @Published var edges    = [GraphEdge]()
-    let unit: CGFloat = 39
+    let unit: CGFloat = 40
+    
     
     // MARK: - Function
     // MARK: Public

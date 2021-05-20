@@ -17,7 +17,8 @@ struct Graph3View: View {
     @State private var isLineAnimated     = false
     @State private var isRotationAnimated = false
     @State private var isDetailViewShown  = false
-    
+    @State private var orientation        = UIDevice.current.orientation
+
     
     // MARK: - View
     // MARK: Public
@@ -28,21 +29,23 @@ struct Graph3View: View {
                 graph
                 cardsView
             }
-            .frame(width: proxy.size.width, height: proxy.size.height)
+            .id(orientation.rawValue)
+            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { value in
+                // Stop animations
+                update(isAnimated: false)
+                
+                // Update views
+                orientation = (value.object as? UIDevice)?.orientation ?? .landscapeLeft
+                
+                // Start animations
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    data.request(size: proxy.size)
+                    update(isAnimated: true)
+                }
+            }
             .onAppear {
                 data.request(size: proxy.size)
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    isScaleAnimated = true
-                }
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
-                    isLineAnimated = true
-                }
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    isRotationAnimated = true
-                }
+                update(isAnimated: true)
             }
         }
     }
@@ -58,10 +61,10 @@ struct Graph3View: View {
                 
                 
                 // Orbit
-                ForEach(1..<Int(min(proxy.size.width, proxy.size.height) / data.unit)) { i in
-                    Path { path in
-                        path.addArc(center: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2), radius: CGFloat(i) * data.unit,
-                                    startAngle: .radians(0), endAngle: .radians(2 * .pi), clockwise: true)
+                ForEach(1..<20) { i in
+                    Path {
+                        $0.addArc(center: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2), radius: CGFloat(i) * 40,
+                                  startAngle: .radians(0), endAngle: .radians(2 * .pi), clockwise: true)
                     }
                     .stroke(Color.blue, lineWidth: 1)
                 }
@@ -69,9 +72,9 @@ struct Graph3View: View {
                 
                 // Degree
                 ForEach(1..<24) {
-                    Path { path in
-                        path.move(to: CGPoint(x: proxy.size.width / 2, y: 0))
-                        path.addLine(to: CGPoint(x: proxy.size.width / 2, y: max(proxy.size.width, proxy.size.height) * 2))
+                    Path {
+                        $0.move(to: CGPoint(x: proxy.size.width / 2, y: 0))
+                        $0.addLine(to: CGPoint(x: proxy.size.width / 2, y: max(proxy.size.width, proxy.size.height) * 2))
                     }
                     .stroke(Color(#colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1)))
                     .rotationEffect(.degrees(15 * Double($0)))
@@ -155,6 +158,31 @@ struct Graph3View: View {
                 }
                 .transition(.moveAndFade)
                 .frame(height: proxy.size.height)
+            }
+        }
+    }
+    
+    
+    // MARK: - Function
+    // MARK: Private
+    private func update(isAnimated: Bool) {
+        switch isAnimated {
+        case false:
+            isScaleAnimated    = false
+            isLineAnimated     = false
+            isRotationAnimated = false
+            
+        case true:
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                isScaleAnimated = true
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+                isLineAnimated = true
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                isRotationAnimated = true
             }
         }
     }
