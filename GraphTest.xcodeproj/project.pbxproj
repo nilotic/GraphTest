@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B7253AF326563A50009CC281 /* EdgeShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7253AF226563A50009CC281 /* EdgeShape.swift */; };
 		B73A223B2640E0AE006CD531 /* GraphTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73A223A2640E0AE006CD531 /* GraphTestApp.swift */; };
 		B73A223F2640E0AF006CD531 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B73A223E2640E0AF006CD531 /* Assets.xcassets */; };
 		B73A22422640E0AF006CD531 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B73A22412640E0AF006CD531 /* Preview Assets.xcassets */; };
@@ -65,6 +66,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B7253AF226563A50009CC281 /* EdgeShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeShape.swift; sourceTree = "<group>"; };
 		B73A22372640E0AE006CD531 /* GraphTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GraphTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B73A223A2640E0AE006CD531 /* GraphTestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphTestApp.swift; sourceTree = "<group>"; };
 		B73A223E2640E0AF006CD531 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -354,6 +356,7 @@
 				B76416CC264A075100475F06 /* InsuranceVertexView.swift */,
 				B76416CF264A07C900475F06 /* MobileVertexView.swift */,
 				B76416D2264A084F00475F06 /* CoworkerVertexView.swift */,
+				B7253AF226563A50009CC281 /* EdgeShape.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -493,6 +496,7 @@
 				B76416C9264A048C00475F06 /* BankVertexView.swift in Sources */,
 				B7E7920726410B930043FB54 /* LogType.swift in Sources */,
 				B77FE4202645157E00EDB7FE /* Graph2Scene.swift in Sources */,
+				B7253AF326563A50009CC281 /* EdgeShape.swift in Sources */,
 				B76414E2264A5604005EFF13 /* CoworkerVertex.swift in Sources */,
 				B7E79214264134F80043FB54 /* ViewExtension.swift in Sources */,
 				B7DAC02A264FF5DF00A6EF5D /* HikeDetail.swift in Sources */,

@@ -13,12 +13,19 @@ struct Graph3View: View {
     // MARK: Private
     @StateObject private var data = Graph3Data()
 
+    @State private var isSummaryShown     = false
     @State private var isScaleAnimated    = false
     @State private var isLineAnimated     = false
     @State private var isRotationAnimated = false
     @State private var isDetailViewShown  = false
     @State private var orientation        = UIDevice.current.orientation
-
+    
+    private let curveBox = CGSize(width: 190, height: 50)
+    private let curveUnit: CGFloat = .pi / 6
+    private var angle: CGFloat {
+        atan2(curveBox.width / 2, curveBox.height)
+    }
+    
     
     // MARK: - View
     // MARK: Public
@@ -26,7 +33,8 @@ struct Graph3View: View {
         GeometryReader { proxy in
             ZStack {
                 guideLine
-                graph
+                curveGuideLine
+//                graph
                 cardsView
             }
             .id(orientation.rawValue)
@@ -85,6 +93,63 @@ struct Graph3View: View {
         }
     }
     
+    private var curveGuideLine: some View {
+        GeometryReader { proxy in
+            ZStack {
+                // Curve Box
+                ForEach(0..<2) {
+                    ZStack {
+                        Rectangle()
+                            .frame(width: curveBox.width, height: curveBox.height)
+                            .border(Color.red)
+                            .offset(x: curveBox.width / 2, y: -curveBox.height / 2)
+                        
+                        Circle()
+                            .fill(Color.green)
+                            .frame(width: 10, height: 10)
+                            .offset(x: curveBox.width / 2, y: -curveBox.height)
+                    }
+                    .rotationEffect(.radians(.pi/6 * Double($0)))
+                }
+                
+                // Control Point
+                ForEach(0..<2) {
+                    Circle()
+                        .fill(Color.orange)
+                        .frame(width: 10, height: 10)
+                        .offset(x: ((curveBox.width / 2 + 12) * cos(angle + curveUnit * CGFloat($0))), y: (curveBox.width / 2 + 12) * sin(angle + curveUnit * CGFloat($0)))
+                }
+                
+                // Curve
+                ForEach(0..<1) {
+                    EdgeShape(source: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
+                              target: CGPoint(x: proxy.size.width / 2 + curveBox.width * cos(curveUnit * CGFloat($0)), y: proxy.size.height / 2 + curveBox.width * sin(curveUnit * CGFloat($0))))
+                        .stroke(Color(#colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)), lineWidth: 5)
+                        .animation(.easeInOut(duration: 3))
+                }
+                
+                /*
+                 Path {
+                 $0.move(to: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2))
+                 
+                 switch isSummaryShown {
+                 case false: $0.addLine(to: CGPoint(x: proxy.size.width / 2 + radius * cos(.pi), y: proxy.size.height / 2 + radius * sin(.pi)))
+                 case true:  $0.addQuadCurve(to: CGPoint(x: proxy.size.width / 2 + radius * cos(.pi), y: proxy.size.height / 2 + radius * sin(.pi)), control: CGPoint(x: proxy.size.width / 2 - radius / 2, y: proxy.size.height / 2 - radius / 2))
+                 }
+                 }
+                 .stroke(Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)), lineWidth: 5)
+                 .animation(.easeInOut(duration: 3))
+                 */
+                //                ForEach(1..<3) {
+                
+                
+                //                }
+            }
+            .frame(width: proxy.size.width, height: proxy.size.height)
+            .opacity(0.5)
+        }
+    }
+    
     private var graph: some View {
         GeometryReader { proxy in
             ZStack(alignment: .center) {
@@ -93,7 +158,9 @@ struct Graph3View: View {
                     switch vertex {
                     case let data as UserVertex:
                         UserVertexView(data: data) {
-                            
+                            withAnimation(.easeInOut(duration: 3)) {
+                                isSummaryShown.toggle()
+                            }
                         }
                         
                     case let data as BankVertex:
@@ -128,12 +195,22 @@ struct Graph3View: View {
                     }
                 }
                 
+                Path {
+                    $0.move(to: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2))
+                    $0.addQuadCurve(to: CGPoint(x: proxy.size.width / 2 , y: proxy.size.height / 2 + 240), control: CGPoint(x: proxy.size.width / 2 + 100, y: proxy.size.height / 2 + 140))
+                }
+                .stroke(Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), lineWidth: 4)
                 
                 // Edge
                 ForEach(Array(data.edges.enumerated()), id: \.element) { (i, edge) in
-                    Path { path in
-                        path.move(to: edge.source.point)
-                        path.addLine(to: edge.target.point)
+                    Path {
+                        $0.move(to: edge.source.point)
+                        
+//                        switch isSummaryShown {
+//                        case false: $0.addLine(to: edge.target.point)
+//                        case true:  $0.addQuadCurve(to: edge.target.point, control: CGPoint(x: proxy.size.width / 2 + 100, y: proxy.size.height / 2 + 140))
+//                        }
+                        
                     }
                     .trim(from: 0, to: isLineAnimated ? 1 : 0)
                     .stroke(Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), lineWidth: 4)
@@ -182,7 +259,7 @@ struct Graph3View: View {
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                isRotationAnimated = true
+//                isRotationAnimated = true
             }
         }
     }
