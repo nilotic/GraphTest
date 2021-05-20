@@ -13,7 +13,7 @@ final class Graph3Data: ObservableObject {
     // MARK: Public
     @Published var vertexes = [Vertex]()
     @Published var edges    = [GraphEdge]()
-    
+    let unit: CGFloat = 39
     
     // MARK: - Function
     // MARK: Public
@@ -31,9 +31,6 @@ final class Graph3Data: ObservableObject {
             
             
             // Edge
-            let length = min(size.width, size.height)
-            let unit   = length / 10
-            
             var edges = [GraphEdge]()
             for graph in data.user.graphs {
                 guard let vertex = graph.nodes.sorted(by: { $0.priority < $1.priority }).first else { continue }

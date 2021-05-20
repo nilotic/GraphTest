@@ -58,9 +58,9 @@ struct Graph3View: View {
                 
                 
                 // Orbit
-                ForEach(1..<11) { i in
+                ForEach(1..<Int(min(proxy.size.width, proxy.size.height) / data.unit)) { i in
                     Path { path in
-                        path.addArc(center: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2), radius: CGFloat(i) * min(proxy.size.width, proxy.size.height) / 10,
+                        path.addArc(center: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2), radius: CGFloat(i) * data.unit,
                                     startAngle: .radians(0), endAngle: .radians(2 * .pi), clockwise: true)
                     }
                     .stroke(Color.blue, lineWidth: 1)
@@ -71,7 +71,7 @@ struct Graph3View: View {
                 ForEach(1..<24) {
                     Path { path in
                         path.move(to: CGPoint(x: proxy.size.width / 2, y: 0))
-                        path.addLine(to: CGPoint(x: proxy.size.width / 2, y: proxy.size.height))
+                        path.addLine(to: CGPoint(x: proxy.size.width / 2, y: max(proxy.size.width, proxy.size.height) * 2))
                     }
                     .stroke(Color(#colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1)))
                     .rotationEffect(.degrees(15 * Double($0)))
