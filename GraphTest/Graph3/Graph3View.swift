@@ -138,7 +138,7 @@ struct Graph3View: View {
                 }
                 .zIndex(-1)
                 .rotationEffect(.degrees(isRotationAnimated ? 360 : 0))
-                .animation(isRotationAnimated ? Animation.linear(duration: 60).repeatForever(autoreverses: false) : nil)
+                .animation(isRotationAnimated ? Animation.linear(duration: 120).repeatForever(autoreverses: false) : nil)
             }
             .frame(width: proxy.size.width, height: proxy.size.height)
         }

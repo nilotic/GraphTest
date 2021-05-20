@@ -71,7 +71,7 @@ struct CoworkerVertexView: View {
         .rotationEffect(.degrees(isAnimating ? -360 : 0))
         .position(data.point)
         .rotationEffect(.degrees(isAnimating ? 360 : 0))
-        .animation(isAnimating ? Animation.linear(duration: 60).repeatForever(autoreverses: false) : nil)
+        .animation(isAnimating ? Animation.linear(duration: 120).repeatForever(autoreverses: false) : nil)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 isScaled = true
