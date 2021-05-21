@@ -13,7 +13,20 @@ final class Graph3Data: ObservableObject {
     // MARK: Public
     @Published var vertexes = [Vertex]()
     @Published var edges    = [GraphEdge]()
+    
+    @Published var orientation = UIDevice.current.orientation
+    
     let unit: CGFloat = 40
+    
+    let curveSize  = CGSize(width: 190, height: 50)
+    let curveUnit  = CGFloat.pi / 6
+    let curveCount = 12
+    
+    let duration: Double = 120
+    
+    var controlPointAngle: CGFloat {
+        atan2(curveSize.width / 2, curveSize.height)
+    }
     
     
     // MARK: - Function
