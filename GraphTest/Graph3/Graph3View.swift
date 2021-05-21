@@ -157,14 +157,13 @@ struct Graph3View: View {
 //                            }
                             
                             isCurved.toggle()
-                            log(.info, isCurved)
                             
-                            let startAngle = currentAngle.truncatingRemainder(dividingBy: -2 * .pi)
-                            let angleDelta: CGFloat = isCurved ? 0 : -2 * .pi
+                            let start = currentAngle.truncatingRemainder(dividingBy: -2 * .pi)
+                            let delta: CGFloat = isCurved ? 0 : -2 * .pi
                             
                             withAnimation(isCurved ? .linear(duration: 0) : Animation.linear(duration: 120).repeatForever(autoreverses: false)) {
                                 curveRatio = isCurved ? 0 : 1
-                                angle = startAngle + angleDelta
+                                angle = start + delta
                             }
                         }
                         
@@ -200,17 +199,17 @@ struct Graph3View: View {
                         Text("")
                     }
                 }
-                /*
+                
                 // Edge
                 ForEach(Array(data.edges.enumerated()), id: \.element) { (i, edge) in
-                    EdgeShape(source: edge.source.point,target: edge.target.point, size: curveSize, ratio: (curveRatio))
+                    EdgeShape(edge: edge, size: curveSize, ratio: curveRatio)
                         .trim(from: 0, to: isLineAnimated ? 1 : 0)
                         .stroke(Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), lineWidth: 3)
-                        .animation(isLineAnimated ? Animation.easeInOut(duration: isCurved ? 0.2 : 0.38).delay(curveRatio == nil ? (0.1 + 0.1 * TimeInterval(i)) : 0) : nil)
+                        .animation(isLineAnimated ? Animation.easeInOut(duration: isCurved ? 0.2 : 0.38).delay(isCurved ? 0 : (0.1 + 0.1 * TimeInterval(i))) : nil)
                 }
                 .zIndex(-1)
                 .rotationEffect(.radians(isRotationAnimated ? 2 * .pi : 0))
-                .animation(isRotationAnimated ? Animation.linear(duration: 120).repeatForever(autoreverses: false) : nil)*/
+                .animation(isRotationAnimated ? Animation.linear(duration: 120).repeatForever(autoreverses: false) : nil)
             }
             .frame(width: proxy.size.width, height: proxy.size.height)
         }
@@ -253,7 +252,7 @@ struct Graph3View: View {
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                withAnimation(Animation.linear(duration: 12).repeatForever(autoreverses: false)) {
+                withAnimation(Animation.linear(duration: 120).repeatForever(autoreverses: false)) {
                     angle = -2 * .pi
                     isRotationAnimated = true
                 }

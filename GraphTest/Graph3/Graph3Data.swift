@@ -24,10 +24,11 @@ final class Graph3Data: ObservableObject {
         do {
             let data = try JSONDecoder().decode(GraphResponse.self, from: try Data(contentsOf: url))
             let center = CGPoint(x: size.width / 2, y: size.height / 2)
+            
             var vertexes = [Vertex]()
             
             // User
-            let userVertex = UserVertex(data: data.user, point: center, anchor: UnitPoint(x: center.x / size.width, y: center.y / size.height))
+            let userVertex = UserVertex(data: data.user, point: center)
             vertexes.append(userVertex)
             
             
@@ -42,14 +43,14 @@ final class Graph3Data: ObservableObject {
                     let vertex = BankVertex(data: data, point: point)
                     
                     vertexes.append(vertex)
-                    edges.append(GraphEdge(source: userVertex, target: vertex))
+                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center))
                     
                 case let data as CardNode:
                     let point  = CGPoint(x: unit * 3, y: 0)
                     let vertex = CardVertex(data: data, point: point)
                     
                     vertexes.append(vertex)
-                    edges.append(GraphEdge(source: userVertex, target: vertex))
+                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center))
                     
                 case let data as InsuranceNode:
                     let radius = unit * 4
@@ -58,7 +59,7 @@ final class Graph3Data: ObservableObject {
                     let vertex = InsuranceVertex(data: data, point: point)
                     
                     vertexes.append(vertex)
-                    edges.append(GraphEdge(source: userVertex, target: vertex))
+                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center))
                     
                 case let data as MobileNode:
                     let radius = unit * 4
@@ -67,7 +68,7 @@ final class Graph3Data: ObservableObject {
                     let vertex = MobileVertex(data: data, point: point)
                     
                     vertexes.append(vertex)
-                    edges.append(GraphEdge(source: userVertex, target: vertex))
+                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center))
                     
                 case let data as CoworkerNode:
                     let radius = unit * 6
@@ -76,7 +77,7 @@ final class Graph3Data: ObservableObject {
                     let vertex = CoworkerVertex(data: data, point: point)
                     
                     vertexes.append(vertex)
-                    edges.append(GraphEdge(source: userVertex, target: vertex))
+                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center))
                     
                 default:
                     continue
