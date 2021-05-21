@@ -13,18 +13,22 @@ struct Graph3View: View {
     // MARK: Private
     @StateObject private var data = Graph3Data()
 
-    @State private var curveRatio: CGFloat = 0
-    @State private var isScaleAnimated     = false
-    @State private var isLineAnimated      = false
-    @State private var isRotationAnimated  = false
-    @State private var isDetailViewShown   = false
-    @State private var orientation         = UIDevice.current.orientation
+    @State private var isScaleAnimated      = false
+    @State private var isLineAnimated       = false
+    @State private var isRotationAnimated   = false
+    @State private var isDetailViewShown    = false
+    
+    @State private var angle: CGFloat        = 0
+    @State private var currentAngle: CGFloat = 0
+    @State private var isCurved              = false
+    @State private var curveRatio: CGFloat   = 0
+    @State private var orientation           = UIDevice.current.orientation
     
     private let curveSize  = CGSize(width: 190, height: 50)
     private let curveUnit  = CGFloat.pi / 6
     private let curveCount = 12
     
-    private var angle: CGFloat {
+    private var controlPointAngle: CGFloat {
         atan2(curveSize.width / 2, curveSize.height)
     }
     
@@ -32,10 +36,13 @@ struct Graph3View: View {
     // MARK: - View
     // MARK: Public
     var body: some View {
+        
+        
         GeometryReader { proxy in
             ZStack {
+//                DemoView()
                 guideLine
-                curveGuideLine
+                // curveGuideLine
                 graph
                 cardsView
             }
@@ -87,7 +94,7 @@ struct Graph3View: View {
                         $0.addLine(to: CGPoint(x: proxy.size.width / 2, y: max(proxy.size.width, proxy.size.height) * 2))
                     }
                     .stroke(Color(#colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1)))
-                    .rotationEffect(.degrees(15 * Double($0)))
+                    .rotationEffect(.radians(.pi / 12 * Double($0)))
                 }
             }
             .frame(width: proxy.size.width, height: proxy.size.height)
@@ -119,7 +126,7 @@ struct Graph3View: View {
                     Circle()
                         .fill(Color.red)
                         .frame(width: 5, height: 5)
-                        .offset(x: ((curveSize.width / 2 + 12) * cos(angle + curveUnit * CGFloat($0))), y: (curveSize.width / 2 + 12) * sin(angle + curveUnit * CGFloat($0)))
+                        .offset(x: ((curveSize.width / 2 + 12) * cos(controlPointAngle + curveUnit * CGFloat($0))), y: (curveSize.width / 2 + 12) * sin(controlPointAngle + curveUnit * CGFloat($0)))
                 }
                 
                 // Curve
@@ -144,67 +151,66 @@ struct Graph3View: View {
                     switch vertex {
                     case let data as UserVertex:
                         UserVertexView(data: data) {
-                            withAnimation(.easeInOut(duration: 0.38)) {
-                                curveRatio = curveRatio <= 0 ? 1 : 0
+//                            withAnimation(.easeInOut(duration: 0.38)) {
+//                                curveRatio = (curveRatio == nil || curveRatio == 0) ? 1 : 0
+//                                angle = curveRatio == 1 ? .pi / 9 : 0
+//                            }
+                            
+                            isCurved.toggle()
+                            log(.info, isCurved)
+                            
+                            let startAngle = currentAngle.truncatingRemainder(dividingBy: -2 * .pi)
+                            let angleDelta: CGFloat = isCurved ? 0 : -2 * .pi
+                            
+                            withAnimation(isCurved ? .linear(duration: 0) : Animation.linear(duration: 120).repeatForever(autoreverses: false)) {
+                                curveRatio = isCurved ? 0 : 1
+                                angle = startAngle + angleDelta
                             }
                         }
                         
                     case let data as BankVertex:
-                        BankVertexView(data: data, isAnimating: $isRotationAnimated) {
+                        BankVertexView(data: data, angle: $angle, currentAngle: $currentAngle, isAnimating: $isRotationAnimated) {
                             
                         }
                         
+                        
                     case let data as CardVertex:
-                        CardVertexView(data: data, isAnimating: $isRotationAnimated) {
+                        CardVertexView(data: data, angle: $angle, currentAngle: $currentAngle, isAnimating: $isRotationAnimated) {
                             withAnimation(.spring()) {
                                 isDetailViewShown = true
                             }
                         }
-                        
+                    
                     case let data as InsuranceVertex:
-                        InsuranceVertexView(data: data, isAnimating: $isRotationAnimated) {
+                        InsuranceVertexView(data: data, angle: $angle, currentAngle: $currentAngle, isAnimating: $isRotationAnimated) {
                             
                         }
-
+                    
                     case let data as MobileVertex:
-                        MobileVertexView(data: data, isAnimating: $isRotationAnimated) {
+                        MobileVertexView(data: data, angle: $angle, currentAngle: $currentAngle, isAnimating: $isRotationAnimated) {
                             
                         }
 
                     case let data as CoworkerVertex:
-                        CoworkerVertexView(data: data, isAnimating: $isRotationAnimated) {
+                        CoworkerVertexView(data: data, angle: $angle, currentAngle: $currentAngle, isAnimating: $isRotationAnimated) {
                             
                         }
-                        
+                    
                     default:
                         Text("")
                     }
                 }
-                
-                Path {
-                    $0.move(to: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2))
-                    $0.addQuadCurve(to: CGPoint(x: proxy.size.width / 2 , y: proxy.size.height / 2 + 240), control: CGPoint(x: proxy.size.width / 2 + 100, y: proxy.size.height / 2 + 140))
-                }
-                .stroke(Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), lineWidth: 4)
-                
+                /*
                 // Edge
                 ForEach(Array(data.edges.enumerated()), id: \.element) { (i, edge) in
-                    Path {
-                        $0.move(to: edge.source.point)
-                        
-//                        switch isSummaryShown {
-//                        case false: $0.addLine(to: edge.target.point)
-//                        case true:  $0.addQuadCurve(to: edge.target.point, control: CGPoint(x: proxy.size.width / 2 + 100, y: proxy.size.height / 2 + 140))
-//                        }
-                        
-                    }
-                    .trim(from: 0, to: isLineAnimated ? 1 : 0)
-                    .stroke(Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), lineWidth: 4)
-                    .animation(isLineAnimated ? Animation.easeInOut(duration: 0.38).delay(0.1 + 0.1 * TimeInterval(i)) : nil)
+                    EdgeShape(source: edge.source.point,target: edge.target.point, size: curveSize, ratio: (curveRatio))
+                        .trim(from: 0, to: isLineAnimated ? 1 : 0)
+                        .stroke(Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), lineWidth: 3)
+                        .animation(isLineAnimated ? Animation.easeInOut(duration: isCurved ? 0.2 : 0.38).delay(curveRatio == nil ? (0.1 + 0.1 * TimeInterval(i)) : 0) : nil)
                 }
                 .zIndex(-1)
-                .rotationEffect(.degrees(isRotationAnimated ? 360 : 0))
-                .animation(isRotationAnimated ? Animation.linear(duration: 120).repeatForever(autoreverses: false) : nil)
+                .rotationEffect(.radians(isRotationAnimated ? 2 * .pi : 0))
+                .animation(isRotationAnimated ? Animation.linear(duration: 120).repeatForever(autoreverses: false) : nil)*/
             }
             .frame(width: proxy.size.width, height: proxy.size.height)
         }
@@ -235,6 +241,8 @@ struct Graph3View: View {
             isLineAnimated     = false
             isRotationAnimated = false
             
+            angle = 0
+            
         case true:
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 isScaleAnimated = true
@@ -245,7 +253,10 @@ struct Graph3View: View {
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//                isRotationAnimated = true
+                withAnimation(Animation.linear(duration: 12).repeatForever(autoreverses: false)) {
+                    angle = -2 * .pi
+                    isRotationAnimated = true
+                }
             }
         }
     }

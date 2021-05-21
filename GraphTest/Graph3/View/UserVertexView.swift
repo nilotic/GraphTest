@@ -12,8 +12,8 @@ struct UserVertexView: View {
     // MARK: - Value
     // MARK: Private
     private let data: UserVertex
-    private let style: VertexButtonStyle
     private let action: (() -> Void)?
+    private let style = VertexButtonStyle()
     
     @State private var isScaled = false
     
@@ -33,8 +33,6 @@ struct UserVertexView: View {
     init(data: UserVertex, action: (() -> Void)? = nil) {
         self.data   = data
         self.action = action
-        
-        style = VertexButtonStyle(anchor: data.anchor)
     }
     
     

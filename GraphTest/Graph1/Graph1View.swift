@@ -49,12 +49,12 @@ struct Graph1View: View {
                 case true:
                     Image(systemName: "link")
                         .scaleEffect(1.5)
-                        .rotation3DEffect(.degrees(180), axis: (x: 1, y: 0, z: 0))
+                        .rotation3DEffect(.radians(.pi), axis: (x: 1, y: 0, z: 0))
                         .foregroundColor(.white)
                     
                 case false:
                     Image(systemName: "hand.tap.fill")
-                        .rotationEffect(.degrees(-15))
+                        .rotationEffect(.radians(.pi / -12))
                         .scaleEffect(1.5)
                         .foregroundColor(.white)
                 }

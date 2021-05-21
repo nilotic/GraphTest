@@ -12,12 +12,13 @@ struct CoworkerVertexView: View {
     // MARK: - Value
     // MARK: Private
     private let data: CoworkerVertex
-    private let style: VertexButtonStyle
     private let action: (() -> Void)?
+    private let style = VertexButtonStyle()
     
-    @Binding private var isAnimating: Bool
     @State private var isScaled = false
-    
+    @Binding private var isAnimating: Bool
+    @Binding private var angle: CGFloat
+    @Binding private var currentAngle: CGFloat
     
     private var offset: CGFloat {
         switch data.priority {
@@ -32,12 +33,13 @@ struct CoworkerVertexView: View {
     
     
     // MARK: - Initializer
-    init(data: CoworkerVertex, isAnimating: Binding<Bool>, action: (() -> Void)? = nil) {
+    init(data: CoworkerVertex, angle: Binding<CGFloat>, currentAngle: Binding<CGFloat>, isAnimating: Binding<Bool>, action: (() -> Void)? = nil) {
         self.data   = data
         self.action = action
         
-        _isAnimating = isAnimating
-        style = VertexButtonStyle(anchor: data.anchor)
+        _angle        = angle
+        _currentAngle = currentAngle
+        _isAnimating  = isAnimating
     }
     
     
@@ -68,10 +70,7 @@ struct CoworkerVertexView: View {
         .buttonStyle(style)
         .scaleEffect(isScaled ? 1 : 0.001)
         .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
-        .rotationEffect(.degrees(isAnimating ? -360 : 0))
-        .position(data.point)
-        .rotationEffect(.degrees(isAnimating ? 360 : 0))
-        .animation(isAnimating ? Animation.linear(duration: 120).repeatForever(autoreverses: false) : nil)
+        .modifier(VertexModifier(angle: angle, currentAngle: $currentAngle, point: data.point))
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 isScaled = true
@@ -84,7 +83,7 @@ struct CoworkerVertexView: View {
 struct CoworkerVertexView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let view = CoworkerVertexView(data: .placeholder, isAnimating: .constant(false))
+        let view = CoworkerVertexView(data: .placeholder, angle: .constant(0), currentAngle: .constant(0), isAnimating: .constant(false))
         
         Group {
             view
