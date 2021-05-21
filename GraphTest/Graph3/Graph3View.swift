@@ -13,17 +13,19 @@ struct Graph3View: View {
     // MARK: Private
     @StateObject private var data = Graph3Data()
 
-    @State private var isSummaryShown     = false
-    @State private var isScaleAnimated    = false
-    @State private var isLineAnimated     = false
-    @State private var isRotationAnimated = false
-    @State private var isDetailViewShown  = false
-    @State private var orientation        = UIDevice.current.orientation
+    @State private var curveRatio: CGFloat = 0
+    @State private var isScaleAnimated     = false
+    @State private var isLineAnimated      = false
+    @State private var isRotationAnimated  = false
+    @State private var isDetailViewShown   = false
+    @State private var orientation         = UIDevice.current.orientation
     
-    private let curveBox = CGSize(width: 190, height: 50)
-    private let curveUnit: CGFloat = .pi / 6
+    private let curveSize  = CGSize(width: 190, height: 50)
+    private let curveUnit  = CGFloat.pi / 6
+    private let curveCount = 12
+    
     private var angle: CGFloat {
-        atan2(curveBox.width / 2, curveBox.height)
+        atan2(curveSize.width / 2, curveSize.height)
     }
     
     
@@ -34,7 +36,7 @@ struct Graph3View: View {
             ZStack {
                 guideLine
                 curveGuideLine
-//                graph
+                graph
                 cardsView
             }
             .id(orientation.rawValue)
@@ -97,53 +99,37 @@ struct Graph3View: View {
         GeometryReader { proxy in
             ZStack {
                 // Curve Box
-                ForEach(0..<2) {
+                ForEach(0..<curveCount) {
                     ZStack {
                         Rectangle()
-                            .frame(width: curveBox.width, height: curveBox.height)
+                            .frame(width: curveSize.width, height: curveSize.height)
                             .border(Color.red)
-                            .offset(x: curveBox.width / 2, y: -curveBox.height / 2)
+                            .offset(x: curveSize.width / 2, y: -curveSize.height / 2)
                         
                         Circle()
                             .fill(Color.green)
                             .frame(width: 10, height: 10)
-                            .offset(x: curveBox.width / 2, y: -curveBox.height)
+                            .offset(x: curveSize.width / 2, y: -curveSize.height)
                     }
-                    .rotationEffect(.radians(.pi/6 * Double($0)))
+                    .rotationEffect(.radians(.pi / 6 * Double($0)))
                 }
                 
                 // Control Point
-                ForEach(0..<2) {
+                ForEach(0..<curveCount) {
                     Circle()
-                        .fill(Color.orange)
-                        .frame(width: 10, height: 10)
-                        .offset(x: ((curveBox.width / 2 + 12) * cos(angle + curveUnit * CGFloat($0))), y: (curveBox.width / 2 + 12) * sin(angle + curveUnit * CGFloat($0)))
+                        .fill(Color.red)
+                        .frame(width: 5, height: 5)
+                        .offset(x: ((curveSize.width / 2 + 12) * cos(angle + curveUnit * CGFloat($0))), y: (curveSize.width / 2 + 12) * sin(angle + curveUnit * CGFloat($0)))
                 }
                 
                 // Curve
-                ForEach(0..<1) {
+                ForEach(0..<curveCount) {
                     EdgeShape(source: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
-                              target: CGPoint(x: proxy.size.width / 2 + curveBox.width * cos(curveUnit * CGFloat($0)), y: proxy.size.height / 2 + curveBox.width * sin(curveUnit * CGFloat($0))))
-                        .stroke(Color(#colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)), lineWidth: 5)
-                        .animation(.easeInOut(duration: 3))
+                              target: CGPoint(x: proxy.size.width / 2 + curveSize.width * cos(curveUnit * CGFloat($0)), y: proxy.size.height / 2 + curveSize.width * sin(curveUnit * CGFloat($0))),
+                              size: curveSize,
+                              ratio: curveRatio)
+                        .stroke(Color(#colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)), lineWidth: 3)
                 }
-                
-                /*
-                 Path {
-                 $0.move(to: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2))
-                 
-                 switch isSummaryShown {
-                 case false: $0.addLine(to: CGPoint(x: proxy.size.width / 2 + radius * cos(.pi), y: proxy.size.height / 2 + radius * sin(.pi)))
-                 case true:  $0.addQuadCurve(to: CGPoint(x: proxy.size.width / 2 + radius * cos(.pi), y: proxy.size.height / 2 + radius * sin(.pi)), control: CGPoint(x: proxy.size.width / 2 - radius / 2, y: proxy.size.height / 2 - radius / 2))
-                 }
-                 }
-                 .stroke(Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)), lineWidth: 5)
-                 .animation(.easeInOut(duration: 3))
-                 */
-                //                ForEach(1..<3) {
-                
-                
-                //                }
             }
             .frame(width: proxy.size.width, height: proxy.size.height)
             .opacity(0.5)
@@ -158,8 +144,8 @@ struct Graph3View: View {
                     switch vertex {
                     case let data as UserVertex:
                         UserVertexView(data: data) {
-                            withAnimation(.easeInOut(duration: 3)) {
-                                isSummaryShown.toggle()
+                            withAnimation(.easeInOut(duration: 0.38)) {
+                                curveRatio = curveRatio <= 0 ? 1 : 0
                             }
                         }
                         

@@ -13,30 +13,29 @@ struct EdgeShape: Shape {
     // MARK: Public
     let source: CGPoint
     let target: CGPoint
+    let size: CGSize
+    var ratio: CGFloat
     
-    var isCurved: Bool = true
-    
-    var animatableData: Bool {
-        get { isCurved }
-        set { isCurved = newValue}
+    var animatableData: CGFloat {
+        get { ratio }
+        set { ratio = newValue }
     }
     
     // MARK: Private
-    private var angle: CGFloat {
-        //    offset(x: ((curveBox.width / 2 + 12) * cos(angle + .pi/6 * CGFloat($0))), y: (curveBox.width / 2 + 12) * sin(angle + .pi/6 * CGFloat($0)))
-        let degree = atan2(target.x - source.x, target.y - source.y) - .pi / 4
-        return -degree
+    private var control: CGPoint {
+        CGPoint(x: source.x + radius * cos(controlPointAngle), y: source.y + radius * sin(controlPointAngle))
+    }
+    
+    private var edgeAngle: CGFloat {
+        atan2(target.y - source.y, target.x - source.x)
+    }
+    
+    private var controlPointAngle: CGFloat {
+        edgeAngle - atan2(size.height * ratio, size.width / 2)
     }
     
     private var radius: CGFloat {
-        let radius = sqrt(pow(target.x - source.x, 2) + pow(target.y - source.y, 2))
-        return radius / 2 + 10
-    }
-
-    private var control: CGPoint {
-        let point = CGPoint(x: source.x + radius * cos(angle), y: source.y + radius * sin(angle))
-        log(.info, "\(point), \(angle * 180 / .pi)")
-        return point
+        sqrt(pow(size.width / 2, 2) + pow(size.height * ratio, 2))
     }
     
     
@@ -45,10 +44,7 @@ struct EdgeShape: Shape {
     func path(in rect: CGRect) -> Path {
         Path {
             $0.move(to: source)
-            switch isCurved {
-            case false:     $0.addLine(to: target)
-            case true:      $0.addQuadCurve(to: target, control: control)
-            }
+            $0.addQuadCurve(to: target, control: control)
         }
     }
 }
