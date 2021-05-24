@@ -13,29 +13,24 @@ struct Graph3View: View {
     // MARK: Private
     @StateObject private var data = Graph3Data()
 
-    @State private var isScaleAnimated    = false
-    @State private var isLineAnimated     = false
-    @State private var isRotationAnimated = false
-    @State private var isDetailViewShown  = false
-    @State private var orientation        = UIDevice.current.orientation
-
     
     // MARK: - View
     // MARK: Public
-    var body: some View {
+    var body: some View {        
         GeometryReader { proxy in
             ZStack {
                 guideLine
+                // curveGuideLine
                 graph
                 cardsView
             }
-            .id(orientation.rawValue)
+            .id(data.orientation.rawValue)
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { value in
                 // Stop animations
                 update(isAnimated: false)
                 
                 // Update views
-                orientation = (value.object as? UIDevice)?.orientation ?? .landscapeLeft
+                data.orientation = (value.object as? UIDevice)?.orientation ?? .landscapeLeft
                 
                 // Start animations
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -77,7 +72,48 @@ struct Graph3View: View {
                         $0.addLine(to: CGPoint(x: proxy.size.width / 2, y: max(proxy.size.width, proxy.size.height) * 2))
                     }
                     .stroke(Color(#colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1)))
-                    .rotationEffect(.degrees(15 * Double($0)))
+                    .rotationEffect(.radians(.pi / 12 * Double($0)))
+                }
+            }
+            .frame(width: proxy.size.width, height: proxy.size.height)
+            .opacity(0.5)
+        }
+    }
+    
+    private var curveGuideLine: some View {
+        GeometryReader { proxy in
+            ZStack {
+                // Curve Box
+                ForEach(0..<data.curveCount) {
+                    ZStack {
+                        Rectangle()
+                            .frame(width: data.curveSize.width, height: data.curveSize.height)
+                            .border(Color.red)
+                            .offset(x: data.curveSize.width / 2, y: -data.curveSize.height / 2)
+                        
+                        Circle()
+                            .fill(Color.green)
+                            .frame(width: 10, height: 10)
+                            .offset(x: data.curveSize.width / 2, y: -data.curveSize.height)
+                    }
+                    .rotationEffect(.radians(.pi / 6 * Double($0)))
+                }
+                
+                // Control Point
+                ForEach(0..<data.curveCount) {
+                    Circle()
+                        .fill(Color.red)
+                        .frame(width: 5, height: 5)
+                        .offset(x: ((data.curveSize.width / 2 + 12) * cos(data.controlPointAngle + data.curveUnit * CGFloat($0))), y: (data.curveSize.width / 2 + 12) * sin(data.controlPointAngle + data.curveUnit * CGFloat($0)))
+                }
+                
+                // Curve
+                ForEach(0..<data.curveCount) {
+                    EdgeShape(source: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
+                              target: CGPoint(x: proxy.size.width / 2 + data.curveSize.width * cos(data.curveUnit * CGFloat($0)), y: proxy.size.height / 2 + data.curveSize.width * sin(data.curveUnit * CGFloat($0))),
+                              size: data.curveSize,
+                              ratio: data.curveRatio)
+                        .stroke(Color(#colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)), lineWidth: 3)
                 }
             }
             .frame(width: proxy.size.width, height: proxy.size.height)
@@ -88,60 +124,56 @@ struct Graph3View: View {
     private var graph: some View {
         GeometryReader { proxy in
             ZStack(alignment: .center) {
+                // Edge
+                ForEach(Array(data.edges.enumerated()), id: \.element) { (i, edge) in
+                    EdgeShape(edge: edge, size: data.curveSize, ratio: data.curveRatio)
+                        .trim(from: 0, to: data.isLineAnimated ? 1 : 0)
+                        .stroke(Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), lineWidth: 3)
+                        .animation(data.isLineAnimated ? Animation.easeInOut(duration: data.isCurveAnimating ? 0.25 : 0.38).delay(data.isCurveAnimating ? 0 : (0.1 + 0.1 * TimeInterval(i))) : nil)
+                }
+                .rotationEffect(.radians(Double(-data.angle)))
+                .animation(data.isRotationAnimated ? Animation.linear(duration: data.duration).repeatForever(autoreverses: false) : Animation.easeInOut(duration: 0.25))
+                
+                
                 // Vertex
                 ForEach(data.vertexes, id: \.id) { vertex in
                     switch vertex {
                     case let data as UserVertex:
                         UserVertexView(data: data) {
-                            
+                           updateVertexes()
                         }
                         
                     case let data as BankVertex:
-                        BankVertexView(data: data, isAnimating: $isRotationAnimated) {
+                        BankVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
                             
                         }
                         
                     case let data as CardVertex:
-                        CardVertexView(data: data, isAnimating: $isRotationAnimated) {
+                        CardVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
                             withAnimation(.spring()) {
-                                isDetailViewShown = true
+                                self.data.isDetailViewShown = true
                             }
                         }
-                        
+                    
                     case let data as InsuranceVertex:
-                        InsuranceVertexView(data: data, isAnimating: $isRotationAnimated) {
+                        InsuranceVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
                             
                         }
-
+                    
                     case let data as MobileVertex:
-                        MobileVertexView(data: data, isAnimating: $isRotationAnimated) {
+                        MobileVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
                             
                         }
 
                     case let data as CoworkerVertex:
-                        CoworkerVertexView(data: data, isAnimating: $isRotationAnimated) {
+                        CoworkerVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
                             
                         }
-                        
+                    
                     default:
                         Text("")
                     }
                 }
-                
-                
-                // Edge
-                ForEach(Array(data.edges.enumerated()), id: \.element) { (i, edge) in
-                    Path { path in
-                        path.move(to: edge.source.point)
-                        path.addLine(to: edge.target.point)
-                    }
-                    .trim(from: 0, to: isLineAnimated ? 1 : 0)
-                    .stroke(Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), lineWidth: 4)
-                    .animation(isLineAnimated ? Animation.easeInOut(duration: 0.38).delay(0.1 + 0.1 * TimeInterval(i)) : nil)
-                }
-                .zIndex(-1)
-                .rotationEffect(.degrees(isRotationAnimated ? 360 : 0))
-                .animation(isRotationAnimated ? Animation.linear(duration: 120).repeatForever(autoreverses: false) : nil)
             }
             .frame(width: proxy.size.width, height: proxy.size.height)
         }
@@ -149,7 +181,7 @@ struct Graph3View: View {
     
     private var cardsView: some View {
         GeometryReader { proxy in
-            if isDetailViewShown {
+            if data.isDetailViewShown {
                 VStack {
                     Spacer()
                     
@@ -168,21 +200,63 @@ struct Graph3View: View {
     private func update(isAnimated: Bool) {
         switch isAnimated {
         case false:
-            isScaleAnimated    = false
-            isLineAnimated     = false
-            isRotationAnimated = false
+            data.isScaleAnimated    = false
+            data.isLineAnimated     = false
+            data.isRotationAnimated = false
+            
+            data.angle = 0
             
         case true:
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                isScaleAnimated = true
+                data.isScaleAnimated = true
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
-                isLineAnimated = true
+                data.isLineAnimated = true
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                isRotationAnimated = true
+                withAnimation(Animation.linear(duration: data.duration).repeatForever(autoreverses: false)) {
+                    data.angle = -2 * .pi
+                    data.isRotationAnimated = true
+                }
+            }
+        }
+    }
+    
+    private func updateVertexes() {
+        data.isCurved.toggle()
+        
+        data.isCurveAnimating = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            data.isCurveAnimating = false
+        }
+        
+        switch data.isCurved {
+        case false:
+            let start = data.currentAngle.truncatingRemainder(dividingBy: -2 * .pi)
+            let delta: CGFloat = (start + (.pi / 9)).truncatingRemainder(dividingBy: 2 * .pi)
+            
+            withAnimation(.easeInOut(duration: 0.25)) {
+                data.curveRatio = 0
+                data.angle = delta
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                withAnimation(Animation.linear(duration: data.duration).repeatForever(autoreverses: false)) {
+                    data.isRotationAnimated = true
+                    data.angle = -2 * .pi
+                }
+            }
+            
+        case true:
+            data.isRotationAnimated = false
+            let start = data.currentAngle.truncatingRemainder(dividingBy: -2 * .pi)
+            let delta: CGFloat = (start + (.pi / -9)).truncatingRemainder(dividingBy: 2 * .pi)
+            
+            withAnimation(.easeInOut(duration: 0.25)) {
+                data.curveRatio = 1
+                data.angle = delta
             }
         }
     }
@@ -198,7 +272,6 @@ struct Graph3View_Previews: PreviewProvider {
             view
                 .previewDevice("iPhone 12")
                 .preferredColorScheme(.dark)
-            
         }
     }
 }

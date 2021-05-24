@@ -13,19 +13,17 @@ struct BankVertex: Vertex, Identifiable {
     let imageName: String
     let priority: UInt
     let point: CGPoint
-    let anchor: UnitPoint
 }
 
 extension BankVertex {
     
-    init(data: BankNode, point: CGPoint, anchor: UnitPoint) {
+    init(data: BankNode, point: CGPoint) {
         id        = data.id
         name      = data.name
         imageName = data.imageName
         priority  = data.priority
         
-        self.point  = point
-        self.anchor = anchor
+        self.point = point
     }
 }
 
@@ -47,8 +45,6 @@ extension BankVertex: Decodable {
         do { imageName = try container.decode(String.self,  forKey: .imageName) } catch { throw error }
         do { priority  = try container.decode(UInt.self,    forKey: .priority) }  catch { throw error }
         do { point     = try container.decode(CGPoint.self, forKey: .point) }     catch { throw error }
-        
-        anchor = .center
     }
 }
 
@@ -70,7 +66,7 @@ extension BankVertex: Equatable {
 extension BankVertex {
     
     static var placeholder: BankVertex {
-        BankVertex(id: "0", name: "SC", imageName: "sc", priority: 0, point: .zero, anchor: .center)
+        BankVertex(id: "0", name: "SC", imageName: "sc", priority: 0, point: .zero)
     }
 }
 #endif

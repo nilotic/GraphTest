@@ -10,6 +10,7 @@ import SwiftUI
 struct GraphEdge {
     let source: Vertex
     let target: Vertex
+    let center: CGPoint
 }
 
 extension GraphEdge: Identifiable {
@@ -37,7 +38,7 @@ extension GraphEdge: Equatable {
 extension GraphEdge {
     
     static var placeholder: GraphEdge {
-        GraphEdge(source: UserVertex.placeholder, target: BankVertex.placeholder)
+        GraphEdge(source: UserVertex.placeholder, target: BankVertex.placeholder, center: .zero)
     }
 }
 #endif

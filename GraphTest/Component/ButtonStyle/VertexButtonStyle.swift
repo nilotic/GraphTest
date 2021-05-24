@@ -10,9 +10,6 @@ import SwiftUI
 struct VertexButtonStyle: ButtonStyle {
     
     // MARK: - Value
-    // MARK: Public
-    let anchor: UnitPoint
- 
     // MARK: Private
     @State private var isAppeared = false
     
@@ -34,7 +31,7 @@ struct VertexButtonStyle: ButtonStyle {
             
             // Content View
             configuration.label
-                .scaleEffect(configuration.isPressed ? 0.89 : 1, anchor: anchor)
+                .scaleEffect(configuration.isPressed ? 0.89 : 1, anchor: .center)
                 .animation(isAppeared ? .easeInOut(duration: 0.17) : nil)
         }
     }

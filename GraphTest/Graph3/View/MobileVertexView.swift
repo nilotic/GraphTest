@@ -12,11 +12,12 @@ struct MobileVertexView: View {
     // MARK: - Value
     // MARK: Private
     private let data: MobileVertex
-    private let style: VertexButtonStyle
     private let action: (() -> Void)?
+    private let style = VertexButtonStyle()
     
-    @Binding private var isAnimating: Bool
     @State private var isScaled = false
+    @Binding private var angle: CGFloat
+    @Binding private var currentAngle: CGFloat
     
     private var offset: CGFloat {
         switch data.priority {
@@ -31,12 +32,12 @@ struct MobileVertexView: View {
     
     
     // MARK: - Initializer
-    init(data: MobileVertex, isAnimating: Binding<Bool>, action: (() -> Void)? = nil) {
+    init(data: MobileVertex, angle: Binding<CGFloat>, currentAngle: Binding<CGFloat>, action: (() -> Void)? = nil) {
         self.data   = data
         self.action = action
         
-        _isAnimating = isAnimating
-        style = VertexButtonStyle(anchor: data.anchor)
+        _angle        = angle
+        _currentAngle = currentAngle
     }
     
     
@@ -67,10 +68,7 @@ struct MobileVertexView: View {
         .buttonStyle(style)
         .scaleEffect(isScaled ? 1 : 0.001)
         .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
-        .rotationEffect(.degrees(isAnimating ? -360 : 0))
-        .position(data.point)
-        .rotationEffect(.degrees(isAnimating ? 360 : 0))
-        .animation(isAnimating ? Animation.linear(duration: 120).repeatForever(autoreverses: false) : nil)
+        .modifier(VertexModifier(angle: angle, currentAngle: $currentAngle, point: data.point))
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                 isScaled = true
@@ -83,7 +81,7 @@ struct MobileVertexView: View {
 struct MobileVertexView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let view = MobileVertexView(data: .placeholder, isAnimating: .constant(false))
+        let view = MobileVertexView(data: .placeholder, angle: .constant(0), currentAngle: .constant(0))
         
         Group {
             view
