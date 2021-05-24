@@ -16,6 +16,17 @@ final class Graph3Data: ObservableObject {
     
     @Published var orientation = UIDevice.current.orientation
     
+    @Published var isScaleAnimated      = false
+    @Published var isLineAnimated       = false
+    @Published var isRotationAnimated   = false
+    @Published var isDetailViewShown    = false
+    
+    @Published var angle: CGFloat        = 0
+    @Published var currentAngle: CGFloat = 0
+    @Published var isCurved              = false
+    @Published var curveRatio: CGFloat   = 0
+    @Published var isCurveAnimating      = false
+    
     let unit: CGFloat = 40
     
     let curveSize  = CGSize(width: 190, height: 50)

@@ -13,18 +13,7 @@ struct Graph3View: View {
     // MARK: Private
     @StateObject private var data = Graph3Data()
 
-    @State private var isScaleAnimated      = false
-    @State private var isLineAnimated       = false
-    @State private var isRotationAnimated   = false
-    @State private var isDetailViewShown    = false
     
-    @State private var angle: CGFloat        = 0
-    @State private var currentAngle: CGFloat = 0
-    @State private var isCurved              = false
-    @State private var curveRatio: CGFloat   = 0
-    @State private var isCurveAnimating      = false
-    
-        
     // MARK: - View
     // MARK: Public
     var body: some View {        
@@ -123,7 +112,7 @@ struct Graph3View: View {
                     EdgeShape(source: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
                               target: CGPoint(x: proxy.size.width / 2 + data.curveSize.width * cos(data.curveUnit * CGFloat($0)), y: proxy.size.height / 2 + data.curveSize.width * sin(data.curveUnit * CGFloat($0))),
                               size: data.curveSize,
-                              ratio: curveRatio)
+                              ratio: data.curveRatio)
                         .stroke(Color(#colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)), lineWidth: 3)
                 }
             }
@@ -137,84 +126,47 @@ struct Graph3View: View {
             ZStack(alignment: .center) {
                 // Edge
                 ForEach(Array(data.edges.enumerated()), id: \.element) { (i, edge) in
-                    EdgeShape(edge: edge, size: data.curveSize, ratio: curveRatio)
-                        .trim(from: 0, to: isLineAnimated ? 1 : 0)
+                    EdgeShape(edge: edge, size: data.curveSize, ratio: data.curveRatio)
+                        .trim(from: 0, to: data.isLineAnimated ? 1 : 0)
                         .stroke(Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), lineWidth: 3)
-                        .animation(isLineAnimated ? Animation.easeInOut(duration: isCurveAnimating ? 0.25 : 0.38).delay(isCurveAnimating ? 0 : (0.1 + 0.1 * TimeInterval(i))) : nil)
+                        .animation(data.isLineAnimated ? Animation.easeInOut(duration: data.isCurveAnimating ? 0.25 : 0.38).delay(data.isCurveAnimating ? 0 : (0.1 + 0.1 * TimeInterval(i))) : nil)
                 }
-                .rotationEffect(.radians(Double(-angle)))
-                .animation(isRotationAnimated ? Animation.linear(duration: data.duration).repeatForever(autoreverses: false) : Animation.easeInOut(duration: 0.25))
+                .rotationEffect(.radians(Double(-data.angle)))
+                .animation(data.isRotationAnimated ? Animation.linear(duration: data.duration).repeatForever(autoreverses: false) : Animation.easeInOut(duration: 0.25))
                 
-//                .rotationEffect(.radians(isRotationAnimated ? 2 * .pi : 0))
-//                .animation(isRotationAnimated ? Animation.linear(duration: data.duration).repeatForever(autoreverses: false) : nil)
-//                .rotationEffect(.radians(isCurved ? .pi / 9 : 0))
-//                .animation(isCurveAnimating ? .easeInOut(duration: 0.25) : nil)
                 
                 // Vertex
                 ForEach(data.vertexes, id: \.id) { vertex in
                     switch vertex {
                     case let data as UserVertex:
                         UserVertexView(data: data) {
-                            isCurved.toggle()
-                            
-                            isCurveAnimating = true
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                isCurveAnimating = false
-                            }
-                            
-                            switch isCurved {
-                            case false:
-                                let start = currentAngle.truncatingRemainder(dividingBy: -2 * .pi)
-                                let delta: CGFloat = (start + (.pi / 9)).truncatingRemainder(dividingBy: 2 * .pi)
-                                
-                                withAnimation(.easeInOut(duration: 0.25)) {
-                                    curveRatio = 0
-                                    angle = delta
-                                }
-    
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                                    withAnimation(Animation.linear(duration: self.data.duration).repeatForever(autoreverses: false)) {
-                                        isRotationAnimated = true
-                                        angle = -2 * .pi
-                                    }
-                                }
-                                
-                            case true:
-                                isRotationAnimated = false
-                                let start = currentAngle.truncatingRemainder(dividingBy: -2 * .pi)
-                                let delta: CGFloat = (start + (.pi / -9)).truncatingRemainder(dividingBy: 2 * .pi)
-                                
-                                withAnimation(.easeInOut(duration: 0.25)) {
-                                    curveRatio = 1
-                                    angle = delta
-                                }
-                            }
+                           updateVertexes()
                         }
                         
                     case let data as BankVertex:
-                        BankVertexView(data: data, angle: $angle, currentAngle: $currentAngle) {
+                        BankVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
                             
                         }
                         
                     case let data as CardVertex:
-                        CardVertexView(data: data, angle: $angle, currentAngle: $currentAngle) {
+                        CardVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
                             withAnimation(.spring()) {
-                                isDetailViewShown = true
+                                self.data.isDetailViewShown = true
                             }
                         }
                     
                     case let data as InsuranceVertex:
-                        InsuranceVertexView(data: data, angle: $angle, currentAngle: $currentAngle) {
+                        InsuranceVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
                             
                         }
                     
                     case let data as MobileVertex:
-                        MobileVertexView(data: data, angle: $angle, currentAngle: $currentAngle) {
+                        MobileVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
                             
                         }
 
                     case let data as CoworkerVertex:
-                        CoworkerVertexView(data: data, angle: $angle, currentAngle: $currentAngle) {
+                        CoworkerVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
                             
                         }
                     
@@ -229,7 +181,7 @@ struct Graph3View: View {
     
     private var cardsView: some View {
         GeometryReader { proxy in
-            if isDetailViewShown {
+            if data.isDetailViewShown {
                 VStack {
                     Spacer()
                     
@@ -248,26 +200,63 @@ struct Graph3View: View {
     private func update(isAnimated: Bool) {
         switch isAnimated {
         case false:
-            isScaleAnimated    = false
-            isLineAnimated     = false
-            isRotationAnimated = false
+            data.isScaleAnimated    = false
+            data.isLineAnimated     = false
+            data.isRotationAnimated = false
             
-            angle = 0
+            data.angle = 0
             
         case true:
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                isScaleAnimated = true
+                data.isScaleAnimated = true
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
-                isLineAnimated = true
+                data.isLineAnimated = true
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 withAnimation(Animation.linear(duration: data.duration).repeatForever(autoreverses: false)) {
-                    angle = -2 * .pi
-                    isRotationAnimated = true
+                    data.angle = -2 * .pi
+                    data.isRotationAnimated = true
                 }
+            }
+        }
+    }
+    
+    private func updateVertexes() {
+        data.isCurved.toggle()
+        
+        data.isCurveAnimating = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            data.isCurveAnimating = false
+        }
+        
+        switch data.isCurved {
+        case false:
+            let start = data.currentAngle.truncatingRemainder(dividingBy: -2 * .pi)
+            let delta: CGFloat = (start + (.pi / 9)).truncatingRemainder(dividingBy: 2 * .pi)
+            
+            withAnimation(.easeInOut(duration: 0.25)) {
+                data.curveRatio = 0
+                data.angle = delta
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                withAnimation(Animation.linear(duration: data.duration).repeatForever(autoreverses: false)) {
+                    data.isRotationAnimated = true
+                    data.angle = -2 * .pi
+                }
+            }
+            
+        case true:
+            data.isRotationAnimated = false
+            let start = data.currentAngle.truncatingRemainder(dividingBy: -2 * .pi)
+            let delta: CGFloat = (start + (.pi / -9)).truncatingRemainder(dividingBy: 2 * .pi)
+            
+            withAnimation(.easeInOut(duration: 0.25)) {
+                data.curveRatio = 1
+                data.angle = delta
             }
         }
     }
