@@ -238,12 +238,9 @@ struct Graph3View: View {
             
         switch data.isCurved {
         case false:
-            let start = data.currentAngle.truncatingRemainder(dividingBy: -2 * .pi)
-            let delta: CGFloat = (start + (.pi / 9)).truncatingRemainder(dividingBy: 2 * .pi)
-            
             withAnimation(.easeInOut(duration: 0.25)) {
                 data.curveRatio = 0
-                data.angle = delta
+                data.angle      = data.previousAngle
             }
 
             // Resume the rotation animation
@@ -256,16 +253,15 @@ struct Graph3View: View {
             
             data.animationWorkItem = workItem
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: workItem)
             
         case true:
+            data.previousAngle = data.currentAngle
             data.isRotationAnimated = false
-            let start = data.currentAngle.truncatingRemainder(dividingBy: -2 * .pi)
-            let delta: CGFloat = (start + (.pi / -9)).truncatingRemainder(dividingBy: 2 * .pi)
-            
+                        
             withAnimation(.easeInOut(duration: 0.25)) {
                 data.curveRatio = 1
-                data.angle = delta
+                data.angle      = (data.currentAngle + (.pi / -9)).truncatingRemainder(dividingBy: 2 * .pi)
             }
         }
     }

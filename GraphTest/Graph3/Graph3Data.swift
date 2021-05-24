@@ -21,11 +21,12 @@ final class Graph3Data: ObservableObject {
     @Published var isRotationAnimated   = false
     @Published var isDetailViewShown    = false
     
-    @Published var angle: CGFloat        = 0
-    @Published var currentAngle: CGFloat = 0
-    @Published var isCurved              = false
-    @Published var curveRatio: CGFloat   = 0
-    @Published var isCurveAnimating      = false
+    @Published var angle: CGFloat         = 0
+    @Published var previousAngle: CGFloat = 0
+    @Published var currentAngle: CGFloat  = 0
+    @Published var isCurved               = false
+    @Published var curveRatio: CGFloat    = 0
+    @Published var isCurveAnimating       = false
     
     var animationWorkItem: DispatchWorkItem? = nil
     let unit: CGFloat = 40
