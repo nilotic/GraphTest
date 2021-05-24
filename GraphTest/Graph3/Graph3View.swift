@@ -140,22 +140,21 @@ struct Graph3View: View {
                     EdgeShape(edge: edge, size: data.curveSize, ratio: curveRatio)
                         .trim(from: 0, to: isLineAnimated ? 1 : 0)
                         .stroke(Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), lineWidth: 3)
-                        .animation(isLineAnimated ? Animation.easeInOut(duration: isCurveAnimating ? 0.2 : 0.38).delay(isCurveAnimating ? 0 : (0.1 + 0.1 * TimeInterval(i))) : nil)
+                        .animation(isLineAnimated ? Animation.easeInOut(duration: isCurveAnimating ? 0.25 : 0.38).delay(isCurveAnimating ? 0 : (0.1 + 0.1 * TimeInterval(i))) : nil)
                 }
-                .rotationEffect(.radians(isRotationAnimated ? 2 * .pi : 0))
-                .animation(isRotationAnimated ? Animation.linear(duration: data.duration).repeatForever(autoreverses: false) : nil)
+                .rotationEffect(.radians(Double(-angle)))
+                .animation(isRotationAnimated ? Animation.linear(duration: data.duration).repeatForever(autoreverses: false) : Animation.easeInOut(duration: 0.25))
                 
+//                .rotationEffect(.radians(isRotationAnimated ? 2 * .pi : 0))
+//                .animation(isRotationAnimated ? Animation.linear(duration: data.duration).repeatForever(autoreverses: false) : nil)
+//                .rotationEffect(.radians(isCurved ? .pi / 9 : 0))
+//                .animation(isCurveAnimating ? .easeInOut(duration: 0.25) : nil)
                 
                 // Vertex
                 ForEach(data.vertexes, id: \.id) { vertex in
                     switch vertex {
                     case let data as UserVertex:
                         UserVertexView(data: data) {
-//                            withAnimation(.easeInOut(duration: 0.38)) {
-//                                curveRatio = (curveRatio == nil || curveRatio == 0) ? 1 : 0
-//                                angle = curveRatio == 1 ? .pi / 9 : 0
-//                            }
-                            
                             isCurved.toggle()
                             
                             isCurveAnimating = true
@@ -163,45 +162,59 @@ struct Graph3View: View {
                                 isCurveAnimating = false
                             }
                             
-                            /*
-                            let start = currentAngle.truncatingRemainder(dividingBy: -2 * .pi)
-                            let delta: CGFloat = isCurved ? 0 : -2 * .pi
-                            
-                            withAnimation(isCurved ? .linear(duration: 0) : Animation.linear(duration: self.data.duration).repeatForever(autoreverses: false)) {
-                                angle = start + delta
-                            }
-                             */
-                            
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                curveRatio = isCurved ? 1 : 0
-                                angle = isCurved ? .pi / -20 : 0
+                            switch isCurved {
+                            case false:
+                                let start = currentAngle.truncatingRemainder(dividingBy: -2 * .pi)
+                                let delta: CGFloat = (start + (.pi / 9)).truncatingRemainder(dividingBy: 2 * .pi)
+                                
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    curveRatio = 0
+                                    angle = delta
+                                }
+    
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                                    withAnimation(Animation.linear(duration: self.data.duration).repeatForever(autoreverses: false)) {
+                                        isRotationAnimated = true
+                                        angle = -2 * .pi
+                                    }
+                                }
+                                
+                            case true:
+                                isRotationAnimated = false
+                                let start = currentAngle.truncatingRemainder(dividingBy: -2 * .pi)
+                                let delta: CGFloat = (start + (.pi / -9)).truncatingRemainder(dividingBy: 2 * .pi)
+                                
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    curveRatio = 1
+                                    angle = delta
+                                }
                             }
                         }
                         
                     case let data as BankVertex:
-                        BankVertexView(data: data, angle: $angle, currentAngle: $currentAngle, isAnimating: $isRotationAnimated) {
+                        BankVertexView(data: data, angle: $angle, currentAngle: $currentAngle) {
                             
                         }
                         
                     case let data as CardVertex:
-                        CardVertexView(data: data, angle: $angle, currentAngle: $currentAngle, isAnimating: $isRotationAnimated) {
+                        CardVertexView(data: data, angle: $angle, currentAngle: $currentAngle) {
                             withAnimation(.spring()) {
                                 isDetailViewShown = true
                             }
                         }
                     
                     case let data as InsuranceVertex:
-                        InsuranceVertexView(data: data, angle: $angle, currentAngle: $currentAngle, isAnimating: $isRotationAnimated) {
+                        InsuranceVertexView(data: data, angle: $angle, currentAngle: $currentAngle) {
                             
                         }
                     
                     case let data as MobileVertex:
-                        MobileVertexView(data: data, angle: $angle, currentAngle: $currentAngle, isAnimating: $isRotationAnimated) {
+                        MobileVertexView(data: data, angle: $angle, currentAngle: $currentAngle) {
                             
                         }
 
                     case let data as CoworkerVertex:
-                        CoworkerVertexView(data: data, angle: $angle, currentAngle: $currentAngle, isAnimating: $isRotationAnimated) {
+                        CoworkerVertexView(data: data, angle: $angle, currentAngle: $currentAngle) {
                             
                         }
                     
@@ -252,8 +265,8 @@ struct Graph3View: View {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 withAnimation(Animation.linear(duration: data.duration).repeatForever(autoreverses: false)) {
-//                    angle = -2 * .pi
-//                    isRotationAnimated = true
+                    angle = -2 * .pi
+                    isRotationAnimated = true
                 }
             }
         }

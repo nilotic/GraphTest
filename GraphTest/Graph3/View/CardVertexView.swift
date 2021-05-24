@@ -16,7 +16,6 @@ struct CardVertexView: View {
     private let style = VertexButtonStyle()
     
     @State private var isScaled = false
-    @Binding private var isAnimating: Bool
     @Binding private var angle: CGFloat
     @Binding private var currentAngle: CGFloat
     
@@ -33,13 +32,12 @@ struct CardVertexView: View {
     
     
     // MARK: - Initializer
-    init(data: CardVertex, angle: Binding<CGFloat>, currentAngle: Binding<CGFloat>, isAnimating: Binding<Bool>, action: (() -> Void)? = nil) {
+    init(data: CardVertex, angle: Binding<CGFloat>, currentAngle: Binding<CGFloat>, action: (() -> Void)? = nil) {
         self.data   = data
         self.action = action
         
         _angle        = angle
         _currentAngle = currentAngle
-        _isAnimating  = isAnimating
     }
     
     
@@ -83,7 +81,7 @@ struct CardVertexView: View {
 struct CardVertexView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let view = CardVertexView(data: .placeholder, angle: .constant(0), currentAngle: .constant(0), isAnimating: .constant(false))
+        let view = CardVertexView(data: .placeholder, angle: .constant(0), currentAngle: .constant(0))
         
         Group {
             view

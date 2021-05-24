@@ -16,7 +16,6 @@ struct CoworkerVertexView: View {
     private let style = VertexButtonStyle()
     
     @State private var isScaled = false
-    @Binding private var isAnimating: Bool
     @Binding private var angle: CGFloat
     @Binding private var currentAngle: CGFloat
     
@@ -33,13 +32,12 @@ struct CoworkerVertexView: View {
     
     
     // MARK: - Initializer
-    init(data: CoworkerVertex, angle: Binding<CGFloat>, currentAngle: Binding<CGFloat>, isAnimating: Binding<Bool>, action: (() -> Void)? = nil) {
+    init(data: CoworkerVertex, angle: Binding<CGFloat>, currentAngle: Binding<CGFloat>, action: (() -> Void)? = nil) {
         self.data   = data
         self.action = action
         
         _angle        = angle
         _currentAngle = currentAngle
-        _isAnimating  = isAnimating
     }
     
     
@@ -83,7 +81,7 @@ struct CoworkerVertexView: View {
 struct CoworkerVertexView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let view = CoworkerVertexView(data: .placeholder, angle: .constant(0), currentAngle: .constant(0), isAnimating: .constant(false))
+        let view = CoworkerVertexView(data: .placeholder, angle: .constant(0), currentAngle: .constant(0))
         
         Group {
             view
