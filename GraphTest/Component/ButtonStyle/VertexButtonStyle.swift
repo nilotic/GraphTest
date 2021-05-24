@@ -10,8 +10,13 @@ import SwiftUI
 struct VertexButtonStyle: ButtonStyle {
     
     // MARK: - Value
+    // MARK: Public
+    var action: ((_ isPressed: Bool) -> Void)?
+    
+    
     // MARK: Private
     @State private var isAppeared = false
+    @State private var isPressed = false
     
     
     // MARK: - Function
@@ -31,8 +36,23 @@ struct VertexButtonStyle: ButtonStyle {
             
             // Content View
             configuration.label
-                .scaleEffect(configuration.isPressed ? 0.89 : 1, anchor: .center)
+                .scaleEffect(isPressed ? 0.89 : 1, anchor: .center)
                 .animation(isAppeared ? .easeInOut(duration: 0.17) : nil)
+                .simultaneousGesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged({ value in
+                            guard !isPressed else { return }
+                            isPressed = true
+                            
+                            action?(isPressed)
+                        })
+                        .onEnded({ value in
+                            guard isPressed else { return }
+                            isPressed = false
+                            
+                            action?(isPressed)
+                        })
+                )
         }
     }
 }

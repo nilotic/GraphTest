@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B70A753E265B797B003A0695 /* VertexButtonModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70A753D265B797B003A0695 /* VertexButtonModifier.swift */; };
 		B7253AF326563A50009CC281 /* EdgeShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7253AF226563A50009CC281 /* EdgeShape.swift */; };
 		B7355C8E2657722C0025F035 /* VertexModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7355C8D2657722C0025F035 /* VertexModifier.swift */; };
 		B73A223B2640E0AE006CD531 /* GraphTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73A223A2640E0AE006CD531 /* GraphTestApp.swift */; };
@@ -67,6 +68,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B70A753D265B797B003A0695 /* VertexButtonModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexButtonModifier.swift; sourceTree = "<group>"; };
 		B7253AF226563A50009CC281 /* EdgeShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeShape.swift; sourceTree = "<group>"; };
 		B7355C8D2657722C0025F035 /* VertexModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexModifier.swift; sourceTree = "<group>"; };
 		B73A22372640E0AE006CD531 /* GraphTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GraphTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -139,6 +141,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B70A753C265B7964003A0695 /* ViewModifier */ = {
+			isa = PBXGroup;
+			children = (
+				B70A753D265B797B003A0695 /* VertexButtonModifier.swift */,
+			);
+			path = ViewModifier;
+			sourceTree = "<group>";
+		};
 		B73A222E2640E0AE006CD531 = {
 			isa = PBXGroup;
 			children = (
@@ -293,6 +303,7 @@
 			isa = PBXGroup;
 			children = (
 				B7E7920926412EB30043FB54 /* ButtonStyle */,
+				B70A753C265B7964003A0695 /* ViewModifier */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -457,6 +468,7 @@
 				B76B73A226492F0C00CE7B55 /* Item.swift in Sources */,
 				B77FE43326452E2C00EDB7FE /* CardNode.swift in Sources */,
 				B73A223B2640E0AE006CD531 /* GraphTestApp.swift in Sources */,
+				B70A753E265B797B003A0695 /* VertexButtonModifier.swift in Sources */,
 				B7DAC028264FF5DF00A6EF5D /* GraphCapsule.swift in Sources */,
 				B7E7921026412F600043FB54 /* FramePreferenceKey.swift in Sources */,
 				B7F8D3FB2643C414002B3BED /* Graph1Data.swift in Sources */,

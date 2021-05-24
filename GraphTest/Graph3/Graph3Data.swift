@@ -27,6 +27,7 @@ final class Graph3Data: ObservableObject {
     @Published var curveRatio: CGFloat   = 0
     @Published var isCurveAnimating      = false
     
+    var animationWorkItem: DispatchWorkItem? = nil
     let unit: CGFloat = 40
     
     let curveSize  = CGSize(width: 190, height: 50)

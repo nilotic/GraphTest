@@ -140,7 +140,7 @@ struct Graph3View: View {
                     switch vertex {
                     case let data as UserVertex:
                         UserVertexView(data: data) {
-                           updateVertexes()
+                            update(isPressed: $0)
                         }
                         
                     case let data as BankVertex:
@@ -224,14 +224,18 @@ struct Graph3View: View {
         }
     }
     
-    private func updateVertexes() {
-        data.isCurved.toggle()
+    private func update(isPressed: Bool) {
+        data.isCurved = isPressed
         
+        // Animation Lock
         data.isCurveAnimating = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             data.isCurveAnimating = false
         }
         
+        // Cancel the rotation animation
+        data.animationWorkItem?.cancel()
+            
         switch data.isCurved {
         case false:
             let start = data.currentAngle.truncatingRemainder(dividingBy: -2 * .pi)
@@ -242,12 +246,17 @@ struct Graph3View: View {
                 data.angle = delta
             }
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+            // Resume the rotation animation
+            let workItem = DispatchWorkItem {
                 withAnimation(Animation.linear(duration: data.duration).repeatForever(autoreverses: false)) {
                     data.isRotationAnimated = true
                     data.angle = -2 * .pi
                 }
             }
+            
+            data.animationWorkItem = workItem
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem)
             
         case true:
             data.isRotationAnimated = false

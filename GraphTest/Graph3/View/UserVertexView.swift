@@ -12,8 +12,7 @@ struct UserVertexView: View {
     // MARK: - Value
     // MARK: Private
     private let data: UserVertex
-    private let action: (() -> Void)?
-    private let style = VertexButtonStyle()
+    private let action: ((_ isPressed: Bool) -> Void)?
     
     @State private var isScaled = false
     
@@ -30,39 +29,37 @@ struct UserVertexView: View {
     
     
     // MARK: - Initializer
-    init(data: UserVertex, action: (() -> Void)? = nil) {
+    init(data: UserVertex, action: ((_ isPressed: Bool) -> Void)? = nil) {
         self.data   = data
-        self.action = action
+        self.action  = action
     }
     
     
     // MARK: - View
     // MARK: Public
     var body: some View {
-        Button(action: { action?() }) {
-            ZStack {
-                Circle()
-                    .stroke(Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)), lineWidth: 2)
-                    .background(Circle().foregroundColor(Color.black))
-                    .frame(width: 70 + offset, height: 70 + offset)
-                    .padding()
+        ZStack {
+            Circle()
+                .stroke(Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)), lineWidth: 2)
+                .background(Circle().foregroundColor(Color.black))
+                .frame(width: 70 + offset, height: 70 + offset)
+                .padding()
+            
+            Group {
+                Image(data.imageName)
+                    .resizable()
+                    .frame(width: 48 + offset, height: 48 + offset)
+                    .padding(.bottom, 20 - (CGFloat(data.priority) * 2))
                 
-                Group {
-                    Image(data.imageName)
-                        .resizable()
-                        .frame(width: 48 + offset, height: 48 + offset)
-                        .padding(.bottom, 20 - (CGFloat(data.priority) * 2))
-                    
-                    Text(data.name)
-                        .font(.system(size: 12 - (CGFloat(data.priority)), weight: .bold))
-                        .padding(.top, 70 - (CGFloat(data.priority) * 5))
-                }
-                .clipped()
+                Text(data.name)
+                    .font(.system(size: 12 - (CGFloat(data.priority)), weight: .bold))
+                    .padding(.top, 70 - (CGFloat(data.priority) * 5))
             }
+            .clipped()
         }
-        .buttonStyle(style)
         .scaleEffect(isScaled ? 1 : 0.001)
         .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
+        .modifier(VertexButtonModifier(action: action))
         .onAppear {
             isScaled = true
         }
