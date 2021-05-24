@@ -16,10 +16,9 @@ final class Graph3Data: ObservableObject {
     
     @Published var orientation = UIDevice.current.orientation
     
-    @Published var isScaleAnimated      = false
-    @Published var isLineAnimated       = false
-    @Published var isRotationAnimated   = false
-    @Published var isDetailViewShown    = false
+    @Published var isScaleAnimated   = false
+    @Published var isLineAnimated    = false
+    @Published var isDetailViewShown = false
     
     @Published var angle: CGFloat         = 0
     @Published var previousAngle: CGFloat = 0
@@ -132,6 +131,7 @@ final class Graph3Data: ObservableObject {
         // Cancel the rotation animation
         animationWorkItem?.cancel()
             
+        // Curve animation
         switch isCurved {
         case false:
             withAnimation(.easeInOut(duration: 0.25)) {
@@ -142,22 +142,19 @@ final class Graph3Data: ObservableObject {
             // Resume the rotation animation
             let workItem = DispatchWorkItem {
                 withAnimation(Animation.linear(duration: self.duration).repeatForever(autoreverses: false)) {
-                    self.isRotationAnimated = true
-                    self.angle = -2 * .pi
+                    self.angle = self.currentAngle - 2 * .pi
                 }
             }
             
             animationWorkItem = workItem
-            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: workItem)
             
         case true:
             previousAngle = currentAngle
-            isRotationAnimated = false
                         
             withAnimation(.easeInOut(duration: 0.25)) {
                 curveRatio = 1
-                angle      = (currentAngle + (.pi / -9)).truncatingRemainder(dividingBy: 2 * .pi)
+                angle      = currentAngle - .pi / 9
             }
         }
     }
@@ -165,9 +162,8 @@ final class Graph3Data: ObservableObject {
     func update(isAnimated: Bool) {
         switch isAnimated {
         case false:
-            isScaleAnimated    = false
-            isLineAnimated     = false
-            isRotationAnimated = false
+            isScaleAnimated = false
+            isLineAnimated  = false
             
             angle = 0
             
@@ -183,7 +179,6 @@ final class Graph3Data: ObservableObject {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 withAnimation(Animation.linear(duration: self.duration).repeatForever(autoreverses: false)) {
                     self.angle = -2 * .pi
-                    self.isRotationAnimated = true
                 }
             }
         }
