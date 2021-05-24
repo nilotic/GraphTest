@@ -27,7 +27,7 @@ struct Graph3View: View {
             .id(data.orientation.rawValue)
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { value in
                 // Stop animations
-                update(isAnimated: false)
+                data.update(isAnimated: false)
                 
                 // Update views
                 data.orientation = (value.object as? UIDevice)?.orientation ?? .landscapeLeft
@@ -35,12 +35,12 @@ struct Graph3View: View {
                 // Start animations
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     data.request(size: proxy.size)
-                    update(isAnimated: true)
+                    data.update(isAnimated: true)
                 }
             }
             .onAppear {
                 data.request(size: proxy.size)
-                update(isAnimated: true)
+                data.update(isAnimated: true)
             }
         }
     }
@@ -140,7 +140,7 @@ struct Graph3View: View {
                     switch vertex {
                     case let data as UserVertex:
                         UserVertexView(data: data) {
-                            update(isPressed: $0)
+                            self.data.update(isPressed: $0)
                         }
                         
                     case let data as BankVertex:
@@ -190,78 +190,6 @@ struct Graph3View: View {
                 }
                 .transition(.moveAndFade)
                 .frame(height: proxy.size.height)
-            }
-        }
-    }
-    
-    
-    // MARK: - Function
-    // MARK: Private
-    private func update(isAnimated: Bool) {
-        switch isAnimated {
-        case false:
-            data.isScaleAnimated    = false
-            data.isLineAnimated     = false
-            data.isRotationAnimated = false
-            
-            data.angle = 0
-            
-        case true:
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                data.isScaleAnimated = true
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
-                data.isLineAnimated = true
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                withAnimation(Animation.linear(duration: data.duration).repeatForever(autoreverses: false)) {
-                    data.angle = -2 * .pi
-                    data.isRotationAnimated = true
-                }
-            }
-        }
-    }
-    
-    private func update(isPressed: Bool) {
-        data.isCurved = isPressed
-        
-        // Animation Lock
-        data.isCurveAnimating = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            data.isCurveAnimating = false
-        }
-        
-        // Cancel the rotation animation
-        data.animationWorkItem?.cancel()
-            
-        switch data.isCurved {
-        case false:
-            withAnimation(.easeInOut(duration: 0.25)) {
-                data.curveRatio = 0
-                data.angle      = data.previousAngle
-            }
-
-            // Resume the rotation animation
-            let workItem = DispatchWorkItem {
-                withAnimation(Animation.linear(duration: data.duration).repeatForever(autoreverses: false)) {
-                    data.isRotationAnimated = true
-                    data.angle = -2 * .pi
-                }
-            }
-            
-            data.animationWorkItem = workItem
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: workItem)
-            
-        case true:
-            data.previousAngle = data.currentAngle
-            data.isRotationAnimated = false
-                        
-            withAnimation(.easeInOut(duration: 0.25)) {
-                data.curveRatio = 1
-                data.angle      = (data.currentAngle + (.pi / -9)).truncatingRemainder(dividingBy: 2 * .pi)
             }
         }
     }

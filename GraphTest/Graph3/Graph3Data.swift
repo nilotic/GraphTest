@@ -119,4 +119,73 @@ final class Graph3Data: ObservableObject {
             log(.error, error.localizedDescription)
         }
     }
+    
+    func update(isPressed: Bool) {
+        isCurved = isPressed
+        
+        // Animation Lock
+        isCurveAnimating = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.isCurveAnimating = false
+        }
+        
+        // Cancel the rotation animation
+        animationWorkItem?.cancel()
+            
+        switch isCurved {
+        case false:
+            withAnimation(.easeInOut(duration: 0.25)) {
+                curveRatio = 0
+                angle      = previousAngle
+            }
+
+            // Resume the rotation animation
+            let workItem = DispatchWorkItem {
+                withAnimation(Animation.linear(duration: self.duration).repeatForever(autoreverses: false)) {
+                    self.isRotationAnimated = true
+                    self.angle = -2 * .pi
+                }
+            }
+            
+            animationWorkItem = workItem
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: workItem)
+            
+        case true:
+            previousAngle = currentAngle
+            isRotationAnimated = false
+                        
+            withAnimation(.easeInOut(duration: 0.25)) {
+                curveRatio = 1
+                angle      = (currentAngle + (.pi / -9)).truncatingRemainder(dividingBy: 2 * .pi)
+            }
+        }
+    }
+    
+    func update(isAnimated: Bool) {
+        switch isAnimated {
+        case false:
+            isScaleAnimated    = false
+            isLineAnimated     = false
+            isRotationAnimated = false
+            
+            angle = 0
+            
+        case true:
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.isScaleAnimated = true
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+                self.isLineAnimated = true
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                withAnimation(Animation.linear(duration: self.duration).repeatForever(autoreverses: false)) {
+                    self.angle = -2 * .pi
+                    self.isRotationAnimated = true
+                }
+            }
+        }
+    }
 }
