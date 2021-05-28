@@ -9,6 +9,8 @@ extension View {
                     .preference(key: FramePreferenceKey.self, value: $0.frame(in: .global))
             }
         )
-        .onPreferenceChange(FramePreferenceKey.self, perform: perform)
+        .onPreferenceChange(FramePreferenceKey.self) { value in
+            DispatchQueue.main.async { perform(value) }
+        }
     }
 }
