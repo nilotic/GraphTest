@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct Graph3View: View {
     
@@ -42,6 +43,7 @@ struct Graph3View: View {
                 data.request(size: proxy.size)
                 data.update(isAnimated: true)
             }
+            .onDrop(of: [UTType.text], delegate: data)
         }
     }
     
@@ -171,6 +173,14 @@ struct Graph3View: View {
                     
                     default:
                         Text("")
+                    }
+                }
+                
+                
+                // Deposit
+                if let data = data.depositVertex {
+                    DepositVertexView(data: data) {
+                        log(.info, "")
                     }
                 }
             }

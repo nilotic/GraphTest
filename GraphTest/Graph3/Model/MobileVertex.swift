@@ -10,7 +10,7 @@ import SwiftUI
 struct MobileVertex: Vertex, Identifiable {
     let id: String
     let name: String
-    let imageName: String
+    let imageName: String?
     let priority: UInt
     let point: CGPoint
 }

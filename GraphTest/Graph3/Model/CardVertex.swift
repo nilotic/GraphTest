@@ -10,7 +10,7 @@ import SwiftUI
 struct CardVertex: Vertex, Identifiable {
     let id: String
     let name: String
-    let imageName: String
+    let imageName: String?
     let priority: UInt
     let point: CGPoint
 }

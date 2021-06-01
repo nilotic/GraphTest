@@ -27,6 +27,8 @@ final class Graph3Data: ObservableObject {
     @Published var curveRatio: CGFloat    = 0
     @Published var isCurveAnimating       = false
     
+    @Published var depositVertex: DepositVertex? = nil
+    
     var animationWorkItem: DispatchWorkItem? = nil
     let unit: CGFloat = 40
     
@@ -181,6 +183,27 @@ final class Graph3Data: ObservableObject {
                     self.angle = -2 * .pi
                 }
             }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                self.depositVertex = DepositVertex(id: "deposit1", name: "₩50,000", priority: 4, point: CGPoint(x: 20, y: -20))
+            }
         }
+    }
+}
+
+
+// MARK: - DropDelegate
+extension Graph3Data: DropDelegate {
+    
+    func performDrop(info: DropInfo) -> Bool {
+        depositVertex != nil
+    }
+    
+    func dropEntered(info: DropInfo) {
+        log(.info, info)
+    }
+    
+    func dropExited(info: DropInfo) {
+        log(.info, info)
     }
 }
