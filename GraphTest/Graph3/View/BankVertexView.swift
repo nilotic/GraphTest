@@ -16,6 +16,9 @@ struct BankVertexView: View {
     private let style = VertexButtonStyle()
     
     @State private var isScaled = false
+    @State private var isRippleAnimated = false
+    @State private var rippleRadius: CGFloat = 0
+    
     @Binding private var angle: CGFloat
     @Binding private var currentAngle: CGFloat
     
@@ -46,12 +49,24 @@ struct BankVertexView: View {
     var body: some View {
         Button(action: { action?() }) {
             ZStack {
+                if rippleRadius != 0 {
+                    Circle()
+                        .fill(Color.white.opacity(rippleRadius == 0 ? 0 : 0.5))
+                        .frame(width: 70 + offset + rippleRadius, height: 70 + offset + rippleRadius)
+                        .transition(.opacity)
+                        .animation(.easeOut(duration: 0.5))
+//                        .onAppear {
+//                            withAnimation {
+//                                rippleRadius = 200
+//                            }
+//                        }
+                }
+                
                 Circle()
                     .stroke(Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)), lineWidth: 2)
                     .background(Circle().foregroundColor(Color.black))
                     .frame(width: 70 + offset, height: 70 + offset)
-                    .padding()
-                
+                    
                 Group {
                     if let imageName = data.imageName {
                         Image(imageName)
@@ -59,7 +74,6 @@ struct BankVertexView: View {
                             .frame(width: 48 + offset, height: 48 + offset)
                             .padding(.bottom, 20 - (CGFloat(data.priority) * 2))
                     }
-
                     Text(data.name)
                         .font(.system(size: 12 - (CGFloat(data.priority)), weight: .bold))
                         .padding(.top, 70 - (CGFloat(data.priority) * 5))
@@ -75,7 +89,14 @@ struct BankVertexView: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                 isScaled = true
             }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                withAnimation {
+                    rippleRadius = 30
+                }
+            }
         }
+        
     }
 }
 

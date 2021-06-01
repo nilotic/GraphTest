@@ -15,7 +15,6 @@ struct VertexButtonModifier: ViewModifier {
     
     
     // MARK: Private
-    @State private var isAppeared = false
     @State private var isPressed = false
     
     
@@ -27,18 +26,18 @@ struct VertexButtonModifier: ViewModifier {
             .animation(.easeInOut(duration: 0.17))
             .simultaneousGesture(
                 DragGesture(minimumDistance: 0)
-                    .onChanged({ _ in
+                    .onChanged { _ in
                         guard !isPressed else { return }
                         isPressed = true
                         
                         action?(isPressed)
-                    })
-                    .onEnded({ _ in
+                    }
+                    .onEnded { _ in
                         guard isPressed else { return }
                         isPressed = false
                         
                         action?(isPressed)
-                    })
+                    }
             )
     }
 }

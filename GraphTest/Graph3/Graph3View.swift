@@ -148,6 +148,9 @@ struct Graph3View: View {
                         BankVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
                             
                         }
+                        .frame {
+                            log(.info, "BankVertexView \($0)")
+                        }
                         
                     case let data as CardVertex:
                         CardVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
@@ -179,8 +182,15 @@ struct Graph3View: View {
                 
                 // Deposit
                 if let data = data.depositVertex {
-                    DepositVertexView(data: data) {
-                        log(.info, "")
+                    DepositVertexView(data: data) { status in
+                        switch status {
+                        case .moved(let frame):
+                            log(.info, frame)
+                            
+                            
+                        case .ended:
+                            log(.info, "Ended")
+                        }
                     }
                 }
             }

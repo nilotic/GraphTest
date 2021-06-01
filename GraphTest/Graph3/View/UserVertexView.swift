@@ -43,8 +43,7 @@ struct UserVertexView: View {
                 .stroke(Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)), lineWidth: 2)
                 .background(Circle().foregroundColor(Color.black))
                 .frame(width: 70 + offset, height: 70 + offset)
-                .padding()
-            
+                
             Group {
                 if let imageName = data.imageName {
                     Image(imageName)

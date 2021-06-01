@@ -13,6 +13,7 @@ struct BankVertex: Vertex, Identifiable {
     let imageName: String?
     let priority: UInt
     let point: CGPoint
+    var isHighlighted: Bool = false
 }
 
 extension BankVertex {

@@ -42,6 +42,8 @@ final class Graph3Data: ObservableObject {
         atan2(curveSize.width / 2, curveSize.height)
     }
     
+    var frames = [CGRect]()
+    
     
     // MARK: - Function
     // MARK: Public
@@ -184,8 +186,8 @@ final class Graph3Data: ObservableObject {
                 }
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                self.depositVertex = DepositVertex(id: "deposit1", name: "₩50,000", priority: 4, point: CGPoint(x: 20, y: -20))
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                self.depositVertex = DepositVertex(id: "deposit1", name: "₩50,000", priority: 4, point: CGPoint(x: 45, y: 45))
             }
         }
     }
