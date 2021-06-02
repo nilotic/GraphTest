@@ -137,43 +137,49 @@ struct Graph3View: View {
                 
                 
                 // Vertex
-                ForEach(data.vertexes, id: \.id) { vertex in
-                    switch vertex {
-                    case let data as UserVertex:
-                        UserVertexView(data: data) {
-                            self.data.update(isPressed: $0)
+                ForEach(data.vertexes.indices, id: \.self) { index in
+                    switch data.vertexes[index] {
+                    case is UserVertex:
+                        UserVertexView(data: $data.vertexes[index]) {
+                            data.update(isPressed: $0)
                         }
                         
-                    case let data as BankVertex:
-                        BankVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
+                    case is BankVertex:
+                        BankVertexView(data: $data.vertexes[index]) {
                             
                         }
+                        .environmentObject(data)
                         .frame {
                             log(.info, "BankVertexView \($0)")
                         }
                         
-                    case let data as CardVertex:
-                        CardVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
+                    case is CardVertex:
+                        CardVertexView(data: $data.vertexes[index]) {
                             withAnimation(.spring()) {
                                 self.data.isDetailViewShown = true
                             }
                         }
+                        .environmentObject(data)
                     
-                    case let data as InsuranceVertex:
-                        InsuranceVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
+                    case is InsuranceVertex:
+                        InsuranceVertexView(data: $data.vertexes[index]) {
                             
                         }
+                        .environmentObject(data)
                     
-                    case let data as MobileVertex:
-                        MobileVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
+                    case is MobileVertex:
+                        MobileVertexView(data: $data.vertexes[index]) {
                             
                         }
-
-                    case let data as CoworkerVertex:
-                        CoworkerVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
+                        .environmentObject(data)
+                        
+                    case is CoworkerVertex:
+                        CoworkerVertexView(data: $data.vertexes[index]) {
                             
                         }
-                    
+                        .environmentObject(data)
+                        
+                        
                     default:
                         Text("")
                     }
@@ -181,12 +187,11 @@ struct Graph3View: View {
                 
                 
                 // Deposit
-                if let data = data.depositVertex {
-                    DepositVertexView(data: data) { status in
+                if data.depositVertex != nil {
+                    DepositVertexView(data: $data.depositVertex) { status in
                         switch status {
                         case .moved(let frame):
                             log(.info, frame)
-                            
                             
                         case .ended:
                             log(.info, "Ended")

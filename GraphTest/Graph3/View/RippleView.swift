@@ -23,7 +23,7 @@ struct RippleView: View {
             .frame(width: radius, height: radius)
             .overlay(grayOverlay)
             .overlay(whiteOverlay)
-            .opacity(isAnimated ? 0.1 : 1)
+            .opacity(isAnimated ? 0 : 1)
             .onAppear {
                 withAnimation(Animation.linear(duration: 3).repeatForever(autoreverses: false)) {
                     radius = 300

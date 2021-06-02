@@ -55,7 +55,6 @@ struct DraggableButtonModifier: ViewModifier {
                         delta = nil
                     }
             )
-            .background(Color.red)
     }
 }
  

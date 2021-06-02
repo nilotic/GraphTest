@@ -10,14 +10,15 @@ import SwiftUI
 struct MobileVertexView: View {
     
     // MARK: - Value
+    // MARK: Public
+    @EnvironmentObject var graphData: Graph3Data
+    
     // MARK: Private
-    private let data: MobileVertex
+    @Binding private var data: Vertex
+    @State private var isScaled = false
+    
     private let action: (() -> Void)?
     private let style = VertexButtonStyle()
-    
-    @State private var isScaled = false
-    @Binding private var angle: CGFloat
-    @Binding private var currentAngle: CGFloat
     
     private var offset: CGFloat {
         switch data.priority {
@@ -32,12 +33,9 @@ struct MobileVertexView: View {
     
     
     // MARK: - Initializer
-    init(data: MobileVertex, angle: Binding<CGFloat>, currentAngle: Binding<CGFloat>, action: (() -> Void)? = nil) {
-        self.data   = data
+    init(data: Binding<Vertex>, action: (() -> Void)? = nil) {
+        _data = data
         self.action = action
-        
-        _angle        = angle
-        _currentAngle = currentAngle
     }
     
     
@@ -69,7 +67,7 @@ struct MobileVertexView: View {
         .buttonStyle(style)
         .scaleEffect(isScaled ? 1 : 0.001)
         .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
-        .modifier(VertexModifier(angle: angle, currentAngle: $currentAngle, point: data.point))
+        .modifier(VertexModifier(data: data, angle: graphData.angle, currentAngle: $graphData.currentAngle))
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                 isScaled = true
@@ -82,7 +80,7 @@ struct MobileVertexView: View {
 struct MobileVertexView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let view = MobileVertexView(data: .placeholder, angle: .constant(0), currentAngle: .constant(0))
+        let view = MobileVertexView(data: .constant(MobileVertex.placeholder))
         
         Group {
             view

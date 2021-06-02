@@ -11,10 +11,10 @@ struct UserVertexView: View {
     
     // MARK: - Value
     // MARK: Private
-    private let data: UserVertex
-    private let action: ((_ isPressed: Bool) -> Void)?
-    
+    @Binding private var data: Vertex
     @State private var isScaled = false
+
+    private let action: ((_ isPressed: Bool) -> Void)?
     
     private var offset: CGFloat {
         switch data.priority {
@@ -29,9 +29,9 @@ struct UserVertexView: View {
     
     
     // MARK: - Initializer
-    init(data: UserVertex, action: ((_ isPressed: Bool) -> Void)? = nil) {
-        self.data   = data
-        self.action  = action
+    init(data: Binding<Vertex>, action: ((_ isPressed: Bool) -> Void)? = nil) {
+        _data = data
+        self.action = action
     }
     
     
@@ -60,7 +60,7 @@ struct UserVertexView: View {
         }
         .scaleEffect(isScaled ? 1 : 0.001)
         .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
-        .modifier(VertexButtonModifier(action: action))
+        .modifier(VertexButtonModifier(data: data, action: action))
         .onAppear {
             isScaled = true
         }
@@ -71,7 +71,7 @@ struct UserVertexView: View {
 struct UserVertexView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let view = UserVertexView(data: .placeholder)
+        let view = UserVertexView(data: .constant(UserVertex.placeholder))
         
         Group {
             view

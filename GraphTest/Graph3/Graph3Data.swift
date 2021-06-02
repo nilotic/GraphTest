@@ -187,7 +187,10 @@ final class Graph3Data: ObservableObject {
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                self.depositVertex = DepositVertex(id: "deposit1", name: "₩50,000", priority: 4, point: CGPoint(x: 45, y: 45))
+                self.depositVertex = DepositVertex(nodeID: "deposit1", name: "₩50,000", priority: 4, point: CGPoint(x: 45, y: 45), isHighlighted: false)
+                
+                self.vertexes[0].isHighlighted = true
+                self.vertexes[1].isHighlighted = true
             }
         }
     }

@@ -7,21 +7,30 @@
 
 import SwiftUI
 
-struct MobileVertex: Vertex, Identifiable {
-    let id: String
+struct MobileVertex: Vertex {
+    let nodeID: String
     let name: String
     let imageName: String?
     let priority: UInt
     let point: CGPoint
+    var isHighlighted: Bool
+}
+
+extension MobileVertex: Identifiable {
+    
+    var id: String {
+        "\(nodeID)\(name)\(isHighlighted)"
+    }
 }
 
 extension MobileVertex {
     
     init(data: MobileNode, point: CGPoint) {
-        id        = data.id
-        name      = data.name
-        imageName = data.imageName
-        priority  = data.priority
+        nodeID        = data.id
+        name          = data.name
+        imageName     = data.imageName
+        priority      = data.priority
+        isHighlighted = false
         
         self.point = point
     }
@@ -30,7 +39,7 @@ extension MobileVertex {
 extension MobileVertex: Decodable {
     
     private enum Key: String, CodingKey {
-        case id
+        case nodeID = "id"
         case name
         case imageName
         case priority
@@ -40,25 +49,27 @@ extension MobileVertex: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: Key.self)
         
-        do { id        = try container.decode(String.self,  forKey: .id) }        catch { throw error }
+        do { nodeID    = try container.decode(String.self,  forKey: .nodeID) }    catch { throw error }
         do { name      = try container.decode(String.self,  forKey: .name) }      catch { throw error }
         do { imageName = try container.decode(String.self,  forKey: .imageName) } catch { throw error }
         do { priority  = try container.decode(UInt.self,    forKey: .priority) }  catch { throw error }
         do { point     = try container.decode(CGPoint.self, forKey: .point) }     catch { throw error }
+        
+        isHighlighted = false
     }
 }
 
 extension MobileVertex: Hashable {
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+        hasher.combine(nodeID)
     }
 }
 
 extension MobileVertex: Equatable {
     
     static func ==(lhs: MobileVertex, rhs: MobileVertex) -> Bool {
-        lhs.id == rhs.id
+        lhs.nodeID == rhs.nodeID
     }
 }
 
@@ -66,7 +77,7 @@ extension MobileVertex: Equatable {
 extension MobileVertex {
     
     static var placeholder: MobileVertex {
-        MobileVertex(id: "0", name: "SC", imageName: "sc", priority: 0, point: .zero)
+        MobileVertex(nodeID: "0", name: "SC", imageName: "sc", priority: 0, point: .zero, isHighlighted: false)
     }
 }
 #endif

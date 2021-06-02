@@ -13,32 +13,45 @@ struct VertexButtonModifier: ViewModifier {
     // MARK: Public
     var action: ((_ isPressed: Bool) -> Void)?
     
-    
     // MARK: Private
     @State private var isPressed = false
+    private var data: Vertex
     
     
+    // MARK: - Initializer
+    init(data: Vertex, action: ((_ isPressed: Bool) -> Void)?) {
+        self.data   = data
+        self.action = action
+    }
+      
+        
     // MARK: - Function
     // MARK: Public
     func body(content: Content) -> some View {
-        content
-            .scaleEffect(isPressed ? 0.89 : 1, anchor: .center)
-            .animation(.easeInOut(duration: 0.17))
-            .simultaneousGesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { _ in
-                        guard !isPressed else { return }
-                        isPressed = true
-                        
-                        action?(isPressed)
-                    }
-                    .onEnded { _ in
-                        guard isPressed else { return }
-                        isPressed = false
-                        
-                        action?(isPressed)
-                    }
-            )
+        return ZStack {
+            if data.isHighlighted {
+                RippleView()
+            }
+            
+            content
+                .scaleEffect(isPressed ? 0.89 : 1, anchor: .center)
+                .animation(.easeInOut(duration: 0.17))
+                .simultaneousGesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { _ in
+                            guard !isPressed else { return }
+                            isPressed = true
+                            
+                            action?(isPressed)
+                        }
+                        .onEnded { _ in
+                            guard isPressed else { return }
+                            isPressed = false
+                            
+                            action?(isPressed)
+                        }
+                )
+        }
     }
 }
  

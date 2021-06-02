@@ -7,25 +7,33 @@
 
 import SwiftUI
 
-struct DepositVertex: Vertex, Identifiable {
-    let id: String
+struct DepositVertex: Vertex {
+    let nodeID: String
     let name: String
     var imageName: String?
     let priority: UInt
     let point: CGPoint
+    var isHighlighted: Bool
+}
+
+extension DepositVertex: Identifiable {
+    
+    var id: String {
+        "\(nodeID)\(name)\(isHighlighted)"
+    }
 }
 
 extension DepositVertex: Hashable {
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+        hasher.combine(nodeID)
     }
 }
 
 extension DepositVertex: Equatable {
     
     static func ==(lhs: DepositVertex, rhs: DepositVertex) -> Bool {
-        lhs.id == rhs.id
+        lhs.nodeID == rhs.nodeID
     }
 }
 
@@ -33,7 +41,7 @@ extension DepositVertex: Equatable {
 extension DepositVertex {
     
     static var placeholder: DepositVertex {
-        DepositVertex(id: "0", name: "₩50,000", priority: 0, point: .zero)
+        DepositVertex(nodeID: "0", name: "₩50,000", priority: 0, point: .zero, isHighlighted: false)
     }
 }
 #endif
