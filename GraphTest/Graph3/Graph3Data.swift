@@ -175,7 +175,7 @@ final class Graph3Data: ObservableObject {
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                self.depositVertex = DepositVertex(nodeID: "deposit1", name: "₩50,000", priority: 4, point: CGPoint(x: 45, y: 45), isHighlighted: false)
+                self.depositVertex = DepositVertex(nodeID: "deposit1", name: "₩50,000", priority: 4, point: CGPoint(x: 45, y: 45), isHighlighted: false, scale: 1)
                 self.vertexes[0].isHighlighted = true
             }
         }
@@ -226,14 +226,44 @@ final class Graph3Data: ObservableObject {
         case .moved(let frame):
             guard frames.count == vertexes.count else { return }
             
+            // Vertexes
+            var isHighlighted = false
             for i in 1..<vertexes.count {
                 vertexes[i].isHighlighted = frames[i].intersects(frame)
+                isHighlighted = isHighlighted || vertexes[i].isHighlighted
             }
             
+            // Deposit Vertex
+            var scale: CGFloat {
+                let distance = (sqrt(pow(frame.origin.x, 2) + pow(frame.origin.y, 2))) - 80
+                let ratio = 1 - (distance / 400)
+                
+                return min(max(ratio, 0.77), 1)
+            }
+            
+            depositVertex?.scale         = scale
+            depositVertex?.isHighlighted = isHighlighted
+            
         case .ended:
-            log(.info, "Ended")
+            depositVertex?.scale = 1
+            
+            var higlightedIndex: Int? {
+                for i in 1..<vertexes.count {
+                    guard vertexes[i].isHighlighted else { continue }
+                    return i
+                }
+                
+                return nil
+            }
+            
+            guard let index = higlightedIndex else { return }
+            vertexes[0].isHighlighted = false       // User
+            vertexes[index].isHighlighted = false   // Target
+            
+            // Reset the deposit vertex
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.depositVertex = nil
+            }
         }
-        
-        
     }
 }

@@ -13,7 +13,7 @@ struct DepositVertexView: View {
     // MARK: Private
     @Binding private var data: DepositVertex?
     @State private var isScaled = false
-    
+        
     private let action: ((_ status: TouchStatus) -> Void)?
     private let style = VertexButtonStyle()
     
@@ -39,7 +39,6 @@ struct DepositVertexView: View {
     // MARK: - View
     // MARK: Public
     var body: some View {
-        
         if let data = data {
             ZStack {
                 Circle()
@@ -51,9 +50,9 @@ struct DepositVertexView: View {
                     .font(.system(size: 12, weight: .bold))
             }
             .buttonStyle(style)
-            .scaleEffect(isScaled ? 1 : 0.001)
+            .scaleEffect(isScaled ? (data.scale) : 0.001)
             .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
-            .modifier(DraggableButtonModifier(point: data.point, action: action))
+            .modifier(DraggableButtonModifier(data: data, action: action))
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                     isScaled = true
