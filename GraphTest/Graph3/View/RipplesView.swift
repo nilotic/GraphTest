@@ -21,11 +21,11 @@ struct RipplesView: View {
         ZStack {
             ForEach(0..<2) { i in
                 ripple
-                    .animation(Animation.easeOut(duration: 3).repeatForever(autoreverses: false).delay(TimeInterval(i) * 0.38))
+                    .animation(Animation.easeOut(duration: 3).repeatForever(autoreverses: false).delay(TimeInterval(i) * 0.28))
             }
         }
         .onAppear {
-            radius = 300
+            radius = 400
             isAnimated = true
         }
     }

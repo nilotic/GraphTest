@@ -150,7 +150,6 @@ final class Graph3Data: ObservableObject {
         }
     }
     
-    
     func update(isAnimated: Bool) {
         switch isAnimated {
         case false:
@@ -172,11 +171,6 @@ final class Graph3Data: ObservableObject {
                 withAnimation(Animation.linear(duration: self.duration).repeatForever(autoreverses: false)) {
 //                    self.angle = -2 * .pi
                 }
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                self.depositVertex = DepositVertex(nodeID: "deposit1", name: "₩50,000", priority: 4, point: CGPoint(x: 45, y: 45), isHighlighted: false, scale: 1)
-                self.vertexes[0].isHighlighted = true
             }
         }
     }
@@ -264,6 +258,14 @@ final class Graph3Data: ObservableObject {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.depositVertex = nil
             }
+        }
+    }
+    
+    func addDeposit() {
+        depositVertex = DepositVertex(nodeID: "deposit1", name: "₩50,000", priority: 4, point: CGPoint(x: 45, y: 45), isHighlighted: false, scale: 1)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+            self.vertexes[0].isHighlighted = true
         }
     }
 }

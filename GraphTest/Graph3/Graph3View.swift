@@ -13,7 +13,8 @@ struct Graph3View: View {
     // MARK: - Value
     // MARK: Private
     @StateObject private var data = Graph3Data()
-
+    private let buttonStyle = ButtonStyle1()
+    
     
     // MARK: - View
     // MARK: Public
@@ -24,6 +25,9 @@ struct Graph3View: View {
                 // curveGuideLine
                 graph
                 cardsView
+                
+                editButton
+                    .offset(x: proxy.size.width / 2 - 48 , y: proxy.size.height / 2 - 48)
             }
             .id(data.orientation.rawValue)
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { value in
@@ -206,6 +210,24 @@ struct Graph3View: View {
                 .frame(height: proxy.size.height)
             }
         }
+    }
+    
+    private var editButton: some View {
+        Button(action: { data.addDeposit() }) {
+            ZStack {
+                // Background
+                Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1))
+                
+                // Image
+                Image(systemName: "dollarsign.circle")
+                    .scaleEffect(2.2)
+                    .foregroundColor(.white)
+            }
+            .frame(width: 66, height: 66)
+            .cornerRadius(33)
+        }
+        .buttonStyle(buttonStyle)
+        .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 30))
     }
 }
 
