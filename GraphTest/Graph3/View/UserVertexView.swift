@@ -11,10 +11,10 @@ struct UserVertexView: View {
     
     // MARK: - Value
     // MARK: Private
-    private let data: UserVertex
-    private let action: ((_ isPressed: Bool) -> Void)?
-    
+    @Binding private var data: Vertex
     @State private var isScaled = false
+
+    private let action: ((_ isPressed: Bool) -> Void)?
     
     private var offset: CGFloat {
         switch data.priority {
@@ -29,9 +29,9 @@ struct UserVertexView: View {
     
     
     // MARK: - Initializer
-    init(data: UserVertex, action: ((_ isPressed: Bool) -> Void)? = nil) {
-        self.data   = data
-        self.action  = action
+    init(data: Binding<Vertex>, action: ((_ isPressed: Bool) -> Void)? = nil) {
+        _data = data
+        self.action = action
     }
     
     
@@ -43,13 +43,14 @@ struct UserVertexView: View {
                 .stroke(Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)), lineWidth: 2)
                 .background(Circle().foregroundColor(Color.black))
                 .frame(width: 70 + offset, height: 70 + offset)
-                .padding()
-            
+                
             Group {
-                Image(data.imageName)
-                    .resizable()
-                    .frame(width: 48 + offset, height: 48 + offset)
-                    .padding(.bottom, 20 - (CGFloat(data.priority) * 2))
+                if let imageName = data.imageName {
+                    Image(imageName)
+                        .resizable()
+                        .frame(width: 48 + offset, height: 48 + offset)
+                        .padding(.bottom, 20 - (CGFloat(data.priority) * 2))
+                }
                 
                 Text(data.name)
                     .font(.system(size: 12 - (CGFloat(data.priority)), weight: .bold))
@@ -59,7 +60,7 @@ struct UserVertexView: View {
         }
         .scaleEffect(isScaled ? 1 : 0.001)
         .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
-        .modifier(VertexButtonModifier(action: action))
+        .modifier(VertexButtonModifier(data: data, action: action))
         .onAppear {
             isScaled = true
         }
@@ -70,7 +71,7 @@ struct UserVertexView: View {
 struct UserVertexView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let view = UserVertexView(data: .placeholder)
+        let view = UserVertexView(data: .constant(UserVertex.placeholder))
         
         Group {
             view

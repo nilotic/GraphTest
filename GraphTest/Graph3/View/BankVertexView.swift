@@ -10,14 +10,15 @@ import SwiftUI
 struct BankVertexView: View {
     
     // MARK: - Value
+    // MARK: Public
+    @EnvironmentObject var graphData: Graph3Data
+    
     // MARK: Private
-    private let data: BankVertex
+    @Binding private var data: Vertex
+    @State private var isScaled = false
+    
     private let action: (() -> Void)?
     private let style = VertexButtonStyle()
-    
-    @State private var isScaled = false
-    @Binding private var angle: CGFloat
-    @Binding private var currentAngle: CGFloat
     
     private var offset: CGFloat {
         switch data.priority {
@@ -32,12 +33,9 @@ struct BankVertexView: View {
     
     
     // MARK: - Initializer
-    init(data: BankVertex, angle: Binding<CGFloat>, currentAngle: Binding<CGFloat>, action: (() -> Void)? = nil) {
-        self.data    = data
-        self.action  = action
-        
-        _angle        = angle
-        _currentAngle = currentAngle
+    init(data: Binding<Vertex>, action: (() -> Void)? = nil) {
+        _data = data
+        self.action = action
     }
     
     
@@ -46,29 +44,32 @@ struct BankVertexView: View {
     var body: some View {
         Button(action: { action?() }) {
             ZStack {
-                Circle()
-                    .stroke(Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)), lineWidth: 2)
-                    .background(Circle().foregroundColor(Color.black))
-                    .frame(width: 70 + offset, height: 70 + offset)
-                    .padding()
-                
                 Group {
-                    Image(data.imageName)
-                        .resizable()
-                        .frame(width: 48 + offset, height: 48 + offset)
-                        .padding(.bottom, 20 - (CGFloat(data.priority) * 2))
-
-                    Text(data.name)
-                        .font(.system(size: 12 - (CGFloat(data.priority)), weight: .bold))
-                        .padding(.top, 70 - (CGFloat(data.priority) * 5))
+                    Circle()
+                        .stroke(Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)), lineWidth: 2)
+                        .background(Circle().foregroundColor(Color.black))
+                        .frame(width: 70 + offset, height: 70 + offset)
+                    
+                    Group {
+                        if let imageName = data.imageName {
+                            Image(imageName)
+                                .resizable()
+                                .frame(width: 48 + offset, height: 48 + offset)
+                                .padding(.bottom, 20 - (CGFloat(data.priority) * 2))
+                        }
+                        
+                        Text(data.name)
+                            .font(.system(size: 12 - (CGFloat(data.priority)), weight: .bold))
+                            .padding(.top, 70 - (CGFloat(data.priority) * 5))
+                    }
+                    .clipped()
                 }
-                .clipped()
+                .scaleEffect(isScaled ? 1 : 0.001)
+                .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
             }
         }
         .buttonStyle(style)
-        .scaleEffect(isScaled ? 1 : 0.001)
-        .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
-        .modifier(VertexModifier(angle: angle, currentAngle: $currentAngle, point: data.point))
+        .modifier(VertexModifier(data: data, angle: graphData.angle, currentAngle: $graphData.currentAngle))
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                 isScaled = true
@@ -81,7 +82,7 @@ struct BankVertexView: View {
 struct BankVertexView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let view = BankVertexView(data: .placeholder, angle: .constant(0), currentAngle: .constant(0))
+        let view = BankVertexView(data: .constant(BankVertex.placeholder))
         
         Group {
             view

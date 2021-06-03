@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct VertexModifier: GeometryEffect {
+struct VertexModifier: AnimatableModifier {
     
     // MARK: - Value
     // MARK: Public
@@ -17,29 +17,49 @@ struct VertexModifier: GeometryEffect {
     }
     
     // MARK: Private
-    private var angle: CGFloat = 0
-    private var point: CGPoint = .zero
-    
+    private var angle: CGFloat
     @Binding private var currentAngle: CGFloat
+    
+    private var data: Vertex
+    @State private var radius: CGFloat = 0
+    
+    private var highlightRadius: CGFloat {
+        radius + 15
+    }
     
     
     // MARK: - Initializer
-    init(angle: CGFloat, currentAngle: Binding<CGFloat>, point: CGPoint) {
+    init(data: Vertex, angle: CGFloat, currentAngle: Binding<CGFloat>) {
+        self.data  = data
         self.angle = angle
-        self.point = point
         
-        self._currentAngle = currentAngle
+        _currentAngle = currentAngle
     }
     
     
     // MARK: - Function
     // MARK: Public
-    func effectValue(size: CGSize) -> ProjectionTransform {
+    func body(content: Content) -> some View {
         DispatchQueue.main.async { currentAngle = angle }
         
-        return ProjectionTransform(CGAffineTransform(rotationAngle: -angle)
-                                    .translatedBy(x: point.x, y: point.y)
-                                    .rotated(by: angle))
+        return ZStack {
+            Circle()
+                .fill(Color(#colorLiteral(red: 0.6292319784, green: 0.5738882467, blue: 1, alpha: 0.3483730089)))
+                .frame(width: highlightRadius, height: highlightRadius)
+                .scaleEffect(data.isHighlighted ? 1 : 0.001)
+                .opacity(data.isHighlighted ? 1 : 0)
+                .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
+                .offset(x: data.point.x, y: data.point.y)
+                .rotationEffect(.radians(Double(-angle)))
+
+            content
+                .rotationEffect(.radians(Double(angle)))
+                .offset(x: data.point.x, y: data.point.y)
+                .rotationEffect(.radians(Double(-angle)))
+                .frame {
+                    radius = $0.size.width
+                }
+        }
     }
 }
 

@@ -6,13 +6,15 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct Graph3View: View {
     
     // MARK: - Value
     // MARK: Private
     @StateObject private var data = Graph3Data()
-
+    private let buttonStyle = ButtonStyle1()
+    
     
     // MARK: - View
     // MARK: Public
@@ -23,6 +25,9 @@ struct Graph3View: View {
                 // curveGuideLine
                 graph
                 cardsView
+                
+                editButton
+                    .offset(x: proxy.size.width / 2 - 48 , y: proxy.size.height / 2 - 48)
             }
             .id(data.orientation.rawValue)
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { value in
@@ -135,42 +140,56 @@ struct Graph3View: View {
                 
                 
                 // Vertex
-                ForEach(data.vertexes, id: \.id) { vertex in
-                    switch vertex {
-                    case let data as UserVertex:
-                        UserVertexView(data: data) {
-                            self.data.update(isPressed: $0)
+                ForEach(data.vertexes.indices, id: \.self) { index in
+                    switch data.vertexes[index] {
+                    case is UserVertex:
+                        UserVertexView(data: $data.vertexes[index]) {
+                            data.handle(isPressed: $0)
                         }
                         
-                    case let data as BankVertex:
-                        BankVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
+                    case is BankVertex:
+                        BankVertexView(data: $data.vertexes[index]) {
                             
                         }
+                        .environmentObject(data)
                         
-                    case let data as CardVertex:
-                        CardVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
+                    case is CardVertex:
+                        CardVertexView(data: $data.vertexes[index]) {
                             withAnimation(.spring()) {
                                 self.data.isDetailViewShown = true
                             }
                         }
+                        .environmentObject(data)
                     
-                    case let data as InsuranceVertex:
-                        InsuranceVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
+                    case is InsuranceVertex:
+                        InsuranceVertexView(data: $data.vertexes[index]) {
                             
                         }
+                        .environmentObject(data)
                     
-                    case let data as MobileVertex:
-                        MobileVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
+                    case is MobileVertex:
+                        MobileVertexView(data: $data.vertexes[index]) {
                             
                         }
-
-                    case let data as CoworkerVertex:
-                        CoworkerVertexView(data: data, angle: $data.angle, currentAngle: $data.currentAngle) {
+                        .environmentObject(data)
+                        
+                    case is CoworkerVertex:
+                        CoworkerVertexView(data: $data.vertexes[index]) {
                             
                         }
-                    
+                        .environmentObject(data)
+                        
+                        
                     default:
                         Text("")
+                    }
+                }
+                
+                
+                // Deposit
+                if data.depositVertex != nil {
+                    DepositVertexView(data: $data.depositVertex) {
+                        data.handle(status: $0)
                     }
                 }
             }
@@ -191,6 +210,24 @@ struct Graph3View: View {
                 .frame(height: proxy.size.height)
             }
         }
+    }
+    
+    private var editButton: some View {
+        Button(action: { data.addDeposit() }) {
+            ZStack {
+                // Background
+                Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1))
+                
+                // Image
+                Image(systemName: "dollarsign.circle")
+                    .scaleEffect(2.2)
+                    .foregroundColor(.white)
+            }
+            .frame(width: 66, height: 66)
+            .cornerRadius(33)
+        }
+        .buttonStyle(buttonStyle)
+        .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 30))
     }
 }
 
