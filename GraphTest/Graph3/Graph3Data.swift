@@ -155,8 +155,13 @@ final class Graph3Data: ObservableObject {
         case false:
             isScaleAnimated = false
             isLineAnimated  = false
+            depositVertex   = nil
             
             angle = 0
+            
+            for i in 0..<vertexes.count {
+                vertexes[i].isHighlighted = false
+            }
             
         case true:
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

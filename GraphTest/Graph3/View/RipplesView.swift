@@ -25,7 +25,7 @@ struct RipplesView: View {
             }
         }
         .onAppear {
-            radius = 400
+            radius = min(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height) - 100
             isAnimated = true
         }
     }

@@ -179,7 +179,6 @@ struct Graph3View: View {
                         }
                         .environmentObject(data)
                         
-                        
                     default:
                         Text("")
                     }
