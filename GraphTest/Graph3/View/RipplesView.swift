@@ -14,16 +14,15 @@ struct RipplesView: View {
     @State private var radius: CGFloat = 10
     @State private var isAnimated = false
     
-
+    
     // MARK: - View
     // MARK: Public
     var body: some View {
         ZStack {
-            ripple
-                .animation(Animation.linear(duration: 3).repeatForever(autoreverses: false))
-            
-            ripple
-                .animation(Animation.linear(duration: 3).repeatForever(autoreverses: false).delay(0.33))
+            ForEach(0..<2) { i in
+                ripple
+                    .animation(Animation.easeOut(duration: 3).repeatForever(autoreverses: false).delay(TimeInterval(i) * 0.38))
+            }
         }
         .onAppear {
             radius = 300

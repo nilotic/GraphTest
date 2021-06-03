@@ -21,6 +21,11 @@ struct VertexModifier: AnimatableModifier {
     @Binding private var currentAngle: CGFloat
     
     private var data: Vertex
+    @State private var radius: CGFloat = 0
+    
+    private var highlightRadius: CGFloat {
+        radius + 20
+    }
     
     
     // MARK: - Initializer
@@ -38,16 +43,22 @@ struct VertexModifier: AnimatableModifier {
         DispatchQueue.main.async { currentAngle = angle }
         
         return ZStack {
-//            if data.isHighlighted {
-//                RippleView()
-//                    .offset(x: data.point.x, y: data.point.y)
-//                    .rotationEffect(.radians(Double(-angle)))
-//            }
-            
+            Circle()
+                .fill(Color(#colorLiteral(red: 0.6292319784, green: 0.5738882467, blue: 1, alpha: 0.3483730089)))
+                .frame(width: highlightRadius, height: highlightRadius)
+                .scaleEffect(data.isHighlighted ? 1 : 0.001)
+                .opacity(data.isHighlighted ? 1 : 0)
+                .animation(.spring(response: 0.5, dampingFraction: 0.38, blendDuration: 0))
+                .offset(x: data.point.x, y: data.point.y)
+                .rotationEffect(.radians(Double(-angle)))
+
             content
                 .rotationEffect(.radians(Double(angle)))
                 .offset(x: data.point.x, y: data.point.y)
                 .rotationEffect(.radians(Double(-angle)))
+                .frame {
+                    radius = $0.size.width
+                }
         }
     }
 }
