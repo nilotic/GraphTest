@@ -169,7 +169,7 @@ final class Graph3Data: ObservableObject {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 withAnimation(Animation.linear(duration: self.duration).repeatForever(autoreverses: false)) {
-//                    self.angle = -2 * .pi
+                    self.angle = -2 * .pi
                 }
             }
         }
@@ -254,16 +254,33 @@ final class Graph3Data: ObservableObject {
             vertexes[0].isHighlighted = false       // User
             vertexes[index].isHighlighted = false   // Target
             
-            // Reset the deposit vertex
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                // Reset the deposit vertex
                 self.depositVertex = nil
+                
+                // Rotation animation
+                withAnimation(Animation.linear(duration: self.duration).repeatForever(autoreverses: false)) {
+                    self.angle = self.currentAngle - 2 * .pi
+                }
             }
         }
     }
     
     func addDeposit() {
+        // Stop Rotation
+        withAnimation(.easeOut(duration: 0.38)) {
+            angle = currentAngle - ((.pi / 180) / (360 / CGFloat(duration)))
+        }
+        
+        // Update frames
+        for (i, frame) in frames.enumerated() {
+            frames[i].origin = frame.origin.applying(CGAffineTransform(rotationAngle: -angle))
+        }
+        
+        // Add a deposit vertex
         depositVertex = DepositVertex(nodeID: "deposit1", name: "₩50,000", priority: 4, point: CGPoint(x: 45, y: 45), isHighlighted: false, scale: 1)
         
+        // Add ripples
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
             self.vertexes[0].isHighlighted = true
         }
