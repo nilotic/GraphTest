@@ -30,7 +30,7 @@ struct VertexButtonModifier: ViewModifier {
     func body(content: Content) -> some View {
         return ZStack {
             if data.isHighlighted {
-                RippleView()
+                RipplesView()
             }
             
             content

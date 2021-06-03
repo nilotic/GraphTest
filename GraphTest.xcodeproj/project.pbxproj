@@ -11,7 +11,7 @@
 		B70914D82665F0A900A5504B /* DepositVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70914D72665F0A900A5504B /* DepositVertex.swift */; };
 		B70914DA26660F7E00A5504B /* DraggableButtonModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70914D926660F7E00A5504B /* DraggableButtonModifier.swift */; };
 		B70914DC26660FAA00A5504B /* DragStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70914DB26660FAA00A5504B /* DragStatus.swift */; };
-		B70914DE2666258E00A5504B /* RippleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70914DD2666258E00A5504B /* RippleView.swift */; };
+		B70914DE2666258E00A5504B /* RipplesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70914DD2666258E00A5504B /* RipplesView.swift */; };
 		B70A753E265B797B003A0695 /* VertexButtonModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70A753D265B797B003A0695 /* VertexButtonModifier.swift */; };
 		B7253AF326563A50009CC281 /* EdgeShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7253AF226563A50009CC281 /* EdgeShape.swift */; };
 		B7355C8E2657722C0025F035 /* VertexModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7355C8D2657722C0025F035 /* VertexModifier.swift */; };
@@ -77,7 +77,7 @@
 		B70914D72665F0A900A5504B /* DepositVertex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepositVertex.swift; sourceTree = "<group>"; };
 		B70914D926660F7E00A5504B /* DraggableButtonModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggableButtonModifier.swift; sourceTree = "<group>"; };
 		B70914DB26660FAA00A5504B /* DragStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragStatus.swift; sourceTree = "<group>"; };
-		B70914DD2666258E00A5504B /* RippleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RippleView.swift; sourceTree = "<group>"; };
+		B70914DD2666258E00A5504B /* RipplesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RipplesView.swift; sourceTree = "<group>"; };
 		B70A753D265B797B003A0695 /* VertexButtonModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexButtonModifier.swift; sourceTree = "<group>"; };
 		B7253AF226563A50009CC281 /* EdgeShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeShape.swift; sourceTree = "<group>"; };
 		B7355C8D2657722C0025F035 /* VertexModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexModifier.swift; sourceTree = "<group>"; };
@@ -385,7 +385,7 @@
 				B70914D52665F09500A5504B /* DepositVertexView.swift */,
 				B7253AF226563A50009CC281 /* EdgeShape.swift */,
 				B7355C8D2657722C0025F035 /* VertexModifier.swift */,
-				B70914DD2666258E00A5504B /* RippleView.swift */,
+				B70914DD2666258E00A5504B /* RipplesView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -515,7 +515,7 @@
 				B7A430BA2652266F00985292 /* VertexButtonStyle.swift in Sources */,
 				B77FE4222645158700EDB7FE /* Graph2Data.swift in Sources */,
 				B73A225526410282006CD531 /* Graph1View.swift in Sources */,
-				B70914DE2666258E00A5504B /* RippleView.swift in Sources */,
+				B70914DE2666258E00A5504B /* RipplesView.swift in Sources */,
 				B70914D82665F0A900A5504B /* DepositVertex.swift in Sources */,
 				B76416CB264A06F600475F06 /* CardVertexView.swift in Sources */,
 				B76414E0264A55E6005EFF13 /* MobileVertex.swift in Sources */,

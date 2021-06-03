@@ -1,5 +1,5 @@
 // 
-//  RippleView.swift
+//  RipplesView.swift
 //
 //  Created by Den Jo on 2021/06/01.
 //  Copyright © nilotic. All rights reserved.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RippleView: View {
+struct RipplesView: View {
     
     // MARK: - Value
     // MARK: Private
@@ -18,21 +18,29 @@ struct RippleView: View {
     // MARK: - View
     // MARK: Public
     var body: some View {
+        ZStack {
+            ripple
+                .animation(Animation.linear(duration: 3).repeatForever(autoreverses: false))
+            
+            ripple
+                .animation(Animation.linear(duration: 3).repeatForever(autoreverses: false).delay(0.33))
+        }
+        .onAppear {
+            radius = 300
+            isAnimated = true
+        }
+    }
+    
+    // MARK: Private
+    private var ripple: some View {
         Circle()
             .fill(Color.clear)
             .frame(width: radius, height: radius)
             .overlay(grayOverlay)
             .overlay(whiteOverlay)
             .opacity(isAnimated ? 0 : 1)
-            .onAppear {
-                withAnimation(Animation.linear(duration: 3).repeatForever(autoreverses: false)) {
-                    radius = 300
-                    isAnimated = true
-                }
-            }
     }
     
-    // MARK: Private
     private var grayOverlay: some View {
         Circle()
             .stroke(Color.gray, lineWidth: 5)
@@ -53,7 +61,7 @@ struct RippleView: View {
 struct RippleView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let view = RippleView()
+        let view = RipplesView()
         
         Group {
             view
