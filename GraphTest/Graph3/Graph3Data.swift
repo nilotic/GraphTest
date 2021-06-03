@@ -42,7 +42,9 @@ final class Graph3Data: ObservableObject {
         atan2(curveSize.width / 2, curveSize.height)
     }
     
-    var frames = [CGRect]()
+    
+    // MARK: Private
+    private var frames = [CGRect]()
     
     
     // MARK: - Function
@@ -55,13 +57,32 @@ final class Graph3Data: ObservableObject {
             let center = CGPoint(x: size.width / 2, y: size.height / 2)
             
             var vertexes = [Vertex]()
+            var frames = [CGRect]()
+            
+            let vertexSize = { (priority: UInt) -> CGSize in
+                var offset: CGFloat {
+                    switch priority {
+                    case 0:     return 50
+                    case 1:     return 40
+                    case 2:     return 30
+                    case 3:     return 20
+                    case 4:     return 10
+                    default:    return 0
+                    }
+                }
+                
+                let radius = CGFloat(70) + offset
+                return CGSize(width: radius, height: radius)
+            }
+            
             
             // User
             let userVertex = UserVertex(data: data.user, point: center)
             vertexes.append(userVertex)
+            frames.append(CGRect(origin: .zero, size: vertexSize(data.user.priority)))
             
             
-            // Edge
+            // Vertex, Edge
             var edges = [GraphEdge]()
             for graph in data.user.graphs {
                 guard let vertex = graph.nodes.sorted(by: { $0.priority < $1.priority }).first else { continue }
@@ -73,6 +94,7 @@ final class Graph3Data: ObservableObject {
                     
                     vertexes.append(vertex)
                     edges.append(GraphEdge(source: userVertex, target: vertex, center: center))
+                    frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
                     
                 case let data as CardNode:
                     let point  = CGPoint(x: unit * 3, y: 0)
@@ -80,6 +102,7 @@ final class Graph3Data: ObservableObject {
                     
                     vertexes.append(vertex)
                     edges.append(GraphEdge(source: userVertex, target: vertex, center: center))
+                    frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
                     
                 case let data as InsuranceNode:
                     let radius = unit * 4
@@ -89,6 +112,7 @@ final class Graph3Data: ObservableObject {
                     
                     vertexes.append(vertex)
                     edges.append(GraphEdge(source: userVertex, target: vertex, center: center))
+                    frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
                     
                 case let data as MobileNode:
                     let radius = unit * 4
@@ -98,6 +122,7 @@ final class Graph3Data: ObservableObject {
                     
                     vertexes.append(vertex)
                     edges.append(GraphEdge(source: userVertex, target: vertex, center: center))
+                    frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
                     
                 case let data as CoworkerNode:
                     let radius = unit * 6
@@ -107,6 +132,7 @@ final class Graph3Data: ObservableObject {
                     
                     vertexes.append(vertex)
                     edges.append(GraphEdge(source: userVertex, target: vertex, center: center))
+                    frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
                     
                 default:
                     continue
@@ -116,6 +142,7 @@ final class Graph3Data: ObservableObject {
             DispatchQueue.main.async {
                 self.vertexes = vertexes
                 self.edges    = edges
+                self.frames   = frames
             }
     
         } catch {
@@ -123,7 +150,38 @@ final class Graph3Data: ObservableObject {
         }
     }
     
-    func update(isPressed: Bool) {
+    
+    func update(isAnimated: Bool) {
+        switch isAnimated {
+        case false:
+            isScaleAnimated = false
+            isLineAnimated  = false
+            
+            angle = 0
+            
+        case true:
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.isScaleAnimated = true
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+                self.isLineAnimated = true
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                withAnimation(Animation.linear(duration: self.duration).repeatForever(autoreverses: false)) {
+//                    self.angle = -2 * .pi
+                }
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                self.depositVertex = DepositVertex(nodeID: "deposit1", name: "₩50,000", priority: 4, point: CGPoint(x: 45, y: 45), isHighlighted: false)
+                self.vertexes[0].isHighlighted = true
+            }
+        }
+    }
+    
+    func handle(isPressed: Bool) {
         isCurved = isPressed
         
         // Animation Lock
@@ -163,52 +221,19 @@ final class Graph3Data: ObservableObject {
         }
     }
     
-    func update(isAnimated: Bool) {
-        switch isAnimated {
-        case false:
-            isScaleAnimated = false
-            isLineAnimated  = false
+    func handle(status: TouchStatus) {
+        switch status {
+        case .moved(let frame):
+            guard frames.count == vertexes.count else { return }
             
-            angle = 0
-            
-        case true:
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.isScaleAnimated = true
+            for i in 1..<vertexes.count {
+                vertexes[i].isHighlighted = frames[i].intersects(frame)
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
-                self.isLineAnimated = true
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                withAnimation(Animation.linear(duration: self.duration).repeatForever(autoreverses: false)) {
-                    self.angle = -2 * .pi
-                }
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                self.depositVertex = DepositVertex(nodeID: "deposit1", name: "₩50,000", priority: 4, point: CGPoint(x: 45, y: 45), isHighlighted: false)
-                
-                self.vertexes[0].isHighlighted = true
-                self.vertexes[1].isHighlighted = true
-            }
+        case .ended:
+            log(.info, "Ended")
         }
-    }
-}
-
-
-// MARK: - DropDelegate
-extension Graph3Data: DropDelegate {
-    
-    func performDrop(info: DropInfo) -> Bool {
-        depositVertex != nil
-    }
-    
-    func dropEntered(info: DropInfo) {
-        log(.info, info)
-    }
-    
-    func dropExited(info: DropInfo) {
-        log(.info, info)
+        
+        
     }
 }

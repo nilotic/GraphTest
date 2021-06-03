@@ -24,7 +24,7 @@ struct VertexModifier: AnimatableModifier {
     @State private var radius: CGFloat = 0
     
     private var highlightRadius: CGFloat {
-        radius + 20
+        radius + 15
     }
     
     
@@ -48,7 +48,7 @@ struct VertexModifier: AnimatableModifier {
                 .frame(width: highlightRadius, height: highlightRadius)
                 .scaleEffect(data.isHighlighted ? 1 : 0.001)
                 .opacity(data.isHighlighted ? 1 : 0)
-                .animation(.spring(response: 0.5, dampingFraction: 0.38, blendDuration: 0))
+                .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
                 .offset(x: data.point.x, y: data.point.y)
                 .rotationEffect(.radians(Double(-angle)))
 

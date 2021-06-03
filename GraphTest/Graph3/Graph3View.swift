@@ -43,7 +43,6 @@ struct Graph3View: View {
                 data.request(size: proxy.size)
                 data.update(isAnimated: true)
             }
-            .onDrop(of: [UTType.text], delegate: data)
         }
     }
     
@@ -141,7 +140,7 @@ struct Graph3View: View {
                     switch data.vertexes[index] {
                     case is UserVertex:
                         UserVertexView(data: $data.vertexes[index]) {
-                            data.update(isPressed: $0)
+                            data.handle(isPressed: $0)
                         }
                         
                     case is BankVertex:
@@ -149,9 +148,6 @@ struct Graph3View: View {
                             
                         }
                         .environmentObject(data)
-                        .frame {
-                            log(.info, "BankVertexView \($0)")
-                        }
                         
                     case is CardVertex:
                         CardVertexView(data: $data.vertexes[index]) {
@@ -188,14 +184,8 @@ struct Graph3View: View {
                 
                 // Deposit
                 if data.depositVertex != nil {
-                    DepositVertexView(data: $data.depositVertex) { status in
-                        switch status {
-                        case .moved(let frame):
-                            log(.info, frame)
-                            
-                        case .ended:
-                            log(.info, "Ended")
-                        }
+                    DepositVertexView(data: $data.depositVertex) {
+                        data.handle(status: $0)
                     }
                 }
             }
