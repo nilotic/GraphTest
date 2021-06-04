@@ -251,9 +251,10 @@ final class Graph3Data: ObservableObject {
             depositVertex?.scale         = scale
             depositVertex?.isHighlighted = highlightedVertex != nil
             
-            // Vibration
+            // Effect
             guard let highlightedVertex = highlightedVertex, highlightedVertex.nodeID != previousHighlightedVertex?.nodeID  else { return }
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            AudioServicesPlaySystemSound(1465) //1057  1113  1114  1465
             
         case .ended:
             depositVertex?.scale = 1
@@ -317,9 +318,19 @@ final class Graph3Data: ObservableObject {
         // Add a deposit vertex
         depositVertex = DepositVertex(nodeID: "deposit1", name: "₩50,000", priority: 4, point: CGPoint(x: 45, y: 45), isHighlighted: false, scale: 1)
         
-        // Add ripples
+        // Ripples
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+            AudioServicesPlaySystemSound(1433)
             self.vertexes[0].isHighlighted = true
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
+            Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [weak self] timer in
+                switch (self?.vertexes[0].isHighlighted ?? false) {
+                case true:      AudioServicesPlaySystemSound(1433)  // 1363, 1433
+                case false:     timer.invalidate()
+                }
+            }
         }
     }
 }
