@@ -16,7 +16,7 @@ struct GraphEdge {
 extension GraphEdge: Identifiable {
     
     var id: String {
-        "\(source.nodeID)\(source.name)\(target.nodeID)\(target.name)"
+        "\(source.nodeID)\(source.name)\(target.id)\(target.name)"
     }
 }
 

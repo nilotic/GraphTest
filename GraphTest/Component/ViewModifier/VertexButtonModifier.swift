@@ -34,6 +34,7 @@ struct VertexButtonModifier: ViewModifier {
             }
             
             content
+                .offset(x: data.point.x, y: data.point.y)
                 .scaleEffect(isPressed ? 0.89 : 1, anchor: .center)
                 .animation(.easeInOut(duration: 0.17))
                 .simultaneousGesture(

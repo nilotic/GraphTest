@@ -48,12 +48,14 @@ final class Graph3Data: ObservableObject {
     
     private let curveAnimationDuration: TimeInterval = 0.2
     private let rotaionDuration: TimeInterval = 120
+    private var size: CGSize = .zero
     
     
     // MARK: - Function
     // MARK: Public
     func request(size: CGSize) {
         guard let url = Bundle.main.url(forResource: "graph", withExtension: "json") else { return }
+        self.size = size
         
         do {
             let data = try JSONDecoder().decode(GraphResponse.self, from: try Data(contentsOf: url))
@@ -81,7 +83,7 @@ final class Graph3Data: ObservableObject {
             
             
             // User
-            let userVertex = UserVertex(data: data.user, point: center)
+            let userVertex = UserVertex(data: data.user, point: .zero)
             vertexes.append(userVertex)
             vertexIndices.append(vertexIndices.count)
             frames.append(CGRect(origin: .zero, size: vertexSize(data.user.priority)))
@@ -382,13 +384,23 @@ final class Graph3Data: ObservableObject {
             }
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        // Remove
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             // Remove vertexes
             if let first = self.vertexes.first {
                 self.vertexIndices = [0]
 
                 // Remove the user vertex after updating the graph
                 DispatchQueue.main.async { self.vertexes = [first] }
+                
+                // Move the user vertex
+                DispatchQueue.main.async {
+                    let radius: CGFloat = 100
+                    
+                    withAnimation(.easeInOut(duration: 0.38)) {
+                        self.vertexes[0].point = CGPoint(x: radius - self.size.width / 2, y: radius - self.size.height / 2)
+                    }
+                }
             }
             
             // Remove edges
