@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 final class Graph3Data: ObservableObject {
     
@@ -279,6 +280,26 @@ final class Graph3Data: ObservableObject {
                     self.angle = self.currentAngle - 2 * .pi
                 }
             }
+            
+            // Sounds
+            AudioServicesPlaySystemSound(1262)
+        }
+    }
+    
+    func update(noitfication: NotificationCenter.Publisher.Output, size: CGSize) {
+        let orientation = (noitfication.object as? UIDevice)?.orientation ?? .landscapeLeft
+        guard self.orientation != orientation else { return }
+        
+        // Stop animations
+        update(isAnimated: false)
+        
+        // Update views
+        self.orientation = orientation
+        
+        // Start animations
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.request(size: size)
+            self.update(isAnimated: true)
         }
     }
     

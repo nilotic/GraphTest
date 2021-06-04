@@ -30,18 +30,8 @@ struct Graph3View: View {
                     .offset(x: proxy.size.width / 2 - 48 , y: proxy.size.height / 2 - 48)
             }
             .id(data.orientation.rawValue)
-            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { value in
-                // Stop animations
-                data.update(isAnimated: false)
-                
-                // Update views
-                data.orientation = (value.object as? UIDevice)?.orientation ?? .landscapeLeft
-                
-                // Start animations
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    data.request(size: proxy.size)
-                    data.update(isAnimated: true)
-                }
+            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) {
+                data.update(noitfication: $0, size: proxy.size)
             }
             .onAppear {
                 data.request(size: proxy.size)
