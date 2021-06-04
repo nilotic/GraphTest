@@ -124,7 +124,7 @@ struct Graph3View: View {
                     EdgeShape(edge: edge, size: data.curveSize, ratio: data.curveRatio)
                         .trim(from: 0, to: data.isLineAnimated ? 1 : 0)
                         .stroke(Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), lineWidth: 3)
-                        .animation(data.isCurveAnimating ? Animation.easeInOut(duration: 0.25) : (data.isLineAnimated ? Animation.easeInOut(duration: 0.38).delay(0.1 + 0.1 * TimeInterval(i)) : nil))
+                        .animation(data.edgeAnimation(index: i))
                 }
                 .rotationEffect(.radians(Double(-data.angle)))
                 

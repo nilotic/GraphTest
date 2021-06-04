@@ -19,6 +19,7 @@ final class Graph3Data: ObservableObject {
     
     @Published var isScaleAnimated   = false
     @Published var isLineAnimated    = false
+    @Published var isCurveAnimating  = false
     @Published var isDetailViewShown = false
     
     @Published var angle: CGFloat         = 0
@@ -26,7 +27,6 @@ final class Graph3Data: ObservableObject {
     @Published var currentAngle: CGFloat  = 0
     @Published var isCurved               = false
     @Published var curveRatio: CGFloat    = 0
-    @Published var isCurveAnimating       = false
     
     @Published var depositVertex: DepositVertex? = nil
     
@@ -37,16 +37,18 @@ final class Graph3Data: ObservableObject {
     let curveUnit  = CGFloat.pi / 6
     let curveCount = 12
     
-    let duration: Double = 120
+    
     
     var controlPointAngle: CGFloat {
         atan2(curveSize.width / 2, curveSize.height)
     }
     
-    
     // MARK: Private
     private var frames = [CGRect]()
     private var highlightedVertex: Vertex? = nil
+    
+    private let curveAnimationDuration: TimeInterval = 0.2
+    private let rotaionDuration: TimeInterval = 120
     
     
     // MARK: - Function
@@ -175,7 +177,7 @@ final class Graph3Data: ObservableObject {
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                withAnimation(Animation.linear(duration: self.duration).repeatForever(autoreverses: false)) {
+                withAnimation(Animation.linear(duration: self.rotaionDuration).repeatForever(autoreverses: false)) {
                     self.angle = -2 * .pi
                 }
             }
@@ -187,7 +189,7 @@ final class Graph3Data: ObservableObject {
         
         // Animation Lock
         isCurveAnimating = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + curveAnimationDuration) {
             self.isCurveAnimating = false
         }
         
@@ -197,25 +199,25 @@ final class Graph3Data: ObservableObject {
         // Curve animation
         switch isCurved {
         case false:
-            withAnimation(.easeInOut(duration: 0.25)) {
+            withAnimation(.easeInOut(duration: curveAnimationDuration)) {
                 curveRatio = 0
                 angle      = previousAngle
             }
 
             // Resume the rotation animation
             let workItem = DispatchWorkItem {
-                withAnimation(Animation.linear(duration: self.duration).repeatForever(autoreverses: false)) {
+                withAnimation(Animation.linear(duration: self.rotaionDuration).repeatForever(autoreverses: false)) {
                     self.angle = self.currentAngle - 2 * .pi
                 }
             }
             
             animationWorkItem = workItem
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: workItem)
+            DispatchQueue.main.asyncAfter(deadline: .now() + curveAnimationDuration, execute: workItem)
             
         case true:
             previousAngle = currentAngle
                         
-            withAnimation(.easeInOut(duration: 0.25)) {
+            withAnimation(.easeInOut(duration: curveAnimationDuration)) {
                 curveRatio = 1
                 angle      = currentAngle - .pi / 9
             }
@@ -277,7 +279,7 @@ final class Graph3Data: ObservableObject {
                 self.depositVertex = nil
                 
                 // Rotation animation
-                withAnimation(Animation.linear(duration: self.duration).repeatForever(autoreverses: false)) {
+                withAnimation(Animation.linear(duration: self.rotaionDuration).repeatForever(autoreverses: false)) {
                     self.angle = self.currentAngle - 2 * .pi
                 }
             }
@@ -307,7 +309,7 @@ final class Graph3Data: ObservableObject {
     func addDeposit() {
         // Stop Rotation
         withAnimation(.easeOut(duration: 0.38)) {
-            angle = currentAngle - ((.pi / 180) / (360 / CGFloat(duration)))
+            angle = currentAngle - ((.pi / 180) / (360 / CGFloat(rotaionDuration)))
         }
         
         // Update frames
@@ -332,5 +334,10 @@ final class Graph3Data: ObservableObject {
                 }
             }
         }
+    }
+    
+    func edgeAnimation(index: Int) -> Animation? {
+        guard !isCurveAnimating else { return .easeInOut(duration: curveAnimationDuration) }
+        return isLineAnimated ? .easeInOut(duration: 0.38).delay(0.1 + 0.1 * TimeInterval(index)) : nil
     }
 }
