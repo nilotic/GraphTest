@@ -13,6 +13,6 @@ protocol Vertex {
     var name: String { get }
     var imageName: String? { get }
     var priority: UInt { get }
-    var point: CGPoint { get }
+    var point: CGPoint { get set }
     var isHighlighted: Bool { get set }
 }

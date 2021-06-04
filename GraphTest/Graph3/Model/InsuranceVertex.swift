@@ -12,7 +12,7 @@ struct InsuranceVertex: Vertex {
     let name: String
     let imageName: String?
     let priority: UInt
-    let point: CGPoint
+    var point: CGPoint
     var isHighlighted: Bool
 }
 

@@ -61,6 +61,7 @@ struct UserVertexView: View {
         .scaleEffect(isScaled ? 1 : 0.001)
         .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
         .modifier(VertexButtonModifier(data: data, action: action))
+        .zIndex(1)
         .onAppear {
             isScaled = true
         }

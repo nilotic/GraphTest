@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct GraphEdge {
-    let source: Vertex
-    let target: Vertex
-    let center: CGPoint
+    var source: Vertex
+    var target: Vertex
+    var center: CGPoint
 }
 
 extension GraphEdge: Identifiable {
     
     var id: String {
-        "\(source.id)\(source.name)\(target.id)\(target.name)"
+        "\(source.nodeID)\(source.name)\(target.nodeID)\(target.name)"
     }
 }
 

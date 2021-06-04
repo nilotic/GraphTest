@@ -28,6 +28,9 @@ struct Graph3View: View {
                 
                 editButton
                     .offset(x: proxy.size.width / 2 - 48 , y: proxy.size.height / 2 - 48)
+                
+                dismissButton
+                    .offset(x: 64 - proxy.size.width / 2 , y: proxy.size.height / 2 - 48)
             }
             .id(data.orientation.rawValue)
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) {
@@ -130,7 +133,7 @@ struct Graph3View: View {
                 
                 
                 // Vertex
-                ForEach(data.vertexes.indices, id: \.self) { index in
+                ForEach(data.vertexIndices, id: \.self) { index in
                     switch data.vertexes[index] {
                     case is UserVertex:
                         UserVertexView(data: $data.vertexes[index]) {
@@ -150,13 +153,13 @@ struct Graph3View: View {
                             }
                         }
                         .environmentObject(data)
-                    
+                        
                     case is InsuranceVertex:
                         InsuranceVertexView(data: $data.vertexes[index]) {
                             
                         }
                         .environmentObject(data)
-                    
+                        
                     case is MobileVertex:
                         MobileVertexView(data: $data.vertexes[index]) {
                             
@@ -209,11 +212,30 @@ struct Graph3View: View {
                 
                 // Image
                 Image(systemName: "dollarsign.circle")
-                    .scaleEffect(2.2)
+                    .scaleEffect(1.5)
                     .foregroundColor(.white)
             }
-            .frame(width: 66, height: 66)
-            .cornerRadius(33)
+            .frame(width: 48, height: 48)
+            .cornerRadius(24)
+        }
+        .buttonStyle(buttonStyle)
+        .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 30))
+    }
+    
+    
+    private var dismissButton: some View {
+        Button(action: { data.dismiss() }) {
+            ZStack {
+                // Background
+                Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1))
+                
+                // Image
+                Image(systemName: "circle.grid.3x3")
+                    .scaleEffect(1.2)
+                    .foregroundColor(.white)
+            }
+            .frame(width: 48, height: 48)
+            .cornerRadius(24)
         }
         .buttonStyle(buttonStyle)
         .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 30))

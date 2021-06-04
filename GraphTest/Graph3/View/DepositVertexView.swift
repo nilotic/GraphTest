@@ -53,6 +53,7 @@ struct DepositVertexView: View {
             .scaleEffect(isScaled ? (data.scale) : 0.001)
             .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
             .modifier(DraggableButtonModifier(data: data, action: action))
+            .zIndex(2)
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                     isScaled = true
