@@ -394,11 +394,12 @@ final class Graph3Data: ObservableObject {
                 DispatchQueue.main.async { self.vertexes = [first] }
                 
                 // Move the user vertex
-                DispatchQueue.main.async {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     let radius: CGFloat = 100
                     
                     withAnimation(.easeInOut(duration: 0.38)) {
                         self.vertexes[0].point = CGPoint(x: radius - self.size.width / 2, y: radius - self.size.height / 2)
+                        self.vertexes[0].priority = 10
                     }
                 }
             }

@@ -12,7 +12,7 @@ protocol Vertex {
     var nodeID: String { get }
     var name: String { get }
     var imageName: String? { get }
-    var priority: UInt { get }
+    var priority: UInt { get set }
     var point: CGPoint { get set }
     var isHighlighted: Bool { get set }
 }

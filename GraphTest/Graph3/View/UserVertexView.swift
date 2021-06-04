@@ -16,14 +16,25 @@ struct UserVertexView: View {
 
     private let action: ((_ isPressed: Bool) -> Void)?
     
-    private var offset: CGFloat {
+    private var radius: CGFloat {
         switch data.priority {
-        case 0:     return 50
-        case 1:     return 40
-        case 2:     return 30
-        case 3:     return 20
-        case 4:     return 10
+        case 0:     return 120
+        case 1:     return 110
+        case 2:     return 100
+        case 3:     return 90
+        case 4:     return 80
         default:    return 0
+        }
+    }
+    
+    private var imageSize: CGSize {
+        switch data.priority {
+        case 0:     return CGSize(width: 98, height: 98)
+        case 1:     return CGSize(width: 88, height: 88)
+        case 2:     return CGSize(width: 78, height: 78)
+        case 3:     return CGSize(width: 68, height: 68)
+        case 4:     return CGSize(width: 58, height: 58)
+        default:    return .zero
         }
     }
     
@@ -42,13 +53,13 @@ struct UserVertexView: View {
             Circle()
                 .stroke(Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)), lineWidth: 2)
                 .background(Circle().foregroundColor(Color.black))
-                .frame(width: 70 + offset, height: 70 + offset)
+                .frame(width: radius, height: radius)
                 
             Group {
                 if let imageName = data.imageName {
                     Image(imageName)
                         .resizable()
-                        .frame(width: 48 + offset, height: 48 + offset)
+                        .frame(width: imageSize.width, height: imageSize.height)
                         .padding(.bottom, 20 - (CGFloat(data.priority) * 2))
                 }
                 

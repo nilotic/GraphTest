@@ -11,7 +11,7 @@ struct CardVertex: Vertex {
     let nodeID: String
     let name: String
     let imageName: String?
-    let priority: UInt
+    var priority: UInt
     var point: CGPoint
     var isHighlighted: Bool
 }

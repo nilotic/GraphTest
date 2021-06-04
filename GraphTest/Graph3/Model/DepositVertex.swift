@@ -11,7 +11,7 @@ struct DepositVertex: Vertex {
     let nodeID: String
     let name: String
     var imageName: String?
-    let priority: UInt
+    var priority: UInt
     var point: CGPoint
     var isHighlighted: Bool
     var scale: CGFloat
