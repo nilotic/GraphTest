@@ -222,7 +222,6 @@ struct Graph3View: View {
         .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 30))
     }
     
-    
     private var dismissButton: some View {
         Button(action: { data.dismiss() }) {
             ZStack {
@@ -239,6 +238,16 @@ struct Graph3View: View {
         }
         .buttonStyle(buttonStyle)
         .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 30))
+    }
+    
+    private var thumbnails: some View {
+        HStack {
+            Circle()
+                .frame(width: 30, height: 30)
+            
+            Circle()
+                .frame(width: 30, height: 30)
+        }
     }
 }
 
