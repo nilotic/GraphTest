@@ -45,6 +45,7 @@ final class Graph3Data: ObservableObject {
     
     // MARK: Private
     private var frames = [CGRect]()
+    private var highlightedVertex: Vertex? = nil
     
     
     // MARK: - Function
@@ -225,11 +226,17 @@ final class Graph3Data: ObservableObject {
         case .moved(let frame):
             guard frames.count == vertexes.count else { return }
             
+            // Cache and Reset the previous one
+            let previousHighlightedVertex = highlightedVertex
+            highlightedVertex = nil
+            
             // Vertexes
-            var isHighlighted = false
             for i in 1..<vertexes.count {
                 vertexes[i].isHighlighted = frames[i].intersects(frame)
-                isHighlighted = isHighlighted || vertexes[i].isHighlighted
+                
+                // Cache for the vibration
+                guard vertexes[i].isHighlighted else { continue }
+                highlightedVertex = vertexes[i]
             }
             
             // Deposit Vertex
@@ -241,7 +248,11 @@ final class Graph3Data: ObservableObject {
             }
             
             depositVertex?.scale         = scale
-            depositVertex?.isHighlighted = isHighlighted
+            depositVertex?.isHighlighted = highlightedVertex != nil
+            
+            // Vibration
+            guard let highlightedVertex = highlightedVertex, highlightedVertex.nodeID != previousHighlightedVertex?.nodeID  else { return }
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
             
         case .ended:
             depositVertex?.scale = 1
