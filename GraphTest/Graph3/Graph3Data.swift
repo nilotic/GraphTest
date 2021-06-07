@@ -422,17 +422,20 @@ final class Graph3Data: ObservableObject {
             }
         }
         
+        // Shrink animation
+        self.vertexes[0].priority = 2
+        
+        
         // Remove
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             // Remove vertexes
             if let first = self.vertexes.first {
                 self.vertexIndices = [0]
-
                 // Remove the user vertex after updating the graph
                 DispatchQueue.main.async { self.vertexes = [first] }
                 
                 // Move the user vertex
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.vertexes[0].point = CGPoint(x: 95 - self.size.width / 2, y: 30 - self.size.height / 2)
                     self.vertexes[0].priority = 8
                 }
@@ -444,7 +447,7 @@ final class Graph3Data: ObservableObject {
         
         
         // Thumbnail
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             withAnimation {
                 self.requestThumbnails()
             }
