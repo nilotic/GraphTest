@@ -18,7 +18,6 @@ struct BankVertexView: View {
     @State private var isScaled = false
     
     private let action: (() -> Void)?
-    private let style = VertexButtonStyle()
     
     private var offset: CGFloat {
         switch data.priority {
@@ -68,7 +67,7 @@ struct BankVertexView: View {
                 .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
             }
         }
-        .buttonStyle(style)
+        .buttonStyle(VertexButtonStyle())
         .modifier(VertexModifier(data: data, angle: graphData.angle, currentAngle: $graphData.currentAngle))
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {

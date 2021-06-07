@@ -23,6 +23,11 @@ struct UserVertexView: View {
         case 2:     return 100
         case 3:     return 90
         case 4:     return 80
+        case 5:     return 70
+        case 6:     return 60
+        case 7:     return 50
+        case 8:     return 40
+        case 9:     return 30
         default:    return 0
         }
     }
@@ -34,7 +39,26 @@ struct UserVertexView: View {
         case 2:     return CGSize(width: 78, height: 78)
         case 3:     return CGSize(width: 68, height: 68)
         case 4:     return CGSize(width: 58, height: 58)
+        case 5:     return CGSize(width: 48, height: 48)
+        case 6:     return CGSize(width: 41, height: 41)
+        case 7:     return CGSize(width: 34, height: 34)
+        case 8:     return CGSize(width: 27, height: 27)
+        case 9:     return CGSize(width: 20, height: 20)
         default:    return .zero
+        }
+    }
+    
+    private var animation: Animation? {
+        switch data.priority {
+        case 6...10:    return .spring(response: 0.38, dampingFraction: 0.7, blendDuration: 0)      // Thumbnail animation
+        default:        return .spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0)      // Bubble animation
+        }
+    }
+    
+    private var padding: EdgeInsets {
+        switch data.priority {
+        case 7...10:    return EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        default:        return EdgeInsets(top: 0, leading: 0, bottom: 20 - (CGFloat(data.priority) * 2), trailing: 0)
         }
     }
     
@@ -60,17 +84,19 @@ struct UserVertexView: View {
                     Image(imageName)
                         .resizable()
                         .frame(width: imageSize.width, height: imageSize.height)
-                        .padding(.bottom, 20 - (CGFloat(data.priority) * 2))
+                        .padding(padding)
                 }
                 
-                Text(data.name)
-                    .font(.system(size: 12 - (CGFloat(data.priority)), weight: .bold))
-                    .padding(.top, 70 - (CGFloat(data.priority) * 5))
+                if data.priority < 7 {
+                    Text(data.name)
+                        .font(.system(size: 12 - (CGFloat(data.priority)), weight: .bold))
+                        .padding(.top, 70 - (CGFloat(data.priority) * 5))
+                }
             }
             .clipped()
         }
         .scaleEffect(isScaled ? 1 : 0.001)
-        .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
+        .animation(animation)
         .modifier(VertexButtonModifier(data: data, action: action))
         .zIndex(1)
         .onAppear {

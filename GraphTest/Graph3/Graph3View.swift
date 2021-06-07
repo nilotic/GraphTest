@@ -18,12 +18,19 @@ struct Graph3View: View {
     
     // MARK: - View
     // MARK: Public
-    var body: some View {        
+    var body: some View {
         GeometryReader { proxy in
             ZStack {
                 guideLine
                 // curveGuideLine
-                graph
+                
+                thumbnails
+                    .offset(x: 0, y: 30 - proxy.size.height / 2)
+                
+                if !data.isGraphHidden {
+                    graph
+                }
+                
                 cardsView
                 
                 editButton
@@ -241,12 +248,21 @@ struct Graph3View: View {
     }
     
     private var thumbnails: some View {
-        HStack {
-            Circle()
-                .frame(width: 30, height: 30)
-            
-            Circle()
-                .frame(width: 30, height: 30)
+        ScrollView(.horizontal, showsIndicators: false) {
+            Group {
+                if !data.thumbnails.isEmpty {
+                    HStack(spacing: 15) {
+                        ForEach(Array(data.thumbnails.enumerated()), id: \.element) { (i, data) in
+                            ThumbnailView(data: data, index: i) {
+                                
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .transition(.move(edge: .trailing))
+                }
+            }
+            .frame(height: 50)
         }
     }
 }
@@ -265,3 +281,39 @@ struct Graph3View_Previews: PreviewProvider {
     }
 }
 #endif
+
+
+struct ContentView22: View {
+    @State private var showDetails = false
+
+    var body: some View {
+        VStack {
+            Button("Press to show details") {
+                withAnimation {
+                    showDetails.toggle()
+                }
+            }
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                Group {
+                    if showDetails {
+                        HStack(spacing: 15) {
+                            ForEach(0..<5, id: \.self) { i in
+                                Circle()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.red)
+                                    .animation(Animation.spring(dampingFraction: 0.5)
+                                                .speed(2)
+                                                .delay(0.03 * TimeInterval(i)))
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .transition(.move(edge: .trailing))
+                    }
+                }
+                .frame(height: 50)
+            }
+        }
+    }
+}
+

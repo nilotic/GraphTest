@@ -15,6 +15,7 @@ final class Graph3Data: ObservableObject {
     @Published var vertexes      = [Vertex]()
     @Published var vertexIndices = [Int]()
     @Published var edges         = [GraphEdge]()
+    @Published var thumbnails    = [UserVertex]()
     
     @Published var orientation = UIDevice.current.orientation
     
@@ -30,6 +31,8 @@ final class Graph3Data: ObservableObject {
     @Published var curveRatio: CGFloat    = 0
     
     @Published var depositVertex: DepositVertex? = nil
+    
+    @Published var isGraphHidden = false
     
     var animationWorkItem: DispatchWorkItem? = nil
     let unit: CGFloat = 40
@@ -167,6 +170,41 @@ final class Graph3Data: ObservableObject {
     
         } catch {
             log(.error, error.localizedDescription)
+        }
+    }
+    
+    func requestThumbnails() {
+        var profileImage: String {
+            ["memoji1","memoji2","memoji3","memoji4","memoji5","memoji6","memoji7","memoji8","memoji9","memoji10",
+             "memoji11","memoji12","memoji13","memoji14","memoji15","memoji16","memoji17","memoji18","memoji19","memoji20",
+             "memoji21","memoji22","memoji23","memoji24","memoji25","memoji26"].randomElement() ?? "memoji1"
+        }
+        
+        var name: String {
+            ["Oliver", "Jake", "Noah", "James", "Jack", "Connor", "Liam", "John", "Harry", "Callum",
+             "Mason", "Robert", "Jacob", "Jacob", "Jacob", "Michael", "Charlie", "Kyle", "William", "William",
+             "Amelia", "Margaret", "Emma", "Mary", "Olivia", "Samantha", "Olivia", "Patricia", "Isla", "Bethany",
+             "Sophia", "Jennifer", "Emily", "Elizabeth", "Isabella", "Elizabeth", "Poppy", "Joanne", "Ava", "Linda"].randomElement() ?? "Oliver"
+        }
+        
+        var nodeID: String {
+            "\((1..<100).randomElement() ?? 0)"
+        }
+        
+        var thumbnails = [UserVertex]()
+        for i in 0..<10  {
+            switch i {
+            case 1:     thumbnails.append(UserVertex(nodeID: nodeID, name: name, imageName: "memoji27", priority: 8, point: .zero, isHighlighted: false))
+            default:    thumbnails.append(UserVertex(nodeID: nodeID, name: name, imageName: profileImage, priority: 8, point: .zero, isHighlighted: false))
+            }
+        }
+        
+        DispatchQueue.main.async {
+            self.thumbnails = thumbnails
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.isGraphHidden = true
         }
     }
     
@@ -395,17 +433,21 @@ final class Graph3Data: ObservableObject {
                 
                 // Move the user vertex
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    let radius: CGFloat = 100
-                    
-                    withAnimation(.easeInOut(duration: 0.38)) {
-                        self.vertexes[0].point = CGPoint(x: radius - self.size.width / 2, y: radius - self.size.height / 2)
-                        self.vertexes[0].priority = 10
-                    }
+                    self.vertexes[0].point = CGPoint(x: 95 - self.size.width / 2, y: 30 - self.size.height / 2)
+                    self.vertexes[0].priority = 8
                 }
             }
             
             // Remove edges
             self.edges.removeAll()
+        }
+        
+        
+        // Thumbnail
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+            withAnimation {
+                self.requestThumbnails()
+            }
         }
     }
 }

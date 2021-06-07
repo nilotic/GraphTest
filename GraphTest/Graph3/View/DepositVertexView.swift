@@ -15,7 +15,6 @@ struct DepositVertexView: View {
     @State private var isScaled = false
         
     private let action: ((_ status: TouchStatus) -> Void)?
-    private let style = VertexButtonStyle()
     
     private var offset: CGFloat {
         switch data?.priority ?? 0 {
@@ -49,7 +48,7 @@ struct DepositVertexView: View {
                 Text(data.name)
                     .font(.system(size: 12, weight: .bold))
             }
-            .buttonStyle(style)
+            .buttonStyle(VertexButtonStyle())
             .scaleEffect(isScaled ? (data.scale) : 0.001)
             .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
             .modifier(DraggableButtonModifier(data: data, action: action))

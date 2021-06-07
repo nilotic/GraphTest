@@ -51,6 +51,8 @@
 		B77FE43726452E5900EDB7FE /* MobileNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE43626452E5900EDB7FE /* MobileNode.swift */; };
 		B77FE43926452E7200EDB7FE /* CoworkerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77FE43826452E7200EDB7FE /* CoworkerNode.swift */; };
 		B7A430BA2652266F00985292 /* VertexButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A430B92652266F00985292 /* VertexButtonStyle.swift */; };
+		B7A497BF266DE79F00BE94A9 /* ThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A497BE266DE79F00BE94A9 /* ThumbnailView.swift */; };
+		B7A497C1266DE88A00BE94A9 /* ThumbnailButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A497C0266DE88A00BE94A9 /* ThumbnailButtonStyle.swift */; };
 		B7DAC028264FF5DF00A6EF5D /* GraphCapsule.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7DAC024264FF5DF00A6EF5D /* GraphCapsule.swift */; };
 		B7DAC029264FF5DF00A6EF5D /* HikeGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7DAC025264FF5DF00A6EF5D /* HikeGraph.swift */; };
 		B7DAC02A264FF5DF00A6EF5D /* HikeDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7DAC026264FF5DF00A6EF5D /* HikeDetail.swift */; };
@@ -119,6 +121,8 @@
 		B77FE43626452E5900EDB7FE /* MobileNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileNode.swift; sourceTree = "<group>"; };
 		B77FE43826452E7200EDB7FE /* CoworkerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoworkerNode.swift; sourceTree = "<group>"; };
 		B7A430B92652266F00985292 /* VertexButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexButtonStyle.swift; sourceTree = "<group>"; };
+		B7A497BE266DE79F00BE94A9 /* ThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailView.swift; sourceTree = "<group>"; };
+		B7A497C0266DE88A00BE94A9 /* ThumbnailButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailButtonStyle.swift; sourceTree = "<group>"; };
 		B7DAC024264FF5DF00A6EF5D /* GraphCapsule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphCapsule.swift; sourceTree = "<group>"; };
 		B7DAC025264FF5DF00A6EF5D /* HikeGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HikeGraph.swift; sourceTree = "<group>"; };
 		B7DAC026264FF5DF00A6EF5D /* HikeDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HikeDetail.swift; sourceTree = "<group>"; };
@@ -325,6 +329,7 @@
 			children = (
 				B7E7920A26412EB30043FB54 /* ButtonStyle1.swift */,
 				B7A430B92652266F00985292 /* VertexButtonStyle.swift */,
+				B7A497C0266DE88A00BE94A9 /* ThumbnailButtonStyle.swift */,
 			);
 			path = ButtonStyle;
 			sourceTree = "<group>";
@@ -386,6 +391,7 @@
 				B7253AF226563A50009CC281 /* EdgeShape.swift */,
 				B7355C8D2657722C0025F035 /* VertexModifier.swift */,
 				B70914DD2666258E00A5504B /* RipplesView.swift */,
+				B7A497BE266DE79F00BE94A9 /* ThumbnailView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -527,10 +533,12 @@
 				B7DAC02F264FF60800A6EF5D /* Hike.swift in Sources */,
 				B7E7920C26412EB30043FB54 /* ButtonStyle1.swift in Sources */,
 				B77FE4272645297500EDB7FE /* GraphResponse.swift in Sources */,
+				B7A497C1266DE88A00BE94A9 /* ThumbnailButtonStyle.swift in Sources */,
 				B7E7920626410B930043FB54 /* Logger.swift in Sources */,
 				B76416C9264A048C00475F06 /* BankVertexView.swift in Sources */,
 				B7E7920726410B930043FB54 /* LogType.swift in Sources */,
 				B77FE4202645157E00EDB7FE /* Graph2Scene.swift in Sources */,
+				B7A497BF266DE79F00BE94A9 /* ThumbnailView.swift in Sources */,
 				B7253AF326563A50009CC281 /* EdgeShape.swift in Sources */,
 				B76414E2264A5604005EFF13 /* CoworkerVertex.swift in Sources */,
 				B7E79214264134F80043FB54 /* ViewExtension.swift in Sources */,

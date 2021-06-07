@@ -18,7 +18,6 @@ struct CoworkerVertexView: View {
     @State private var isScaled = false
     
     private let action: (() -> Void)?
-    private let style = VertexButtonStyle()
     
     private var offset: CGFloat {
         switch data.priority {
@@ -64,7 +63,7 @@ struct CoworkerVertexView: View {
                 .clipped()
             }
         }
-        .buttonStyle(style)
+        .buttonStyle(VertexButtonStyle())
         .scaleEffect(isScaled ? 1 : 0.001)
         .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
         .modifier(VertexModifier(data: data, angle: graphData.angle, currentAngle: $graphData.currentAngle))
