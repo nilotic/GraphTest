@@ -86,10 +86,8 @@ final class Graph3Data: ObservableObject {
             vertexIndices.append(vertexIndices.count)
             frames.append(CGRect(origin: .zero, size: vertexSize(data.user.priority)))
             
-            
-            
             // Vertex, Edge
-            let dashStyle = StrokeStyle(lineWidth: 1, dash: [5])
+            let dashStyle = StrokeStyle(lineWidth: 2, lineCap: .round, dash: [0.5, 5])
             let lineStyle = StrokeStyle(lineWidth: 2)
             
             var dashEdges = [GraphEdge]()
@@ -243,9 +241,10 @@ final class Graph3Data: ObservableObject {
             }
             
             // Dash Edge
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 for i in 0..<self.dashEdges.count {
-                    self.dashEdges[i].trim = 0...1
+                    self.dashEdges[i].trim    = 0...1
+                    self.dashEdges[i].opacity = 1
                 }
             }
             
@@ -253,7 +252,8 @@ final class Graph3Data: ObservableObject {
             // Edge
             DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                 for i in 0..<self.edges.count {
-                    self.edges[i].trim = 0...1
+                    self.edges[i].trim    = 0...1
+                    self.edges[i].opacity = 1
                 }
             }
         /*
@@ -267,7 +267,6 @@ final class Graph3Data: ObservableObject {
                 }
             }
             
-                          
         
             // Rotation
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -454,7 +453,7 @@ final class Graph3Data: ObservableObject {
         let point = vertexes[index].point
         let distance = sqrt(pow(point.x, 2) + pow(point.y, 2))
         let ratio = TimeInterval(distance / min(size.width, size.height))
-        let duration = max(2, ratio)
+        let duration = max(2.5, ratio)
         
         return dashEdges[index].trim.upperBound <= 0 ? nil : .easeInOut(duration: duration).delay(0.1 + 0.1 * TimeInterval(index))
     }
@@ -466,7 +465,7 @@ final class Graph3Data: ObservableObject {
         let point = vertexes[index].point
         let distance = sqrt(pow(point.x, 2) + pow(point.y, 2))
         let ratio = TimeInterval(distance / min(size.width, size.height))
-        let duration = max(1, ratio)
+        let duration = max(2, ratio)
         
         return edges[index].trim.upperBound <= 0 ? nil : .easeInOut(duration: duration).delay(0.1 + 0.1 * TimeInterval(index))
     }

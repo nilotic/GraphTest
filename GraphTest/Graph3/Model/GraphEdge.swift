@@ -16,6 +16,7 @@ struct GraphEdge {
     var angle: Double              = 0
     var trim: ClosedRange<CGFloat> = 0...0
     var color: Color               = .clear
+    var opacity: Double            = 0
     var style                      = StrokeStyle()
 }
 
