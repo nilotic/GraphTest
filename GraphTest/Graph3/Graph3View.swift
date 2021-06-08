@@ -45,7 +45,10 @@ struct Graph3View: View {
             }
             .onAppear {
                 data.request(size: proxy.size)
-                data.update(isAnimated: true)
+                
+                DispatchQueue.main.async {
+                    data.update(isAnimated: true)
+                }
             }
         }
     }
@@ -85,59 +88,26 @@ struct Graph3View: View {
         }
     }
     
-    private var curveGuideLine: some View {
-        GeometryReader { proxy in
-            ZStack {
-                // Curve Box
-                ForEach(0..<data.curveCount) {
-                    ZStack {
-                        Rectangle()
-                            .frame(width: data.curveSize.width, height: data.curveSize.height)
-                            .border(Color.red)
-                            .offset(x: data.curveSize.width / 2, y: -data.curveSize.height / 2)
-                        
-                        Circle()
-                            .fill(Color.green)
-                            .frame(width: 10, height: 10)
-                            .offset(x: data.curveSize.width / 2, y: -data.curveSize.height)
-                    }
-                    .rotationEffect(.radians(.pi / 6 * Double($0)))
-                }
-                
-                // Control Point
-                ForEach(0..<data.curveCount) {
-                    Circle()
-                        .fill(Color.red)
-                        .frame(width: 5, height: 5)
-                        .offset(x: ((data.curveSize.width / 2 + 12) * cos(data.controlPointAngle + data.curveUnit * CGFloat($0))), y: (data.curveSize.width / 2 + 12) * sin(data.controlPointAngle + data.curveUnit * CGFloat($0)))
-                }
-                
-                // Curve
-                ForEach(0..<data.curveCount) {
-                    EdgeShape(source: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
-                              target: CGPoint(x: proxy.size.width / 2 + data.curveSize.width * cos(data.curveUnit * CGFloat($0)), y: proxy.size.height / 2 + data.curveSize.width * sin(data.curveUnit * CGFloat($0))),
-                              size: data.curveSize,
-                              ratio: data.curveRatio)
-                        .stroke(Color(#colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)), lineWidth: 3)
-                }
-            }
-            .frame(width: proxy.size.width, height: proxy.size.height)
-            .opacity(0.5)
-        }
-    }
-    
     private var graph: some View {
         GeometryReader { proxy in
             ZStack(alignment: .center) {
+                // Dash Edge
+                ForEach(Array(data.dashEdges.enumerated()), id: \.element) { (i, edge) in
+                    EdgeShape(edge: edge)
+                        .trim(from: edge.trim.lowerBound, to: edge.trim.upperBound)
+                        .stroke(edge.color, style: edge.style)
+                        .animation(data.dashEdgeAnimation(index: i))
+                        .rotationEffect(.radians(edge.angle))
+                }
+               
                 // Edge
                 ForEach(Array(data.edges.enumerated()), id: \.element) { (i, edge) in
-                    EdgeShape(edge: edge, size: data.curveSize, ratio: data.curveRatio)
-                        .trim(from: 0, to: data.isLineAnimated ? 1 : 0)
-                        .stroke(Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), lineWidth: 3)
+                    EdgeShape(edge: edge)
+                        .trim(from: edge.trim.lowerBound, to: edge.trim.upperBound)
+                        .stroke(edge.color, style: edge.style)
                         .animation(data.edgeAnimation(index: i))
+                        .rotationEffect(.radians(edge.angle))
                 }
-                .rotationEffect(.radians(Double(-data.angle)))
-                
                 
                 // Vertex
                 ForEach(data.vertexIndices, id: \.self) { index in
@@ -151,7 +121,6 @@ struct Graph3View: View {
                         BankVertexView(data: $data.vertexes[index]) {
                             
                         }
-                        .environmentObject(data)
                         
                     case is CardVertex:
                         CardVertexView(data: $data.vertexes[index]) {
@@ -159,25 +128,21 @@ struct Graph3View: View {
                                 self.data.isDetailViewShown = true
                             }
                         }
-                        .environmentObject(data)
                         
                     case is InsuranceVertex:
                         InsuranceVertexView(data: $data.vertexes[index]) {
                             
                         }
-                        .environmentObject(data)
                         
                     case is MobileVertex:
                         MobileVertexView(data: $data.vertexes[index]) {
                             
                         }
-                        .environmentObject(data)
                         
                     case is CoworkerVertex:
                         CoworkerVertexView(data: $data.vertexes[index]) {
                             
                         }
-                        .environmentObject(data)
                         
                     default:
                         Text("")
@@ -265,6 +230,50 @@ struct Graph3View: View {
             .frame(height: 50)
         }
     }
+    
+    
+    /*
+    private var curveGuideLine: some View {
+        GeometryReader { proxy in
+            ZStack {
+                // Curve Box
+                ForEach(0..<data.curveCount) {
+                    ZStack {
+                        Rectangle()
+                            .frame(width: data.curveSize.width, height: data.curveSize.height)
+                            .border(Color.red)
+                            .offset(x: data.curveSize.width / 2, y: -data.curveSize.height / 2)
+                        
+                        Circle()
+                            .fill(Color.green)
+                            .frame(width: 10, height: 10)
+                            .offset(x: data.curveSize.width / 2, y: -data.curveSize.height)
+                    }
+                    .rotationEffect(.radians(.pi / 6 * Double($0)))
+                }
+                
+                // Control Point
+                ForEach(0..<data.curveCount) {
+                    Circle()
+                        .fill(Color.red)
+                        .frame(width: 5, height: 5)
+                        .offset(x: ((data.curveSize.width / 2 + 12) * cos(data.controlPointAngle + data.curveUnit * CGFloat($0))), y: (data.curveSize.width / 2 + 12) * sin(data.controlPointAngle + data.curveUnit * CGFloat($0)))
+                }
+                
+                // Curve
+                ForEach(0..<data.curveCount) {
+                    EdgeShape(source: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
+                              target: CGPoint(x: proxy.size.width / 2 + data.curveSize.width * cos(data.curveUnit * CGFloat($0)), y: proxy.size.height / 2 + data.curveSize.width * sin(data.curveUnit * CGFloat($0))),
+                              size: data.curveSize,
+                              ratio: data.curveRatio)
+                        .stroke(Color(#colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)), lineWidth: 3)
+                }
+            }
+            .frame(width: proxy.size.width, height: proxy.size.height)
+            .opacity(0.5)
+        }
+    }
+    */
 }
 
 #if DEBUG

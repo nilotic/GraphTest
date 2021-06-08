@@ -10,7 +10,13 @@ import SwiftUI
 struct GraphEdge {
     var source: Vertex
     var target: Vertex
-    var center: CGPoint
+    var center: CGPoint            = .zero
+    var size: CGSize               = .zero
+    var ratio: CGFloat             = 0
+    var angle: Double              = 0
+    var trim: ClosedRange<CGFloat> = 0...0
+    var color: Color               = .clear
+    var style                      = StrokeStyle()
 }
 
 extension GraphEdge: Identifiable {
@@ -38,7 +44,7 @@ extension GraphEdge: Equatable {
 extension GraphEdge {
     
     static var placeholder: GraphEdge {
-        GraphEdge(source: UserVertex.placeholder, target: BankVertex.placeholder, center: .zero)
+        GraphEdge(source: UserVertex.placeholder, target: BankVertex.placeholder)
     }
 }
 #endif

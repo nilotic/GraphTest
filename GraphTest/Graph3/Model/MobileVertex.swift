@@ -11,9 +11,13 @@ struct MobileVertex: Vertex {
     let nodeID: String
     let name: String
     let imageName: String?
-    var priority: UInt
-    var point: CGPoint
-    var isHighlighted: Bool
+    var priority: UInt    = 0
+    var point: CGPoint    = .zero
+    var isHighlighted     = false
+    var isScaled          = false
+    var scale: CGFloat    = 0
+    var angle: CGFloat    = 0
+    var endAngle: CGFloat = 0
 }
 
 extension MobileVertex: Identifiable {
@@ -26,11 +30,10 @@ extension MobileVertex: Identifiable {
 extension MobileVertex {
     
     init(data: MobileNode, point: CGPoint) {
-        nodeID        = data.id
-        name          = data.name
-        imageName     = data.imageName
-        priority      = data.priority
-        isHighlighted = false
+        nodeID    = data.id
+        name      = data.name
+        imageName = data.imageName
+        priority  = data.priority
         
         self.point = point
     }
@@ -54,8 +57,6 @@ extension MobileVertex: Decodable {
         do { imageName = try container.decode(String.self,  forKey: .imageName) } catch { throw error }
         do { priority  = try container.decode(UInt.self,    forKey: .priority) }  catch { throw error }
         do { point     = try container.decode(CGPoint.self, forKey: .point) }     catch { throw error }
-        
-        isHighlighted = false
     }
 }
 
@@ -77,7 +78,7 @@ extension MobileVertex: Equatable {
 extension MobileVertex {
     
     static var placeholder: MobileVertex {
-        MobileVertex(nodeID: "0", name: "SC", imageName: "sc", priority: 0, point: .zero, isHighlighted: false)
+        MobileVertex(nodeID: "0", name: "SC", imageName: "sc")
     }
 }
 #endif

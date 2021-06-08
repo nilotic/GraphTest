@@ -15,4 +15,7 @@ protocol Vertex {
     var priority: UInt { get set }
     var point: CGPoint { get set }
     var isHighlighted: Bool { get set }
+    var isScaled: Bool { get set }
+    var angle: CGFloat { get set }
+    var endAngle: CGFloat { get set }
 }

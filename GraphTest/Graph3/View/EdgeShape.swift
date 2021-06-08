@@ -40,12 +40,12 @@ struct EdgeShape: Shape {
     
     
     // MARK: - Initializer
-    init(edge: GraphEdge, size: CGSize, ratio: CGFloat) {
+    init(edge: GraphEdge) {
         source = CGPoint(x: edge.source.point.x + edge.center.x, y: edge.source.point.y + edge.center.y)
         target = CGPoint(x: edge.target.point.x + edge.center.x, y: edge.target.point.y + edge.center.y)
         
-        self.size  = size
-        self.ratio = ratio
+        self.size  = edge.size
+        self.ratio = edge.ratio
     }
     
     init(source: CGPoint, target: CGPoint, size: CGSize, ratio: CGFloat) {

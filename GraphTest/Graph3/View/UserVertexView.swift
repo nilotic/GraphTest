@@ -12,8 +12,6 @@ struct UserVertexView: View {
     // MARK: - Value
     // MARK: Private
     @Binding private var data: Vertex
-    @State private var isScaled = false
-
     private let action: ((_ isPressed: Bool) -> Void)?
     
     private var radius: CGFloat {
@@ -50,8 +48,8 @@ struct UserVertexView: View {
     
     private var animation: Animation? {
         switch data.priority {
-        case 6...10:    return .spring(response: 0.38, dampingFraction: 0.7, blendDuration: 0)      // Thumbnail animation
-        default:        return .spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0)      // Bubble animation
+        case 6...10:    return .spring(response: 0.38, dampingFraction: 0.7, blendDuration: 0)   // Thumbnail animation
+        default:        return .spring(response: 1, dampingFraction: 0.5, blendDuration: 0)      // Bubble animation
         }
     }
     
@@ -95,13 +93,10 @@ struct UserVertexView: View {
             }
             .clipped()
         }
-        .scaleEffect(isScaled ? 1 : 0.001)
+        .scaleEffect(data.isScaled ? 1 : 0.001)
         .animation(animation)
         .modifier(VertexButtonModifier(data: data, action: action))
         .zIndex(1)
-        .onAppear {
-            isScaled = true
-        }
     }
 }
 

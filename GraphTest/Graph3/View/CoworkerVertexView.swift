@@ -15,8 +15,6 @@ struct CoworkerVertexView: View {
     
     // MARK: Private
     @Binding private var data: Vertex
-    @State private var isScaled = false
-    
     private let action: (() -> Void)?
     
     private var offset: CGFloat {
@@ -64,14 +62,9 @@ struct CoworkerVertexView: View {
             }
         }
         .buttonStyle(VertexButtonStyle())
-        .scaleEffect(isScaled ? 1 : 0.001)
+        .scaleEffect(data.isScaled ? 1 : 0.001)
         .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
-        .modifier(VertexModifier(data: data, angle: graphData.angle, currentAngle: $graphData.currentAngle))
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                isScaled = true
-            }
-        }
+        .modifier(VertexModifier(data: data, angle: $data.angle, endAngle: data.endAngle))
     }
 }
 

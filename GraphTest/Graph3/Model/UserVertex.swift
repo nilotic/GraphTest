@@ -11,9 +11,13 @@ struct UserVertex: Vertex {
     let nodeID: String
     let name: String
     let imageName: String?
-    var priority: UInt
-    var point: CGPoint
-    var isHighlighted: Bool
+    var priority: UInt    = 0
+    var point: CGPoint    = .zero
+    var isHighlighted     = false
+    var isScaled          = false
+    var scale: CGFloat    = 0
+    var angle: CGFloat    = 0
+    var endAngle: CGFloat = 0
 }
 
 extension UserVertex: Identifiable {
@@ -26,11 +30,10 @@ extension UserVertex: Identifiable {
 extension UserVertex {
     
     init(data: UserNode, point: CGPoint) {
-        nodeID        = data.id
-        name          = data.name
-        imageName     = data.imageName
-        priority      = data.priority
-        isHighlighted = false
+        nodeID    = data.id
+        name      = data.name
+        imageName = data.imageName
+        priority  = data.priority
         
         self.point = point
     }
@@ -54,8 +57,6 @@ extension UserVertex: Decodable {
         do { imageName = try container.decode(String.self,  forKey: .imageName) } catch { throw error }
         do { priority  = try container.decode(UInt.self,    forKey: .priority) }  catch { throw error }
         do { point     = try container.decode(CGPoint.self, forKey: .point) }     catch { throw error }
-        
-        isHighlighted = false
     }
 }
 
@@ -78,7 +79,7 @@ extension UserVertex: Equatable {
 extension UserVertex {
     
     static var placeholder: UserVertex {
-        UserVertex(nodeID: "0", name: "Oliver", imageName: "memoji1", priority: 0, point: .zero, isHighlighted: false)
+        UserVertex(nodeID: "0", name: "Oliver", imageName: "memoji1")
     }
 }
 #endif

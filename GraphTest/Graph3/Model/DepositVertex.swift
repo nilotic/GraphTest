@@ -11,10 +11,13 @@ struct DepositVertex: Vertex {
     let nodeID: String
     let name: String
     var imageName: String?
-    var priority: UInt
-    var point: CGPoint
-    var isHighlighted: Bool
-    var scale: CGFloat
+    var priority: UInt    = 0
+    var point: CGPoint    = .zero
+    var isHighlighted     = false
+    var isScaled          = false
+    var scale: CGFloat    = 0
+    var angle: CGFloat    = 0
+    var endAngle: CGFloat = 0
 }
 
 extension DepositVertex: Identifiable {
@@ -42,7 +45,7 @@ extension DepositVertex: Equatable {
 extension DepositVertex {
     
     static var placeholder: DepositVertex {
-        DepositVertex(nodeID: "0", name: "₩50,000", priority: 0, point: .zero, isHighlighted: false, scale: 1)
+        DepositVertex(nodeID: "0", name: "₩50,000")
     }
 }
 #endif

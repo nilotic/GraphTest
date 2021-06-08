@@ -12,8 +12,6 @@ struct DepositVertexView: View {
     // MARK: - Value
     // MARK: Private
     @Binding private var data: DepositVertex?
-    @State private var isScaled = false
-        
     private let action: ((_ status: TouchStatus) -> Void)?
     
     private var offset: CGFloat {
@@ -49,15 +47,10 @@ struct DepositVertexView: View {
                     .font(.system(size: 12, weight: .bold))
             }
             .buttonStyle(VertexButtonStyle())
-            .scaleEffect(isScaled ? (data.scale) : 0.001)
+            .scaleEffect(data.isScaled ? (data.scale) : 0.001)
             .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
             .modifier(DraggableButtonModifier(data: data, action: action))
             .zIndex(2)
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                    isScaled = true
-                }
-            }
         }
     }
 }

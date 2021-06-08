@@ -12,13 +12,13 @@ struct VertexModifier: AnimatableModifier {
     // MARK: - Value
     // MARK: Public
     var animatableData: CGFloat {
-        get { angle }
-        set { angle = newValue }
+        get { endAngle }
+        set { endAngle = newValue }
     }
     
     // MARK: Private
-    private var angle: CGFloat
-    @Binding private var currentAngle: CGFloat
+    private var endAngle: CGFloat
+    @Binding private var angle: CGFloat
     
     private var data: Vertex
     @State private var radius: CGFloat = 0
@@ -29,18 +29,18 @@ struct VertexModifier: AnimatableModifier {
     
     
     // MARK: - Initializer
-    init(data: Vertex, angle: CGFloat, currentAngle: Binding<CGFloat>) {
-        self.data  = data
-        self.angle = angle
+    init(data: Vertex, angle: Binding<CGFloat>, endAngle: CGFloat) {
+        self.data     = data
+        self.endAngle = endAngle
         
-        _currentAngle = currentAngle
+        _angle = angle
     }
     
     
     // MARK: - Function
     // MARK: Public
     func body(content: Content) -> some View {
-        DispatchQueue.main.async { currentAngle = angle }
+        DispatchQueue.main.async { angle = endAngle }
         
         return ZStack {
             Circle()
@@ -50,12 +50,12 @@ struct VertexModifier: AnimatableModifier {
                 .opacity(data.isHighlighted ? 1 : 0)
                 .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
                 .offset(x: data.point.x, y: data.point.y)
-                .rotationEffect(.radians(Double(-angle)))
+                .rotationEffect(.radians(Double(-endAngle)))
 
             content
-                .rotationEffect(.radians(Double(angle)))
+                .rotationEffect(.radians(Double(endAngle)))
                 .offset(x: data.point.x, y: data.point.y)
-                .rotationEffect(.radians(Double(-angle)))
+                .rotationEffect(.radians(Double(-endAngle)))
                 .frame {
                     radius = $0.size.width
                 }

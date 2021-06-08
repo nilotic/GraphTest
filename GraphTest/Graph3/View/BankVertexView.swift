@@ -10,13 +10,8 @@ import SwiftUI
 struct BankVertexView: View {
     
     // MARK: - Value
-    // MARK: Public
-    @EnvironmentObject var graphData: Graph3Data
-    
     // MARK: Private
     @Binding private var data: Vertex
-    @State private var isScaled = false
-    
     private let action: (() -> Void)?
     
     private var offset: CGFloat {
@@ -63,17 +58,12 @@ struct BankVertexView: View {
                     }
                     .clipped()
                 }
-                .scaleEffect(isScaled ? 1 : 0.001)
+                .scaleEffect(data.isScaled ? 1 : 0.001)
                 .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
             }
         }
         .buttonStyle(VertexButtonStyle())
-        .modifier(VertexModifier(data: data, angle: graphData.angle, currentAngle: $graphData.currentAngle))
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                isScaled = true
-            }
-        }
+        .modifier(VertexModifier(data: data, angle: $data.angle, endAngle: data.endAngle))
     }
 }
 

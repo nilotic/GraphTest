@@ -14,30 +14,23 @@ final class Graph3Data: ObservableObject {
     // MARK: Public
     @Published var vertexes      = [Vertex]()
     @Published var vertexIndices = [Int]()
+    @Published var dashEdges     = [GraphEdge]()
     @Published var edges         = [GraphEdge]()
     @Published var thumbnails    = [UserVertex]()
     
     @Published var orientation = UIDevice.current.orientation
-    
-    @Published var isScaleAnimated   = false
-    @Published var isLineAnimated    = false
     @Published var isCurveAnimating  = false
     @Published var isDetailViewShown = false
+    @Published var isCurved          = false
     
-    @Published var angle: CGFloat         = 0
-    @Published var previousAngle: CGFloat = 0
-    @Published var currentAngle: CGFloat  = 0
-    @Published var isCurved               = false
-    @Published var curveRatio: CGFloat    = 0
-    
+
     @Published var depositVertex: DepositVertex? = nil
-    
     @Published var isGraphHidden = false
+    
     
     var animationWorkItem: DispatchWorkItem? = nil
     let unit: CGFloat = 40
     
-    let curveSize  = CGSize(width: 190, height: 50)
     let curveUnit  = CGFloat.pi / 6
     let curveCount = 12
     
@@ -48,6 +41,8 @@ final class Graph3Data: ObservableObject {
     // MARK: Private
     private var frames = [CGRect]()
     private var highlightedVertex: Vertex? = nil
+    
+    private let curveSize = CGSize(width: 190, height: 50)
     
     private let curveAnimationDuration: TimeInterval = 0.2
     private let rotaionDuration: TimeInterval = 120
@@ -94,7 +89,12 @@ final class Graph3Data: ObservableObject {
             
             
             // Vertex, Edge
-            var edges = [GraphEdge]()
+            let dashStyle = StrokeStyle(lineWidth: 1, dash: [5])
+            let lineStyle = StrokeStyle(lineWidth: 2)
+            
+            var dashEdges = [GraphEdge]()
+            var edges     = [GraphEdge]()
+            
             for graph in data.user.graphs {
                 guard let vertex = graph.nodes.sorted(by: { $0.priority < $1.priority }).first else { continue }
 
@@ -106,9 +106,10 @@ final class Graph3Data: ObservableObject {
                     vertexes.append(vertex)
                     vertexIndices.append(vertexIndices.count)
                     
-                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center))
-                    frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
+                    dashEdges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: Color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)), style: dashStyle))
+                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), style: lineStyle))
                     
+                    frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
                     
                 case let data as CardNode:
                     let point  = CGPoint(x: unit * 3, y: 0)
@@ -117,7 +118,9 @@ final class Graph3Data: ObservableObject {
                     vertexes.append(vertex)
                     vertexIndices.append(vertexIndices.count)
                     
-                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center))
+                    dashEdges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: Color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)), style: dashStyle))
+                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), style: lineStyle))
+                    
                     frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
                     
                 case let data as InsuranceNode:
@@ -129,7 +132,9 @@ final class Graph3Data: ObservableObject {
                     vertexes.append(vertex)
                     vertexIndices.append(vertexIndices.count)
                     
-                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center))
+                    dashEdges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: Color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)), style: dashStyle))
+                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), style: lineStyle))
+                    
                     frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
                     
                 case let data as MobileNode:
@@ -141,7 +146,9 @@ final class Graph3Data: ObservableObject {
                     vertexes.append(vertex)
                     vertexIndices.append(vertexIndices.count)
                     
-                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center))
+                    dashEdges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: Color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)), style: dashStyle))
+                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), style: lineStyle))
+                    
                     frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
                     
                 case let data as CoworkerNode:
@@ -153,7 +160,9 @@ final class Graph3Data: ObservableObject {
                     vertexes.append(vertex)
                     vertexIndices.append(vertexIndices.count)
                     
-                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center))
+                    dashEdges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: Color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)), style: dashStyle))
+                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), style: lineStyle))
+                    
                     frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
                     
                 default:
@@ -164,6 +173,7 @@ final class Graph3Data: ObservableObject {
             DispatchQueue.main.async {
                 self.vertexes      = vertexes
                 self.vertexIndices = vertexIndices
+                self.dashEdges     = dashEdges
                 self.edges         = edges
                 self.frames        = frames
             }
@@ -211,36 +221,65 @@ final class Graph3Data: ObservableObject {
     func update(isAnimated: Bool) {
         switch isAnimated {
         case false:
-            isScaleAnimated = false
-            isLineAnimated  = false
-            depositVertex   = nil
-            
-            angle = 0
+            update(angle: 0)
             
             for i in 0..<vertexes.count {
+                vertexes[i].isScaled = false
                 vertexes[i].isHighlighted = false
             }
             
+            for i in 0..<dashEdges.count {
+                dashEdges[i].trim = 0...0
+            }
+            
+            depositVertex = nil
+            
+            
         case true:
+            // User
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.isScaleAnimated = true
+                guard self.vertexes.first is UserVertex else { return }
+                self.vertexes[0].isScaled = true
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
-                self.isLineAnimated = true
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                withAnimation(Animation.linear(duration: self.rotaionDuration).repeatForever(autoreverses: false)) {
-                    self.angle = -2 * .pi
+            // Dash Edge
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                for i in 0..<self.dashEdges.count {
+                    self.dashEdges[i].trim = 0...1
                 }
             }
+            
+            
+            // Edge
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                for i in 0..<self.edges.count {
+                    self.edges[i].trim = 0...1
+                }
+            }
+        /*
+            // Vertexes
+            for (i, vertex) in vertexes.enumerated() {
+                guard !(vertex is UserVertex) else { continue }
+                let delay = TimeInterval(sqrt(pow(vertex.point.x, 2) + pow(vertex.point.y, 2))) / 100 + 1
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                    self.vertexes[i].isScaled = true
+                }
+            }
+            
+                          
+        
+            // Rotation
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                withAnimation(Animation.linear(duration: self.rotaionDuration).repeatForever(autoreverses: false)) {
+                    self.update(angle: -2 * .pi)
+                }
+            }
+         */
         }
     }
     
     func handle(isPressed: Bool) {
-        isCurved = isPressed
-        
         // Animation Lock
         isCurveAnimating = true
         DispatchQueue.main.asyncAfter(deadline: .now() + curveAnimationDuration) {
@@ -251,17 +290,16 @@ final class Graph3Data: ObservableObject {
         animationWorkItem?.cancel()
             
         // Curve animation
-        switch isCurved {
+        switch isPressed {
         case false:
             withAnimation(.easeInOut(duration: curveAnimationDuration)) {
-                curveRatio = 0
-                angle      = previousAngle
+                update(offset: .pi / 8, curveRatio: 0)
             }
 
             // Resume the rotation animation
             let workItem = DispatchWorkItem {
                 withAnimation(Animation.linear(duration: self.rotaionDuration).repeatForever(autoreverses: false)) {
-                    self.angle = self.currentAngle - 2 * .pi
+                    self.update(offset: -2 * .pi)
                 }
             }
             
@@ -269,11 +307,8 @@ final class Graph3Data: ObservableObject {
             DispatchQueue.main.asyncAfter(deadline: .now() + curveAnimationDuration, execute: workItem)
             
         case true:
-            previousAngle = currentAngle
-                        
             withAnimation(.easeInOut(duration: curveAnimationDuration)) {
-                curveRatio = 1
-                angle      = currentAngle - .pi / 9
+                update(offset: -.pi / 8, curveRatio: 1)
             }
         }
     }
@@ -334,7 +369,7 @@ final class Graph3Data: ObservableObject {
                 
                 // Rotation animation
                 withAnimation(Animation.linear(duration: self.rotaionDuration).repeatForever(autoreverses: false)) {
-                    self.angle = self.currentAngle - 2 * .pi
+                    self.update(offset: -2 * .pi)
                 }
             }
             
@@ -359,16 +394,37 @@ final class Graph3Data: ObservableObject {
             self.update(isAnimated: true)
         }
     }
+  
+    func update(angle: CGFloat) {
+        guard vertexes.count == (dashEdges.count + 1), vertexes.first is UserVertex else { return }
+        
+        for i in 0..<dashEdges.count {
+            vertexes[i + 1].endAngle = angle
+            dashEdges[i].angle = -Double(vertexes[i + 1].endAngle)
+        }
+    }
+    
+    func update(offset: CGFloat, curveRatio: CGFloat = 0) {
+        guard vertexes.count == (dashEdges.count + 1), vertexes.first is UserVertex else { return }
+    
+        for i in 0..<dashEdges.count {
+            vertexes[i + 1].endAngle = vertexes[i + 1].angle + offset
+            
+            dashEdges[i].angle = -Double(vertexes[i + 1].endAngle)
+            dashEdges[i].ratio = curveRatio
+        }
+    }
     
     func addDeposit() {
         // Stop Rotation
         withAnimation(.easeOut(duration: 0.38)) {
-            angle = currentAngle - ((.pi / 180) / (360 / CGFloat(rotaionDuration)))
+            update(offset: -((.pi / 180) / (360 / CGFloat(rotaionDuration))))
         }
         
         // Update frames
+        guard frames.count == vertexes.count else { return }
         for (i, frame) in frames.enumerated() {
-            frames[i].origin = frame.origin.applying(CGAffineTransform(rotationAngle: -angle))
+            frames[i].origin = frame.origin.applying(CGAffineTransform(rotationAngle: -vertexes[i].endAngle))
         }
         
         // Add a deposit vertex
@@ -391,15 +447,34 @@ final class Graph3Data: ObservableObject {
         }
     }
     
+    func dashEdgeAnimation(index: Int) -> Animation? {
+        guard !isCurveAnimating else { return .easeInOut(duration: curveAnimationDuration) }
+    
+        guard index < vertexes.count, index < dashEdges.count else { return nil }
+        let point = vertexes[index].point
+        let distance = sqrt(pow(point.x, 2) + pow(point.y, 2))
+        let ratio = TimeInterval(distance / min(size.width, size.height))
+        let duration = max(2, ratio)
+        
+        return dashEdges[index].trim.upperBound <= 0 ? nil : .easeInOut(duration: duration).delay(0.1 + 0.1 * TimeInterval(index))
+    }
+    
     func edgeAnimation(index: Int) -> Animation? {
         guard !isCurveAnimating else { return .easeInOut(duration: curveAnimationDuration) }
-        return isLineAnimated ? .easeInOut(duration: 0.38).delay(0.1 + 0.1 * TimeInterval(index)) : nil
+    
+        guard index < vertexes.count, index < edges.count else { return nil }
+        let point = vertexes[index].point
+        let distance = sqrt(pow(point.x, 2) + pow(point.y, 2))
+        let ratio = TimeInterval(distance / min(size.width, size.height))
+        let duration = max(1, ratio)
+        
+        return edges[index].trim.upperBound <= 0 ? nil : .easeInOut(duration: duration).delay(0.1 + 0.1 * TimeInterval(index))
     }
     
     func dismiss() {
         // Stop rotation
         withAnimation(.linear(duration: 0.1)) {
-            angle = currentAngle - ((.pi / 180) / (360 / CGFloat(rotaionDuration)))
+            update(offset: -((.pi / 180) / (360 / CGFloat(rotaionDuration))))
         }
             
         withAnimation(.easeInOut(duration: 0.32)) {
@@ -412,13 +487,13 @@ final class Graph3Data: ObservableObject {
             }
             
             // Edges
-            for (i, edge) in edges.enumerated() {
+            for (i, edge) in dashEdges.enumerated() {
                 var edge = edge
                 edge.source.point = .zero
                 edge.target.point = .zero
                 edge.center       = .zero
                 
-                edges[i] = edge
+                dashEdges[i] = edge
             }
         }
         
@@ -442,7 +517,7 @@ final class Graph3Data: ObservableObject {
             }
             
             // Remove edges
-            self.edges.removeAll()
+            self.dashEdges.removeAll()
         }
         
         
