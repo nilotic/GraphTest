@@ -49,7 +49,7 @@ struct UserVertexView: View {
     private var animation: Animation? {
         switch data.priority {
         case 6...10:    return .spring(response: 0.38, dampingFraction: 0.7, blendDuration: 0)   // Thumbnail animation
-        default:        return .spring(response: 2.2, dampingFraction: 0.9, blendDuration: 0)    // Bubble animation
+        default:        return .spring(response: 1.2, dampingFraction: 0.9, blendDuration: 0)    // Bubble animation
         }
     }
     

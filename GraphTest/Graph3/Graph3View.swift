@@ -106,6 +106,7 @@ struct Graph3View: View {
                     EdgeShape(edge: edge)
                         .trim(from: edge.trim.lowerBound, to: edge.trim.upperBound)
                         .stroke(edge.color, style: edge.style)
+                        .opacity(edge.opacity)
                         .animation(data.edgeAnimation(index: i))
                         .rotationEffect(.radians(edge.angle))
                 }
