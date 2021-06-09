@@ -44,11 +44,11 @@ struct Graph3View: View {
                 data.update(noitfication: $0, size: proxy.size)
             }
             .onAppear {
+                guard !data.isAppeared else { return }
+                data.isAppeared = true
                 data.request(size: proxy.size)
                 
-                DispatchQueue.main.async {
-                    data.update(isAnimated: true)
-                }
+                DispatchQueue.main.async { data.update(isAnimated: true) }
             }
         }
     }

@@ -14,13 +14,18 @@ struct DepositVertexView: View {
     @Binding private var data: DepositVertex?
     private let action: ((_ status: TouchStatus) -> Void)?
     
-    private var offset: CGFloat {
+    private var radius: CGFloat {
         switch data?.priority ?? 0 {
-        case 0:     return 50
-        case 1:     return 40
-        case 2:     return 30
-        case 3:     return 20
-        case 4:     return 10
+        case 0:     return 120
+        case 1:     return 110
+        case 2:     return 100
+        case 3:     return 90
+        case 4:     return 80
+        case 5:     return 70
+        case 6:     return 60
+        case 7:     return 50
+        case 8:     return 40
+        case 9:     return 30
         default:    return 0
         }
     }
@@ -41,17 +46,26 @@ struct DepositVertexView: View {
                 Circle()
                     .stroke(Color(#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)), lineWidth: 2)
                     .background(Circle().foregroundColor(Color.black))
-                    .frame(width: 80 + offset, height: 80 + offset)
+                    .frame(width: radius, height: radius)
                 
                 Text(data.name)
                     .font(.system(size: 12, weight: .bold))
             }
             .buttonStyle(VertexButtonStyle())
             .scaleEffect(data.isScaled ? (data.scale) : 0.001)
-            .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
+            .mask(mask)
+            .animation(.easeOut(duration: 1))
+            //.animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
             .modifier(DraggableButtonModifier(data: data, action: action))
             .zIndex(2)
         }
+    }
+    
+    // MARK: Private
+    private var mask: some View {
+        let isMasked = (data?.isMasked ?? false)
+        return Circle()
+            .frame(width: isMasked ? 0 : radius, height: isMasked ? 0 : radius)
     }
 }
 

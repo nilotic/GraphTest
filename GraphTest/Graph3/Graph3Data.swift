@@ -27,7 +27,7 @@ final class Graph3Data: ObservableObject {
     @Published var depositVertex: DepositVertex? = nil
     @Published var isGraphHidden = false
     
-    
+    var isAppeared = false
     var animationWorkItem: DispatchWorkItem? = nil
     let unit: CGFloat = 40
     
@@ -81,7 +81,11 @@ final class Graph3Data: ObservableObject {
             
             
             // User
-            let userVertex = UserVertex(data: data.user, point: .zero)
+            var userVertex = UserVertex(data: data.user, point: .zero)
+            userVertex.scale    = 1
+            userVertex.isScaled = true
+            userVertex.isMasked = true
+            
             vertexes.append(userVertex)
             vertexIndices.append(vertexIndices.count)
             frames.append(CGRect(origin: .zero, size: vertexSize(data.user.priority)))
@@ -102,7 +106,11 @@ final class Graph3Data: ObservableObject {
                 switch vertex {
                 case let data as BankNode:
                     let point  = CGPoint(x: 0, y: unit * 6)
-                    let vertex = BankVertex(data: data, point: point)
+                    
+                    var vertex = BankVertex(data: data, point: point)
+                    vertex.scale    = 1
+                    vertex.isScaled = true
+                    vertex.isMasked = true
                     
                     vertexes.append(vertex)
                     vertexIndices.append(vertexIndices.count)
@@ -114,7 +122,11 @@ final class Graph3Data: ObservableObject {
                     
                 case let data as CardNode:
                     let point  = CGPoint(x: unit * 3, y: 0)
-                    let vertex = CardVertex(data: data, point: point)
+                   
+                    var vertex = CardVertex(data: data, point: point)
+                    vertex.scale    = 1
+                    vertex.isScaled = true
+                    vertex.isMasked = true
                     
                     vertexes.append(vertex)
                     vertexIndices.append(vertexIndices.count)
@@ -128,7 +140,11 @@ final class Graph3Data: ObservableObject {
                     let radius = unit * 4
                     let radian = CGFloat.pi / 6 * 8
                     let point  = CGPoint(x: radius * cos(radian), y: radius * sin(radian))
-                    let vertex = InsuranceVertex(data: data, point: point)
+                   
+                    var vertex = InsuranceVertex(data: data, point: point)
+                    vertex.scale    = 1
+                    vertex.isScaled = true
+                    vertex.isMasked = true
                     
                     vertexes.append(vertex)
                     vertexIndices.append(vertexIndices.count)
@@ -142,7 +158,11 @@ final class Graph3Data: ObservableObject {
                     let radius = unit * 4
                     let radian = CGFloat.pi / 6 * 5
                     let point  = CGPoint(x: radius * cos(radian), y: radius * sin(radian))
-                    let vertex = MobileVertex(data: data, point: point)
+                   
+                    var vertex = MobileVertex(data: data, point: point)
+                    vertex.scale    = 1
+                    vertex.isScaled = true
+                    vertex.isMasked = true
                     
                     vertexes.append(vertex)
                     vertexIndices.append(vertexIndices.count)
@@ -156,7 +176,11 @@ final class Graph3Data: ObservableObject {
                     let radius = unit * 6
                     let radian = CGFloat.pi / 6 * 10
                     let point  = CGPoint(x: radius * cos(radian), y: radius * sin(radian))
-                    let vertex = CoworkerVertex(data: data, point: point)
+                    
+                    var vertex = CoworkerVertex(data: data, point: point)
+                    vertex.scale    = 1
+                    vertex.isScaled = true
+                    vertex.isMasked = true
                     
                     vertexes.append(vertex)
                     vertexIndices.append(vertexIndices.count)
@@ -222,6 +246,8 @@ final class Graph3Data: ObservableObject {
     func update(isAnimated: Bool) {
         switch isAnimated {
         case false:
+            // Vertex
+            depositVertex = nil
             update(angle: 0)
             
             for i in 0..<vertexes.count {
@@ -229,18 +255,18 @@ final class Graph3Data: ObservableObject {
                 vertexes[i].isHighlighted = false
             }
             
+            // Edge
+            guard dashEdges.count == edges.count else { return }
             for i in 0..<dashEdges.count {
                 dashEdges[i].trim = 0...0
+                edges[i].trim     = 0...0
             }
-            
-            depositVertex = nil
-            
             
         case true:
             // User
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 guard self.vertexes.first is UserVertex else { return }
-                self.vertexes[0].isScaled = true
+                self.vertexes[0].isMasked = false
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.9) {
@@ -256,7 +282,7 @@ final class Graph3Data: ObservableObject {
                     let duration = self.dashEdgeAnimationDuration(index: i - 1) + (0.1 + 0.2 * TimeInterval(i - 1))
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                        self.vertexes[i].isScaled = true
+                        self.vertexes[i].isMasked = false
                     }
                 }
             
@@ -402,22 +428,27 @@ final class Graph3Data: ObservableObject {
     }
   
     func update(angle: CGFloat) {
-        guard vertexes.count == (edges.count + 1), vertexes.first is UserVertex else { return }
+        guard vertexes.count == (edges.count + 1), vertexes.first is UserVertex, dashEdges.count == edges.count else { return }
         
         for i in 0..<edges.count {
             vertexes[i + 1].endAngle = angle
-            edges[i].angle = -Double(vertexes[i + 1].endAngle)
+            
+            dashEdges[i].angle = -Double(vertexes[i + 1].endAngle)
+            edges[i].angle     = dashEdges[i].angle
         }
     }
     
     func update(offset: CGFloat, curveRatio: CGFloat = 0) {
-        guard vertexes.count == (edges.count + 1), vertexes.first is UserVertex else { return }
-    
+        guard vertexes.count == (edges.count + 1), vertexes.first is UserVertex, dashEdges.count == edges.count else { return }
+        
         for i in 0..<edges.count {
             vertexes[i + 1].endAngle = vertexes[i + 1].angle + offset
             
-            edges[i].angle = -Double(vertexes[i + 1].endAngle)
-            edges[i].ratio = curveRatio
+            dashEdges[i].angle = -Double(vertexes[i + 1].endAngle)
+            dashEdges[i].ratio = curveRatio
+            
+            edges[i].angle = dashEdges[i].angle
+            edges[i].ratio = dashEdges[i].ratio
         }
     }
     

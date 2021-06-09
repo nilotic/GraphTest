@@ -49,7 +49,9 @@ struct UserVertexView: View {
     private var animation: Animation? {
         switch data.priority {
         case 6...10:    return .spring(response: 0.38, dampingFraction: 0.7, blendDuration: 0)   // Thumbnail animation
-        default:        return .spring(response: 1.2, dampingFraction: 0.9, blendDuration: 0)    // Bubble animation
+        default:
+            // return .spring(response: 1.2, dampingFraction: 0.9, blendDuration: 0)    // Bubble animation
+            return .easeOut(duration: 0.38) // Mask Animation
         }
     }
     
@@ -93,10 +95,17 @@ struct UserVertexView: View {
             }
             .clipped()
         }
+        .mask(mask)
         .scaleEffect(data.isScaled ? 1 : 0.001)
         .animation(animation)
         .modifier(VertexButtonModifier(data: data, action: action))
         .zIndex(1)
+    }
+    
+    // MARK: Private
+    private var mask: some View {
+        Circle()
+            .frame(width: data.isMasked ? 0 : radius, height: data.isMasked ? 0 : radius)
     }
 }
 

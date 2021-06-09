@@ -14,14 +14,35 @@ struct InsuranceVertexView: View {
     @Binding private var data: Vertex
     private let action: (() -> Void)?
     
-    private var offset: CGFloat {
+    private var radius: CGFloat {
         switch data.priority {
-        case 0:     return 50
-        case 1:     return 40
-        case 2:     return 30
-        case 3:     return 20
-        case 4:     return 10
+        case 0:     return 120
+        case 1:     return 110
+        case 2:     return 100
+        case 3:     return 90
+        case 4:     return 80
+        case 5:     return 70
+        case 6:     return 60
+        case 7:     return 50
+        case 8:     return 40
+        case 9:     return 30
         default:    return 0
+        }
+    }
+    
+    private var imageSize: CGSize {
+        switch data.priority {
+        case 0:     return CGSize(width: 98, height: 98)
+        case 1:     return CGSize(width: 88, height: 88)
+        case 2:     return CGSize(width: 78, height: 78)
+        case 3:     return CGSize(width: 68, height: 68)
+        case 4:     return CGSize(width: 58, height: 58)
+        case 5:     return CGSize(width: 48, height: 48)
+        case 6:     return CGSize(width: 41, height: 41)
+        case 7:     return CGSize(width: 34, height: 34)
+        case 8:     return CGSize(width: 27, height: 27)
+        case 9:     return CGSize(width: 20, height: 20)
+        default:    return .zero
         }
     }
     
@@ -41,13 +62,13 @@ struct InsuranceVertexView: View {
                 Circle()
                     .stroke(Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)), lineWidth: 2)
                     .background(Circle().foregroundColor(Color.black))
-                    .frame(width: 70 + offset, height: 70 + offset)
+                    .frame(width: radius, height: radius)
                     
                 Group {
                     if let imageName = data.imageName {
                         Image(imageName)
                             .resizable()
-                            .frame(width: 48 + offset, height: 48 + offset)
+                            .frame(width: imageSize.width, height: imageSize.height)
                             .padding(.bottom, 20 - (CGFloat(data.priority) * 2))
                     }
                     
@@ -57,11 +78,19 @@ struct InsuranceVertexView: View {
                 }
                 .clipped()
             }
+            .scaleEffect(data.isScaled ? 1 : 0.001)
+            .mask(mask)
+            .animation(.easeOut(duration: 0.5))
+            // .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
         }
         .buttonStyle(VertexButtonStyle())
-        .scaleEffect(data.isScaled ? 1 : 0.001)
-        .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
         .modifier(VertexModifier(data: data, angle: $data.angle, endAngle: data.endAngle))
+    }
+    
+    // MARK: Private
+    private var mask: some View {
+        Circle()
+            .frame(width: data.isMasked ? 0 : radius, height: data.isMasked ? 0 : radius)
     }
 }
 

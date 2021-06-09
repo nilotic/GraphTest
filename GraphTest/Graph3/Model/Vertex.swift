@@ -16,6 +16,7 @@ protocol Vertex {
     var point: CGPoint { get set }
     var isHighlighted: Bool { get set }
     var isScaled: Bool { get set }
+    var isMasked: Bool { get set }
     var angle: CGFloat { get set }
     var endAngle: CGFloat { get set }
 }

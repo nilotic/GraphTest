@@ -15,6 +15,7 @@ struct CoworkerVertex: Vertex {
     var point: CGPoint    = .zero
     var isHighlighted     = false
     var isScaled          = false
+    var isMasked: Bool    = false
     var scale: CGFloat    = 0
     var angle: CGFloat    = 0
     var endAngle: CGFloat = 0
