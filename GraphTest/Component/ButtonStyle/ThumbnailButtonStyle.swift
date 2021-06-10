@@ -18,7 +18,7 @@ struct ThumbnailButtonStyle: ButtonStyle {
     private let index: Int
 
     private var animation: Animation {
-        isAppeared ? .easeInOut(duration: 0.17) : Animation.spring(dampingFraction: 0.5)
+        isAppeared ? .easeInOut(duration: 0.17) : .spring(dampingFraction: 0.5)
                                                     .speed(1.2)
                                                     .delay(0.04 * TimeInterval(index))
     }

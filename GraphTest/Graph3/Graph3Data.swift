@@ -23,10 +23,9 @@ final class Graph3Data: ObservableObject {
     @Published var isDetailViewShown = false
     @Published var isCurved          = false
     
-
     @Published var depositVertex: DepositVertex? = nil
     @Published var isGraphHidden = false
-    
+
     var isAppeared = false
     var animationWorkItem: DispatchWorkItem? = nil
     let unit: CGFloat = 40
@@ -184,6 +183,159 @@ final class Graph3Data: ObservableObject {
         }
     }
     
+    func request(userVertex: UserVertex) {
+        guard let url = Bundle.main.url(forResource: "graph", withExtension: "json") else { return }
+        
+        do {
+            let data = try JSONDecoder().decode(GraphResponse.self, from: try Data(contentsOf: url))
+            let center = CGPoint(x: size.width / 2, y: size.height / 2)
+            
+            var vertexes      = [Vertex]()
+            var vertexIndices = [Int]()
+            var frames        = [CGRect]()
+            
+            let vertexSize = { (priority: UInt) -> CGSize in
+                var radius: CGFloat {
+                    switch priority {
+                    case 0:     return 120
+                    case 1:     return 110
+                    case 2:     return 100
+                    case 3:     return 90
+                    case 4:     return 80
+                    case 5:     return 70
+                    case 6:     return 60
+                    case 7:     return 50
+                    case 8:     return 40
+                    case 9:     return 30
+                    default:    return 0
+                    }
+                }
+                return CGSize(width: radius, height: radius)
+            }
+            
+            
+            // User
+            var userVertex = userVertex
+            userVertex.point = CGPoint(x: userVertex.point.x -  center.x + vertexSize(userVertex.priority).width / 2, y: userVertex.point.y - 7 - center.y - vertexSize(userVertex.priority).height / 2)
+            userVertex.scale = 1
+            userVertex.isScaled = true
+            
+            vertexes.append(userVertex)
+            vertexIndices.append(vertexIndices.count)
+            frames.append(CGRect(origin: .zero, size: vertexSize(data.user.priority)))
+            
+            DispatchQueue.main.async {
+                self.thumbnails.removeAll()
+                self.isGraphHidden = false
+                
+                self.vertexes      = vertexes
+                self.vertexIndices = vertexIndices
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.38) {
+                self.vertexes[0].priority = 1
+                self.vertexes[0].point    = .zero
+            }
+            
+            /*
+            // Vertex, Edge
+            let dashStyle = StrokeStyle(lineWidth: 2, lineCap: .round, dash: [0.5, 5])
+            let lineStyle = StrokeStyle(lineWidth: 2)
+            
+            var dashEdges = [GraphEdge]()
+            var edges     = [GraphEdge]()
+            
+            let dashEdgeColor = Color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1))
+            let edgeColor     = Color(#colorLiteral(red: 0.3647058904, green: 0.06666667014, blue: 0.9686274529, alpha: 1))
+            
+            for graph in data.user.graphs {
+                guard let vertex = graph.nodes.sorted(by: { $0.priority < $1.priority }).first else { continue }
+
+                switch vertex {
+                case let data as BankNode:
+                    let point  = CGPoint(x: 0, y: unit * 6)
+                    let vertex = BankVertex(data: data, point: point)
+                    
+                    vertexes.append(vertex)
+                    vertexIndices.append(vertexIndices.count)
+                    
+                    dashEdges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: dashEdgeColor, style: dashStyle))
+                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: edgeColor, style: lineStyle))
+                    
+                    frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
+                    
+                case let data as CardNode:
+                    let point  = CGPoint(x: unit * 3, y: 0)
+                    let vertex = CardVertex(data: data, point: point)
+                    
+                    vertexes.append(vertex)
+                    vertexIndices.append(vertexIndices.count)
+                    
+                    dashEdges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: dashEdgeColor, style: dashStyle))
+                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: edgeColor, style: lineStyle))
+                    
+                    frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
+                    
+                case let data as InsuranceNode:
+                    let radius = unit * 4
+                    let radian = CGFloat.pi / 6 * 8
+                    let point  = CGPoint(x: radius * cos(radian), y: radius * sin(radian))
+                    let vertex = InsuranceVertex(data: data, point: point)
+                   
+                    vertexes.append(vertex)
+                    vertexIndices.append(vertexIndices.count)
+                    
+                    dashEdges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: dashEdgeColor, style: dashStyle))
+                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: edgeColor, style: lineStyle))
+                    
+                    frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
+                    
+                case let data as MobileNode:
+                    let radius = unit * 4
+                    let radian = CGFloat.pi / 6 * 5
+                    let point  = CGPoint(x: radius * cos(radian), y: radius * sin(radian))
+                    let vertex = MobileVertex(data: data, point: point)
+                    
+                    vertexes.append(vertex)
+                    vertexIndices.append(vertexIndices.count)
+                    
+                    dashEdges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: dashEdgeColor, style: dashStyle))
+                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: edgeColor, style: lineStyle))
+                    
+                    frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
+                    
+                case let data as CoworkerNode:
+                    let radius = unit * 6
+                    let radian = CGFloat.pi / 6 * 10
+                    let point  = CGPoint(x: radius * cos(radian), y: radius * sin(radian))
+                    let vertex = CoworkerVertex(data: data, point: point)
+                    
+                    vertexes.append(vertex)
+                    vertexIndices.append(vertexIndices.count)
+                    
+                    dashEdges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: dashEdgeColor, style: dashStyle))
+                    edges.append(GraphEdge(source: userVertex, target: vertex, center: center, size: curveSize, color: edgeColor, style: lineStyle))
+                    
+                    frames.append(CGRect(origin: point, size: vertexSize(data.priority)))
+                    
+                default:
+                    continue
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.vertexes      = vertexes
+                self.vertexIndices = vertexIndices
+                self.dashEdges     = dashEdges
+                self.edges         = edges
+                self.frames        = frames
+            }
+             */
+        } catch {
+            log(.error, error.localizedDescription)
+        }
+    }
+    
     func requestThumbnails() {
         var profileImage: String {
             ["memoji1","memoji2","memoji3","memoji4","memoji5","memoji6","memoji7","memoji8","memoji9","memoji10",
@@ -205,7 +357,7 @@ final class Graph3Data: ObservableObject {
         var thumbnails = [UserVertex]()
         for i in 0..<10  {
             switch i {
-            case 1:     thumbnails.append(UserVertex(nodeID: nodeID, name: name, imageName: "memoji27", priority: 8, point: .zero, isHighlighted: false))
+            case 1:     thumbnails.append(UserVertex(nodeID: nodeID, name: "Den", imageName: "memoji27", priority: 8, point: .zero, isHighlighted: false))  // For Test
             default:    thumbnails.append(UserVertex(nodeID: nodeID, name: name, imageName: profileImage, priority: 8, point: .zero, isHighlighted: false))
             }
         }
@@ -245,7 +397,7 @@ final class Graph3Data: ObservableObject {
                 self.vertexes[0].isScaled = true
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 // Dash Edge
                 for i in 0..<self.dashEdges.count {
                     self.dashEdges[i].trim    = 0...1
@@ -264,7 +416,7 @@ final class Graph3Data: ObservableObject {
             
                 // Edge
                 for i in 0..<self.edges.count {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.2) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                         self.edges[i].trim    = 0...1
                         self.edges[i].opacity = 1
                     }
@@ -278,7 +430,7 @@ final class Graph3Data: ObservableObject {
                 }
             
                 // Rotation
-                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                     withAnimation(Animation.linear(duration: self.rotaionDuration).repeatForever(autoreverses: false)) {
                         self.update(angle: -2 * .pi)
                     }

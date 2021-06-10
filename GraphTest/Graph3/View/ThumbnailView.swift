@@ -12,12 +12,12 @@ struct ThumbnailView: View {
     // MARK: - Value
     // MARK: Private
     private var data: UserVertex
-    private let action: (() -> Void)?
+    private let action: ((_ vertex: UserVertex) -> Void)?
     @State private var index: Int
     
     
     // MARK: - Initializer
-    init(data: UserVertex, index: Int, action: (() -> Void)? = nil) {
+    init(data: UserVertex, index: Int, action: ((_ vertex: UserVertex) -> Void)? = nil) {
         self.data   = data
         self.index  = index
         self.action = action
@@ -27,27 +27,35 @@ struct ThumbnailView: View {
     // MARK: - View
     // MARK: Public
     var body: some View {
-        Button(action: { action?() }) {
-            ZStack {
-                Circle()
-                    .stroke(Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)), lineWidth: 2)
-                    .background(Circle().foregroundColor(Color.black))
-                    .frame(width: 40, height: 40)
+        GeometryReader { proxy in
+            Button(action: {
+                var data = data
+                data.point = proxy.frame(in: .global).origin
+                action?(data)
                 
-                if let imageName = data.imageName {
-                    Image(imageName)
-                        .resizable()
-                        .frame(width: 27, height: 27)
+            }) {
+                ZStack {
+                    Circle()
+                        .stroke(Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1)), lineWidth: 2)
+                        .background(Circle().foregroundColor(Color.black))
+                        .frame(width: 40, height: 40)
+                    
+                    if let imageName = data.imageName {
+                        Image(imageName)
+                            .resizable()
+                            .frame(width: 27, height: 27)
+                    }
+                }
+            }
+            .buttonStyle(ThumbnailButtonStyle(index: index))
+            .opacity(index == 1 ? 0 : 1)
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    index = 0
                 }
             }
         }
-        .buttonStyle(ThumbnailButtonStyle(index: index))
-        .opacity(index == 1 ? 0 : 1)
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                index = 0
-            }
-        }
+        .frame(width: 40, height: 40)
     }
 }
 

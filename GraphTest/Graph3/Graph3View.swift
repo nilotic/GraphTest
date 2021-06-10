@@ -219,9 +219,9 @@ struct Graph3View: View {
             Group {
                 if !data.thumbnails.isEmpty {
                     HStack(spacing: 15) {
-                        ForEach(Array(data.thumbnails.enumerated()), id: \.element) { (i, data) in
-                            ThumbnailView(data: data, index: i) {
-                                
+                        ForEach(Array(data.thumbnails.enumerated()), id: \.element) { (i, thumbnail) in
+                            ThumbnailView(data: thumbnail, index: i) {
+                                data.request(userVertex: $0)
                             }
                         }
                     }
