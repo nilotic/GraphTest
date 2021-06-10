@@ -53,19 +53,10 @@ struct DepositVertexView: View {
             }
             .buttonStyle(VertexButtonStyle())
             .scaleEffect(data.isScaled ? (data.scale) : 0.001)
-            .mask(mask)
-            .animation(.easeOut(duration: 1))
-            //.animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
+            .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
             .modifier(DraggableButtonModifier(data: data, action: action))
             .zIndex(2)
         }
-    }
-    
-    // MARK: Private
-    private var mask: some View {
-        let isMasked = (data?.isMasked ?? false)
-        return Circle()
-            .frame(width: isMasked ? 0 : radius, height: isMasked ? 0 : radius)
     }
 }
 

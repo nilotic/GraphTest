@@ -79,18 +79,10 @@ struct MobileVertexView: View {
                 .clipped()
             }
             .scaleEffect(data.isScaled ? 1 : 0.001)
-            .mask(mask)
-            .animation(.easeOut(duration: 0.5))
-            // .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
+            .animation(.spring(response: 0.38, dampingFraction: 0.5, blendDuration: 0))
         }
         .buttonStyle(VertexButtonStyle())
         .modifier(VertexModifier(data: data, angle: $data.angle, endAngle: data.endAngle))
-    }
-    
-    // MARK: Private
-    private var mask: some View {
-        Circle()
-            .frame(width: data.isMasked ? 0 : radius, height: data.isMasked ? 0 : radius)
     }
 }
 

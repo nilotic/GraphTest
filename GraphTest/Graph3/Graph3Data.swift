@@ -81,11 +81,7 @@ final class Graph3Data: ObservableObject {
             
             
             // User
-            var userVertex = UserVertex(data: data.user, point: .zero)
-            userVertex.scale    = 1
-            userVertex.isScaled = true
-            userVertex.isMasked = true
-            
+            let userVertex = UserVertex(data: data.user, point: .zero)
             vertexes.append(userVertex)
             vertexIndices.append(vertexIndices.count)
             frames.append(CGRect(origin: .zero, size: vertexSize(data.user.priority)))
@@ -106,11 +102,7 @@ final class Graph3Data: ObservableObject {
                 switch vertex {
                 case let data as BankNode:
                     let point  = CGPoint(x: 0, y: unit * 6)
-                    
-                    var vertex = BankVertex(data: data, point: point)
-                    vertex.scale    = 1
-                    vertex.isScaled = true
-                    vertex.isMasked = true
+                    let vertex = BankVertex(data: data, point: point)
                     
                     vertexes.append(vertex)
                     vertexIndices.append(vertexIndices.count)
@@ -122,11 +114,7 @@ final class Graph3Data: ObservableObject {
                     
                 case let data as CardNode:
                     let point  = CGPoint(x: unit * 3, y: 0)
-                   
-                    var vertex = CardVertex(data: data, point: point)
-                    vertex.scale    = 1
-                    vertex.isScaled = true
-                    vertex.isMasked = true
+                    let vertex = CardVertex(data: data, point: point)
                     
                     vertexes.append(vertex)
                     vertexIndices.append(vertexIndices.count)
@@ -140,12 +128,8 @@ final class Graph3Data: ObservableObject {
                     let radius = unit * 4
                     let radian = CGFloat.pi / 6 * 8
                     let point  = CGPoint(x: radius * cos(radian), y: radius * sin(radian))
+                    let vertex = InsuranceVertex(data: data, point: point)
                    
-                    var vertex = InsuranceVertex(data: data, point: point)
-                    vertex.scale    = 1
-                    vertex.isScaled = true
-                    vertex.isMasked = true
-                    
                     vertexes.append(vertex)
                     vertexIndices.append(vertexIndices.count)
                     
@@ -158,11 +142,7 @@ final class Graph3Data: ObservableObject {
                     let radius = unit * 4
                     let radian = CGFloat.pi / 6 * 5
                     let point  = CGPoint(x: radius * cos(radian), y: radius * sin(radian))
-                   
-                    var vertex = MobileVertex(data: data, point: point)
-                    vertex.scale    = 1
-                    vertex.isScaled = true
-                    vertex.isMasked = true
+                    let vertex = MobileVertex(data: data, point: point)
                     
                     vertexes.append(vertex)
                     vertexIndices.append(vertexIndices.count)
@@ -176,11 +156,7 @@ final class Graph3Data: ObservableObject {
                     let radius = unit * 6
                     let radian = CGFloat.pi / 6 * 10
                     let point  = CGPoint(x: radius * cos(radian), y: radius * sin(radian))
-                    
-                    var vertex = CoworkerVertex(data: data, point: point)
-                    vertex.scale    = 1
-                    vertex.isScaled = true
-                    vertex.isMasked = true
+                    let vertex = CoworkerVertex(data: data, point: point)
                     
                     vertexes.append(vertex)
                     vertexIndices.append(vertexIndices.count)
@@ -266,10 +242,10 @@ final class Graph3Data: ObservableObject {
             // User
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 guard self.vertexes.first is UserVertex else { return }
-                self.vertexes[0].isMasked = false
+                self.vertexes[0].isScaled = true
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.9) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
                 // Dash Edge
                 for i in 0..<self.dashEdges.count {
                     self.dashEdges[i].trim    = 0...1
@@ -282,7 +258,7 @@ final class Graph3Data: ObservableObject {
                     let duration = self.dashEdgeAnimationDuration(index: i - 1) + (0.1 + 0.2 * TimeInterval(i - 1))
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                        self.vertexes[i].isMasked = false
+                        self.vertexes[i].isScaled = true
                     }
                 }
             
