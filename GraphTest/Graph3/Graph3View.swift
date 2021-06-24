@@ -111,47 +111,8 @@ struct Graph3View: View {
                 }
                 
                 // Vertex
-                if !data.indices.isEmpty {
-                    ForEach(data.indices[data.page], id: \.self) { index in
-                        switch data.vertexes[data.page][index] {
-                        case is UserVertex:
-                            UserVertexView(data: $data.vertexes[data.page][index]) {
-                                data.handle(isPressed: $0)
-                            }
-                            
-                        case is BankVertex:
-                            BankVertexView(data: $data.vertexes[data.page][index]) {
-                                
-                            }
-                            
-                        case is CardVertex:
-                            CardVertexView(data: $data.vertexes[data.page][index]) {
-                                withAnimation(.spring()) {
-                                    self.data.isDetailViewShown = true
-                                }
-                            }
-                            
-                        case is InsuranceVertex:
-                            InsuranceVertexView(data: $data.vertexes[data.page][index]) {
-                                
-                            }
-                            
-                        case is MobileVertex:
-                            MobileVertexView(data: $data.vertexes[data.page][index]) {
-                                
-                            }
-                            
-                        case is CoworkerVertex:
-                            CoworkerVertexView(data: $data.vertexes[data.page][index]) {
-                                
-                            }
-                            
-                        default:
-                            Text("")
-                        }
-                    }
-                }
-                
+                firstPageView
+                secondPageView
                 
                 // Deposit
                 if data.depositVertex != nil {
@@ -162,6 +123,92 @@ struct Graph3View: View {
             }
             .frame(width: proxy.size.width, height: proxy.size.height)
         }
+    }
+    
+    private var firstPageView: some View {
+        Group {
+            if !data.indices.isEmpty {
+                ForEach(data.indices[0], id: \.self) { index in
+                    switch data.vertexes[0][index] {
+                    case is UserVertex:
+                        UserVertexView(data: $data.vertexes[0][index]) {
+                            data.handle(isPressed: $0)
+                        }
+                        
+                    case is BankVertex:
+                        BankVertexView(data: $data.vertexes[0][index]) {
+                            
+                        }
+                        
+                    case is CardVertex:
+                        CardVertexView(data: $data.vertexes[0][index]) {
+                            withAnimation(.spring()) {
+                                self.data.isDetailViewShown = true
+                            }
+                        }
+                        
+                    case is InsuranceVertex:
+                        InsuranceVertexView(data: $data.vertexes[0][index]) {
+                            
+                        }
+                        
+                    case is MobileVertex:
+                        MobileVertexView(data: $data.vertexes[0][index]) {
+                            
+                        }
+                        
+                    case is CoworkerVertex:
+                        CoworkerVertexView(data: $data.vertexes[0][index]) {
+                            
+                        }
+                        
+                    default:
+                        EmptyView()
+                    }
+                }
+            }
+        }
+    }
+    
+    private var secondPageView: some View {
+        Group {
+            if 1 < data.indices.count {
+                ForEach(data.indices[1], id: \.self) { index in
+                    switch data.vertexes[1][index] {
+                    case is BankVertex:
+                        BankVertexView(data: $data.vertexes[1][index]) {
+                            
+                        }
+                        
+                    case is CardVertex:
+                        CardVertexView(data: $data.vertexes[1][index]) {
+                            withAnimation(.spring()) {
+                                self.data.isDetailViewShown = true
+                            }
+                        }
+                        
+                    case is InsuranceVertex:
+                        InsuranceVertexView(data: $data.vertexes[1][index]) {
+                            
+                        }
+                        
+                    case is MobileVertex:
+                        MobileVertexView(data: $data.vertexes[1][index]) {
+                            
+                        }
+                        
+                    case is CoworkerVertex:
+                        CoworkerVertexView(data: $data.vertexes[1][index]) {
+                            
+                        }
+                        
+                    default:
+                        EmptyView()
+                    }
+                }
+            }
+        }
+        .zIndex(-2)
     }
     
     private var cardsView: some View {

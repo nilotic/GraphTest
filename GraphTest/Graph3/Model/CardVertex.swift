@@ -18,6 +18,7 @@ struct CardVertex: Vertex {
     var scale: CGFloat    = 0
     var angle: CGFloat    = 0
     var endAngle: CGFloat = 0
+    var blur: CGFloat     = 0
 }
 
 extension CardVertex: Identifiable {

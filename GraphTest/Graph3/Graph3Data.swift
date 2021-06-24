@@ -178,11 +178,28 @@ final class Graph3Data: ObservableObject {
             vertexes.append(vertexSection)
             indices.append(indexSection)
             
+            
             // 2nd page
             vertexSection.removeFirst()
-            indexSection.removeFirst()
+            let shuffled = vertexSection.shuffled()
             
-            vertexSection.shuffle()
+            vertexSection.removeAll()
+            indexSection.removeAll()
+            
+            for (i, vertex) in shuffled.enumerated() {
+                var vertex = vertex
+                let radius = unit * 3
+                let radian = CGFloat.pi / 3 * CGFloat(i + 1)
+                let point  = CGPoint(x: radius * cos(radian), y: radius * sin(radian))
+                
+                vertex.point    = point
+                vertex.priority = 8
+                vertex.blur     = 4
+                
+                vertexSection.append(vertex)
+                indexSection.append(indexSection.count)
+            }
+            
             vertexes.append(vertexSection)
             indices.append(indexSection)
             
@@ -332,15 +349,30 @@ final class Graph3Data: ObservableObject {
                     self.dashEdges[i].trim    = 0...1
                     self.dashEdges[i].opacity = 1
                 }
-                // Vertexes
+                
+                // Front Vertexes
                 for (i, vertex) in self.vertexes[self.page].enumerated() {
                     guard !(vertex is UserVertex), i < self.vertexes[self.page].count else { continue }
-                    let duration = self.dashEdgeAnimationDuration(index: i - 1) + (0.1 + 0.2 * TimeInterval(i - 1))
+                    let duration = self.dashEdgeAnimationDuration(page: self.page, index: i - 1) + (0.1 + 0.2 * TimeInterval(i - 1))
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                         self.vertexes[self.page][i].isScaled = true
                     }
                 }
+                
+                // Backward Vertexes
+                if 1 < self.vertexes.count {
+                    let backwardPage = self.page == 0 ? 1 : 0
+                    for (i, vertex) in self.vertexes[backwardPage].enumerated() {
+                        guard !(vertex is UserVertex), i < self.vertexes[backwardPage].count else { continue }
+                        let duration = self.dashEdgeAnimationDuration(page: backwardPage, index: i) + (0.1 + 0.2 * TimeInterval(i)) + 2
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                            self.vertexes[backwardPage][i].isScaled = true
+                        }
+                    }
+                }
+                
             
                 // Edge
                 for i in 0..<self.edges.count {
@@ -356,7 +388,7 @@ final class Graph3Data: ObservableObject {
                         self.dashEdges[i].opacity = 0
                     }
                 }
-            
+                
                 // Rotation
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                     withAnimation(Animation.linear(duration: self.rotaionDuration).repeatForever(autoreverses: false)) {
@@ -544,15 +576,19 @@ final class Graph3Data: ObservableObject {
         }
     }
     
-    func dashEdgeAnimation(index: Int) -> Animation? {
+    func dashEdgeAnimation(page: Int? = nil, index: Int) -> Animation? {
+        let page = page ?? self.page
+        
         guard !isCurveAnimating else { return .easeInOut(duration: curveAnimationDuration) }
-        let duration = dashEdgeAnimationDuration(index: index)
+        let duration = dashEdgeAnimationDuration(page: page, index: index)
         
         return dashEdges[index].trim.upperBound <= 0 ? nil : .easeInOut(duration: duration).delay(0.1 + 0.2 * TimeInterval(index))
     }
     
-    func dashEdgeAnimationDuration(index: Int) -> TimeInterval {
-        guard !isCurveAnimating, index < vertexes[page].count, index < dashEdges.count else { return 0 }
+    func dashEdgeAnimationDuration(page: Int? = nil, index: Int) -> TimeInterval {
+        let page = page ?? self.page
+        
+        guard !isCurveAnimating, page < vertexes.count, index < vertexes[page].count else { return 0 }
         let point = vertexes[page][index].point
         let distance = sqrt(pow(point.x, 2) + pow(point.y, 2))
         let ratio = TimeInterval(distance / min(size.width, size.height))

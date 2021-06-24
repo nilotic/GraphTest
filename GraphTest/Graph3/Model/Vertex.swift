@@ -18,4 +18,5 @@ protocol Vertex {
     var isScaled: Bool { get set }
     var angle: CGFloat { get set }
     var endAngle: CGFloat { get set }
+    var blur: CGFloat { get set }
 }

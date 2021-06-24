@@ -83,6 +83,7 @@ struct MobileVertexView: View {
         }
         .buttonStyle(VertexButtonStyle())
         .modifier(VertexModifier(data: data, angle: $data.angle, endAngle: data.endAngle))
+        .blur(radius: data.blur)
     }
 }
 
