@@ -404,14 +404,14 @@ final class Graph3Data: ObservableObject {
     func handle(status: TouchStatus) {
         switch status {
         case .moved(let frame):
-            guard frames.count == vertexes.count else { return }
+            guard frames.count == vertexes[page].count else { return }
             
             // Cache and Reset the previous one
             let previousHighlightedVertex = highlightedVertex
             highlightedVertex = nil
             
             // Highlight vertexes
-            for i in 1..<vertexes.count {
+            for i in 1..<vertexes[page].count {
                 vertexes[page][i].isHighlighted = frames[i].intersects(frame)
                 
                 // Cache for the vibration
@@ -439,7 +439,7 @@ final class Graph3Data: ObservableObject {
             depositVertex?.scale = 1
             
             var higlightedIndex: Int? {
-                for i in 1..<vertexes.count {
+                for i in 1..<vertexes[page].count {
                     guard vertexes[page][i].isHighlighted else { continue }
                     return i
                 }
@@ -495,7 +495,7 @@ final class Graph3Data: ObservableObject {
     }
     
     func update(offset: CGFloat, curveRatio: CGFloat = 0) {
-        guard vertexes.count == (edges.count + 1), dashEdges.count == edges.count else { return }
+        guard vertexes[page].count == (edges.count + 1), dashEdges.count == edges.count else { return }
         
         for i in 0..<edges.count {
             vertexes[page][i + 1].endAngle = vertexes[page][i + 1].angle + offset
@@ -515,7 +515,7 @@ final class Graph3Data: ObservableObject {
         }
         
         // Update frames
-        guard frames.count == vertexes.count else { return }
+        guard frames.count == vertexes[page].count else { return }
         for (i, frame) in frames.enumerated() {
             frames[i].origin = frame.origin.applying(CGAffineTransform(rotationAngle: -vertexes[page][i].endAngle))
         }
