@@ -13,7 +13,6 @@ struct Graph3View: View {
     // MARK: - Value
     // MARK: Private
     @StateObject private var data = Graph3Data()
-    private let buttonStyle = ButtonStyle1()
     
     
     // MARK: - View
@@ -112,42 +111,44 @@ struct Graph3View: View {
                 }
                 
                 // Vertex
-                ForEach(data.vertexIndices, id: \.self) { index in
-                    switch data.vertexes[index] {
-                    case is UserVertex:
-                        UserVertexView(data: $data.vertexes[index]) {
-                            data.handle(isPressed: $0)
-                        }
-                        
-                    case is BankVertex:
-                        BankVertexView(data: $data.vertexes[index]) {
-                            
-                        }
-                        
-                    case is CardVertex:
-                        CardVertexView(data: $data.vertexes[index]) {
-                            withAnimation(.spring()) {
-                                self.data.isDetailViewShown = true
+                if !data.indices.isEmpty {
+                    ForEach(data.indices[data.page], id: \.self) { index in
+                        switch data.vertexes[data.page][index] {
+                        case is UserVertex:
+                            UserVertexView(data: $data.vertexes[data.page][index]) {
+                                data.handle(isPressed: $0)
                             }
-                        }
-                        
-                    case is InsuranceVertex:
-                        InsuranceVertexView(data: $data.vertexes[index]) {
                             
-                        }
-                        
-                    case is MobileVertex:
-                        MobileVertexView(data: $data.vertexes[index]) {
+                        case is BankVertex:
+                            BankVertexView(data: $data.vertexes[data.page][index]) {
+                                
+                            }
                             
-                        }
-                        
-                    case is CoworkerVertex:
-                        CoworkerVertexView(data: $data.vertexes[index]) {
+                        case is CardVertex:
+                            CardVertexView(data: $data.vertexes[data.page][index]) {
+                                withAnimation(.spring()) {
+                                    self.data.isDetailViewShown = true
+                                }
+                            }
                             
+                        case is InsuranceVertex:
+                            InsuranceVertexView(data: $data.vertexes[data.page][index]) {
+                                
+                            }
+                            
+                        case is MobileVertex:
+                            MobileVertexView(data: $data.vertexes[data.page][index]) {
+                                
+                            }
+                            
+                        case is CoworkerVertex:
+                            CoworkerVertexView(data: $data.vertexes[data.page][index]) {
+                                
+                            }
+                            
+                        default:
+                            Text("")
                         }
-                        
-                    default:
-                        Text("")
                     }
                 }
                 
@@ -192,7 +193,7 @@ struct Graph3View: View {
             .frame(width: 48, height: 48)
             .cornerRadius(24)
         }
-        .buttonStyle(buttonStyle)
+        .buttonStyle(ButtonStyle1())
         .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 30))
     }
     
@@ -210,7 +211,7 @@ struct Graph3View: View {
             .frame(width: 48, height: 48)
             .cornerRadius(24)
         }
-        .buttonStyle(buttonStyle)
+        .buttonStyle(ButtonStyle1())
         .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 30))
     }
     
