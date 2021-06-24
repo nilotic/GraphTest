@@ -171,6 +171,7 @@ struct Graph3View: View {
                 }
             }
         }
+        .zIndex(data.page == 1 ? -2 : 0)
     }
     
     private var secondPageView: some View {
@@ -211,7 +212,7 @@ struct Graph3View: View {
                 }
             }
         }
-        .zIndex(-2)
+        .zIndex(data.page == 0 ? -2 : 0)
     }
     
     private var cardsView: some View {
@@ -266,7 +267,7 @@ struct Graph3View: View {
     }
     
     private var changeButton: some View {
-        Button(action: {    }) {
+        Button(action: { data.change() }) {
             ZStack {
                 // Background
                 Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1))

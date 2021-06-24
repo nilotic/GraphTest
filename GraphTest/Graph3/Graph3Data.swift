@@ -353,22 +353,22 @@ final class Graph3Data: ObservableObject {
                 // Front Vertexes
                 for (i, vertex) in self.vertexes[self.page].enumerated() {
                     guard !(vertex is UserVertex), i < self.vertexes[self.page].count else { continue }
-                    let duration = self.dashEdgeAnimationDuration(page: self.page, index: i - 1) + (0.1 + 0.2 * TimeInterval(i - 1))
+                    let duration = self.dashEdgeAnimationDuration(page: self.page, index: max(0, i - 1)) + (0.1 + 0.2 * TimeInterval(max(0, i - 1)))
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                         self.vertexes[self.page][i].isScaled = true
                     }
                 }
                 
-                // Backward Vertexes
+                // Back Vertexes
                 if 1 < self.vertexes.count {
-                    let backwardPage = self.page == 0 ? 1 : 0
-                    for (i, vertex) in self.vertexes[backwardPage].enumerated() {
-                        guard !(vertex is UserVertex), i < self.vertexes[backwardPage].count else { continue }
-                        let duration = self.dashEdgeAnimationDuration(page: backwardPage, index: i) + (0.1 + 0.2 * TimeInterval(i)) + 2
+                    let backPage = self.page == 0 ? 1 : 0
+                    for (i, vertex) in self.vertexes[backPage].enumerated() {
+                        guard !(vertex is UserVertex), i < self.vertexes[backPage].count else { continue }
+                        let duration = self.dashEdgeAnimationDuration(page: backPage, index: i) + (0.1 + 0.2 * TimeInterval(i)) + 2
                         
                         DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                            self.vertexes[backwardPage][i].isScaled = true
+                            self.vertexes[backPage][i].isScaled = true
                         }
                     }
                 }
@@ -516,12 +516,12 @@ final class Graph3Data: ObservableObject {
     }
   
     func update(angle: CGFloat) {
-        guard vertexes[page].count == (edges.count + 1), dashEdges.count == edges.count else { return }
+        guard vertexes[0].count == (edges.count + 1), dashEdges.count == edges.count else { return }
         
         for i in 0..<edges.count {
-            vertexes[page][i + 1].endAngle = angle
+            vertexes[page][i + (page == 0 ? 1 : 0)].endAngle = angle
             
-            dashEdges[i].angle = -Double(vertexes[page][i + 1].endAngle)
+            dashEdges[i].angle = -Double(vertexes[page][i + (page == 0 ? 1 : 0)].endAngle)
             edges[i].angle     = dashEdges[i].angle
         }
     }
@@ -659,6 +659,112 @@ final class Graph3Data: ObservableObject {
             withAnimation {
                 self.requestThumbnails()
             }
+        }
+    }
+    
+    func change() {
+        guard 1 < indices.count else { return }
+        
+        withAnimation(.easeOut(duration: 0.38)) {
+            // Stop Rotation
+            update(offset: -((.pi / 180) / (360 / CGFloat(rotaionDuration))))
+            
+            // Edges
+            for (i, edge) in edges.enumerated() {
+                var edge = edge
+                edge.source.point = .zero
+                edge.target.point = .zero
+                edge.center       = .zero
+                
+                edges[i] = edge
+            }
+        }
+        
+        withAnimation(.easeInOut(duration: 0.32)) {
+            // Front vertexes
+            for (i, vertex) in vertexes[page].enumerated() {
+                switch vertex {
+                case is UserVertex:
+                    continue
+                    
+                default:
+                    let radius = unit * 3
+                    let radian = CGFloat.pi / 3 * CGFloat(i + 1)
+                    let point  = CGPoint(x: radius * cos(radian), y: radius * sin(radian))
+                    
+                    vertexes[page][i].point    = point
+                    vertexes[page][i].priority = 8
+                    vertexes[page][i].blur     = 4
+                }
+            }
+            
+            // Back vertexes
+            let center = CGPoint(x: size.width / 2, y: size.height / 2)
+            var frames = [CGRect]()
+            
+            let dashStyle = StrokeStyle(lineWidth: 2, lineCap: .round, dash: [0.5, 5])
+            let lineStyle = StrokeStyle(lineWidth: 2)
+            
+            var dashEdges = [GraphEdge]()
+            var edges     = [GraphEdge]()
+            
+            let dashEdgeColor = Color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1))
+            let edgeColor     = Color(#colorLiteral(red: 0.3647058904, green: 0.06666667014, blue: 0.9686274529, alpha: 1))
+            
+            let vertexSize = { (priority: UInt) -> CGSize in
+                var offset: CGFloat {
+                    switch priority {
+                    case 0:     return 50
+                    case 1:     return 40
+                    case 2:     return 30
+                    case 3:     return 20
+                    case 4:     return 10
+                    default:    return 0
+                    }
+                }
+                
+                let radius = CGFloat(70) + offset
+                return CGSize(width: radius, height: radius)
+            }
+            
+            guard let userVertex = vertexes.first?.first else { return }
+            
+            let points = [CGPoint(x: 0, y: unit * 6), CGPoint(x: unit * 3, y: 0),
+                          CGPoint(x: unit * 4 * cos(.pi / 6 * 8), y: unit * 4 * sin(.pi / 6 * 8)),
+                          CGPoint(x: unit * 4 * cos(.pi / 6 * 5), y: unit * 4 * sin(.pi / 6 * 5)),
+                          CGPoint(x: unit * 6 * cos(.pi / 6 * 10), y: unit * 6 * sin(.pi / 6 * 10))]
+            
+            let priorities: [UInt] = [5, 4, 5, 3, 2]
+            let backPage = self.page == 0 ? 1 : 0
+            
+            for (i, vertex) in vertexes[backPage].enumerated() {
+                switch vertex {
+                case is UserVertex:
+                    continue
+                    
+                default:
+                    vertexes[backPage][i].point    = points[i + (page == 1 ? -1 : 0)]
+                    vertexes[backPage][i].priority = priorities[i + (page == 1 ? -1 : 0)]
+                    vertexes[backPage][i].blur     = 0
+                    
+                    // Edge
+                    dashEdges.append(GraphEdge(source: userVertex, target: vertexes[backPage][i], center: center, size: curveSize, color: dashEdgeColor, style: dashStyle))
+                    edges.append(GraphEdge(source: userVertex, target: vertexes[backPage][i], center: center, size: curveSize, color: edgeColor, style: lineStyle))
+                    
+                    // Frame
+                    frames.append(CGRect(origin: vertexes[backPage][i].point, size: vertexSize(vertexes[backPage][i].priority)))
+                }
+            }
+            
+            self.dashEdges = dashEdges
+            self.edges     = edges
+            self.frames    = frames
+            
+            self.page = self.page == 0 ? 1 : 0
+        }
+        
+        DispatchQueue.main.async {
+            self.update(isAnimated: true)
         }
     }
 }
