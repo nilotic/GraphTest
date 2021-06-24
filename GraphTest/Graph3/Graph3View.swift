@@ -32,6 +32,9 @@ struct Graph3View: View {
                 
                 cardsView
                 
+                changeButton
+                    .offset(x: proxy.size.width / 2 - 48 , y: proxy.size.height / 2 - 110)
+                
                 editButton
                     .offset(x: proxy.size.width / 2 - 48 , y: proxy.size.height / 2 - 48)
                 
@@ -253,6 +256,24 @@ struct Graph3View: View {
                 // Image
                 Image(systemName: "circle.grid.3x3")
                     .scaleEffect(1.2)
+                    .foregroundColor(.white)
+            }
+            .frame(width: 48, height: 48)
+            .cornerRadius(24)
+        }
+        .buttonStyle(ButtonStyle1())
+        .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 30))
+    }
+    
+    private var changeButton: some View {
+        Button(action: {    }) {
+            ZStack {
+                // Background
+                Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1))
+                
+                // Image
+                Image(systemName: "arrow.triangle.2.circlepath.circle")
+                    .scaleEffect(1.5)
                     .foregroundColor(.white)
             }
             .frame(width: 48, height: 48)
