@@ -42,6 +42,12 @@ struct TabbarView: View {
                     TabbarItem(type: .graph4, selection: $selection)
                 }
                 .tag(TabbarType.graph4)
+            
+            Graph5View()
+                .tabItem {
+                    TabbarItem(type: .graph5, selection: $selection)
+                }
+                .tag(TabbarType.graph5)
         }
     }
 }

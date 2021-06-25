@@ -1,5 +1,5 @@
 // 
-//  Graph4Data.swift
+//  Graph5Data.swift
 //
 //  Created by Den Jo on 2021/06/25.
 //  Copyright © nilotic. All rights reserved.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-final class Graph4Data: ObservableObject {
+final class Graph5Data: ObservableObject {
     
     // MARK: - Value
     // MARK: Public

@@ -1,5 +1,5 @@
 // 
-//  Graph4View.swift
+//  Graph5View.swift
 //
 //  Created by Den Jo on 2021/06/25.
 //  Copyright © nilotic. All rights reserved.
@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct Graph4View: View {
+struct Graph5View: View {
     
     // MARK: - Value
     // MARK: Private
-    @StateObject private var data = Graph4Data()
+    @StateObject private var data = Graph5Data()
     
     private let lineColor = { (index: Int) -> Color in
         switch index {
@@ -50,7 +50,7 @@ struct Graph4View: View {
     }
     
     // MARK: Private
-    private var guideLine1: some View {
+    private var guideLine: some View {
         GeometryReader { proxy in
             ZStack(alignment: .center) {
                 ArcShape(startAngle: .degrees(240), endAngle: .degrees(300))
@@ -87,7 +87,7 @@ struct Graph4View: View {
         }
     }
     
-    private var guideLine: some View {
+    private var guideLine2: some View {
         GeometryReader { proxy in
             ZStack(alignment: .center) {
                 // Yellow
@@ -183,11 +183,11 @@ struct Graph4View: View {
 }
 
 #if DEBUG
-struct Graph4View_Previews: PreviewProvider {
+struct Graph5View_Previews: PreviewProvider {
     
     // https://www.ios-resolution.com
     static var previews: some View {
-        let view = Graph4View()
+        let view = Graph5View()
         
         Group {
             view

@@ -13,6 +13,7 @@ enum TabbarType {
     case graph2
     case graph3
     case graph4
+    case graph5
 }
 
 extension TabbarType {
@@ -23,6 +24,7 @@ extension TabbarType {
         case .graph2:    return "Graph2"
         case .graph3:    return "Graph3"
         case .graph4:    return "Graph4"
+        case .graph5:    return "Graph5"
         }
     }
     
@@ -32,6 +34,7 @@ extension TabbarType {
         case .graph2:    return "2.circle"
         case .graph3:    return "3.circle"
         case .graph4:    return "4.circle"
+        case .graph5:    return "5.circle"
         }
     }
     
@@ -41,6 +44,7 @@ extension TabbarType {
         case .graph2:    return 1
         case .graph3:    return 2
         case .graph4:    return 3
+        case .graph5:    return 4
         }
     }
 }
