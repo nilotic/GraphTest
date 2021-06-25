@@ -702,14 +702,9 @@ final class Graph3Data: ObservableObject {
             let center = CGPoint(x: size.width / 2, y: size.height / 2)
             var frames = [CGRect]()
             
-            let dashStyle = StrokeStyle(lineWidth: 2, lineCap: .round, dash: [0.5, 5])
             let lineStyle = StrokeStyle(lineWidth: 2)
-            
-            var dashEdges = [GraphEdge]()
             var edges     = [GraphEdge]()
-            
-            let dashEdgeColor = Color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1))
-            let edgeColor     = Color(#colorLiteral(red: 0.3647058904, green: 0.06666667014, blue: 0.9686274529, alpha: 1))
+            let edgeColor = Color(#colorLiteral(red: 0.3647058904, green: 0.06666667014, blue: 0.9686274529, alpha: 1))
             
             let vertexSize = { (priority: UInt) -> CGSize in
                 var offset: CGFloat {
@@ -748,7 +743,6 @@ final class Graph3Data: ObservableObject {
                     vertexes[backPage][i].blur     = 0
                     
                     // Edge
-                    dashEdges.append(GraphEdge(source: userVertex, target: vertexes[backPage][i], center: center, size: curveSize, color: dashEdgeColor, style: dashStyle))
                     edges.append(GraphEdge(source: userVertex, target: vertexes[backPage][i], center: center, size: curveSize, color: edgeColor, style: lineStyle))
                     
                     // Frame
@@ -756,15 +750,30 @@ final class Graph3Data: ObservableObject {
                 }
             }
             
-            self.dashEdges = dashEdges
-            self.edges     = edges
-            self.frames    = frames
+            self.edges  = edges
+            self.frames = frames
             
             self.page = self.page == 0 ? 1 : 0
         }
         
         DispatchQueue.main.async {
-            self.update(isAnimated: true)
+            // Edge
+            for i in 0..<self.edges.count {
+                self.edges[i].trim    = 0...1
+                self.edges[i].opacity = 1
+                
+                // Hide dashEdge
+                guard i < self.dashEdges.count else { return }
+                self.dashEdges[i].trim    = 0...0
+                self.dashEdges[i].opacity = 0
+            }
+            
+            // Rotation
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                withAnimation(Animation.linear(duration: self.rotaionDuration).repeatForever(autoreverses: false)) {
+                    self.update(angle: -2 * .pi)
+                }
+            }
         }
     }
 }
