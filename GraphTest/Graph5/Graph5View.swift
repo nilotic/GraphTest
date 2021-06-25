@@ -157,7 +157,7 @@ struct Graph5View: View {
     private var vertexView: some View {
         ZStack {
             ForEach(data.vertexes) {
-                AccountVertexView(data: $0)
+                AccountVertexView2(data: $0)
                     .offset(x: $0.slot.point.x, y: $0.slot.point.y)
             }
         }

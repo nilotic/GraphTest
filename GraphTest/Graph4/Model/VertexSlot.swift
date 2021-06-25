@@ -52,7 +52,7 @@ extension VertexSlot {
         }
     }
     
-    var priority: CGFloat {
+    var priority: UInt {
         switch slot {
         case 0, 4:          return 0
         case 1, 3, 5, 7:    return 1

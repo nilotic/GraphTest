@@ -11,7 +11,7 @@ final class Graph5Data: ObservableObject {
     
     // MARK: - Value
     // MARK: Public
-    @Published var vertexes = [AccountVertex]()
+    @Published var vertexes = [AccountVertex2]()
     
     // MARK: Private
     private var id: String {
@@ -35,11 +35,25 @@ final class Graph5Data: ObservableObject {
     // MARK: - Function
     // MARK: Public
     func request() {
-        let offset = (0...3).randomElement() ?? 0
+        var vertexes = [AccountVertex2]()
         
-        var vertexes = [AccountVertex]()
         for i in 0..<8 {
-            vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: UInt(i), offset: offset)))
+            let priority = UInt((0...2).randomElement() ?? 2)
+            
+            var offset: Int {
+                switch i {
+                case 1...8:
+                    switch vertexes[i - 1].slot.priority {
+                    case 3:     return 2
+                    default:    return priority == 3 ? 2 : ((1...3).randomElement() ?? 1)
+                    }
+                    
+                default:
+                    return (0...2).randomElement() ?? 0
+                }
+            }
+            
+            vertexes.append(AccountVertex2(id: id, name: name, imageName: imageName, slot: VertexSlot2(slot: UInt(i), offset: offset, priority: priority)))
         }
         
         DispatchQueue.main.async { self.vertexes = vertexes }

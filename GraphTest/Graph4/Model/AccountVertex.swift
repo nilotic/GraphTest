@@ -28,7 +28,6 @@ extension AccountVertex: Equatable {
     }
 }
 
-
 #if DEBUG
 extension AccountVertex {
     
