@@ -19,9 +19,7 @@ struct ArcShape: Shape {
     // MARK: Public
     func path(in rect: CGRect) -> Path {
         var path = Path()
-        path.move(to: CGPoint(x: rect.midX, y: rect.midY))
         path.addArc(center: CGPoint(x: rect.midX, y: rect.midY), radius: rect.width / 2, startAngle: startAngle, endAngle: endAngle, clockwise: false)
-        path.addLine(to: CGPoint(x: rect.midX, y: rect.midY))
         return path
     }
 }

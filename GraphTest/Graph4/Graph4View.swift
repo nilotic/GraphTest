@@ -16,17 +16,7 @@ struct Graph4View: View {
     private let lineColor = { (index: Int) -> Color in
         switch index {
         case 9, 18, 27, 36:     return .clear
-        case 11, 7:             return Color(#colorLiteral(red: 0.9607843161, green: 0.7058823705, blue: 0.200000003, alpha: 1))
-        case 15, 21:            return Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1))
         default:                return Color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1))
-        }
-    }
-    
-    private let lineWidth = { (index: Int) -> CGFloat in
-        switch index {
-        case 11, 7:         return 3
-        case 15, 21:        return 3
-        default:            return 1
         }
     }
     
@@ -38,6 +28,7 @@ struct Graph4View: View {
             ZStack {
                 guideLine
                 vertexView
+                userVertextView
                 
                 changeButton
                     .offset(x: proxy.size.width / 2 - 48 , y: proxy.size.height / 2 - 110)
@@ -92,39 +83,39 @@ struct Graph4View: View {
             ZStack(alignment: .center) {
                 // Yellow
                 ArcShape(startAngle: .degrees(250), endAngle: .degrees(290))
-                    .fill(Color(#colorLiteral(red: 1, green: 0.8724767566, blue: 0.3582777977, alpha: 1)))
+                    .stroke(Color(#colorLiteral(red: 1, green: 0.8724767566, blue: 0.3582777977, alpha: 1)), lineWidth: 5)
                     .frame(width: 360, height: 360)
   
                 ArcShape(startAngle: .degrees(70), endAngle: .degrees(110))
-                    .fill(Color(#colorLiteral(red: 1, green: 0.8724767566, blue: 0.3582777977, alpha: 1)))
+                    .stroke(Color(#colorLiteral(red: 1, green: 0.8724767566, blue: 0.3582777977, alpha: 1)), lineWidth: 5)
                     .frame(width: 360, height: 360)
                 
                 
                 // Blue
                 ArcShape(startAngle: .degrees(290), endAngle: .degrees(330))
-                    .fill(Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)))
+                    .stroke(Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), lineWidth: 5)
                     .frame(width: 320, height: 320)
   
-                ArcShape(startAngle: .degrees(30), endAngle: .degrees(70))
-                    .fill(Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)))
+                ArcShape(startAngle: .degrees(30), endAngle: .degrees(60))
+                    .stroke(Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), lineWidth: 5)
                     .frame(width: 320, height: 320)
                 
-                ArcShape(startAngle: .degrees(110), endAngle: .degrees(150))
-                    .fill(Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)))
+                ArcShape(startAngle: .degrees(120), endAngle: .degrees(150))
+                    .stroke(Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), lineWidth: 5)
                     .frame(width: 320, height: 320)
   
-                ArcShape(startAngle: .degrees(210), endAngle: .degrees(250))
-                    .fill(Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)))
+                ArcShape(startAngle: .degrees(210), endAngle: .degrees(240))
+                    .stroke(Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), lineWidth: 5)
                     .frame(width: 320, height: 320)
                 
                 
                 // Purple
-                ArcShape(startAngle: .degrees(330), endAngle: .degrees(30))
-                    .fill(Color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)))
+                ArcShape(startAngle: .degrees(340), endAngle: .degrees(20))
+                    .stroke(Color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)), lineWidth: 5)
                     .frame(width: 280, height: 280)
   
-                ArcShape(startAngle: .degrees(150), endAngle: .degrees(210))
-                    .fill(Color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)))
+                ArcShape(startAngle: .degrees(160), endAngle: .degrees(200))
+                    .stroke(Color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)), lineWidth: 5)
                     .frame(width: 280, height: 280)
                 
                 
@@ -145,7 +136,7 @@ struct Graph4View: View {
                         $0.move(to: CGPoint(x: proxy.size.width / 2 - 180, y: proxy.size.height / 2))
                         $0.addLine(to: CGPoint(x: proxy.size.width / 2 + 180, y: proxy.size.height / 2))
                     }
-                    .stroke(lineColor($0), lineWidth: lineWidth($0))
+                    .stroke(lineColor($0), lineWidth: 1)
                     .rotationEffect(.radians(.pi / 18 * Double($0)))
                 }
             }
@@ -161,6 +152,27 @@ struct Graph4View: View {
                     .offset(x: $0.slot.point.x, y: $0.slot.point.y)
             }
         }
+    }
+    
+    private var userVertextView: some View {
+        ZStack {
+            Circle()
+                .stroke(Color(#colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1)), lineWidth: 1)
+                .background(Circle().foregroundColor(Color.black))
+                .frame(width: 112, height: 112)
+                
+            VStack(spacing: 0) {
+                Image("memoji27")
+                    .resizable()
+                    .frame(width: 70, height: 70)
+                    
+                Text("\(Int(112))")
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(Color(#colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1)))
+            }
+            .clipped()
+        }
+        .zIndex(1)
     }
     
     private var changeButton: some View {

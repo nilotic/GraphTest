@@ -77,12 +77,11 @@ struct AccountVertexView: View {
 
 #if DEBUG
 struct AccountVertexView_Previews: PreviewProvider {
-    
     static var previews: some View {
         let view = VStack(spacing: 20) {
-            AccountVertexView(data: AccountVertex(id: "0", name: "Oliver", imageName: "memoji1", slot: VertexSlot(slot: 0, offset: 0)))
-            AccountVertexView(data: AccountVertex(id: "1", name: "Jake", imageName: "memoji2", slot: VertexSlot(slot: 1, offset: 0)))
-            AccountVertexView(data: AccountVertex(id: "2", name: "Noah", imageName: "memoji3", slot: VertexSlot(slot: 2, offset: 0)))
+            AccountVertexView(data: AccountVertex(id: "0", name: "Oliver", imageName: "memoji1", slot: VertexSlot(slot: 0, line: 0)))
+            AccountVertexView(data: AccountVertex(id: "1", name: "Jake", imageName: "memoji2", slot: VertexSlot(slot: 1, line: 0)))
+            AccountVertexView(data: AccountVertex(id: "2", name: "Noah", imageName: "memoji3", slot: VertexSlot(slot: 2, line: 0)))
         }
         
         Group {
