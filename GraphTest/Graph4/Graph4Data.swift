@@ -39,13 +39,12 @@ final class Graph4Data: ObservableObject {
     // MARK: Public
     func request() {
         var priorities: [UInt] {
-            let totalCount = 8
-        
-            let priority1Count = (1...2).randomElement() ?? 1
-            let priority2Count = (1...3).randomElement() ?? 1
+            // let totalCount = (1...8).randomElement() ?? 1
+            let totalCount = 6
             
-            let remainder = totalCount - (priority1Count + priority2Count)
-            let priority3Count = (0...remainder).randomElement() ?? 0
+            let priority1Count = min(2, totalCount)
+            let priority2Count = max(0, min(3, totalCount - priority1Count))
+            let priority3Count = max(0, min(3, totalCount - priority1Count - priority2Count))
             return [UInt(priority1Count), UInt(priority2Count), UInt(priority3Count)]
         }
         
@@ -65,111 +64,212 @@ final class Graph4Data: ObservableObject {
             }
         }
         
-        let priorityCounts = priorities
-        
         // 2nd. Set vertexes
         var vertexes = [AccountVertex]()
-        for (priority, count) in priorityCounts.enumerated() {
-            switch priority {
-            case 0:
-                var priority1Slots: [UInt] = [0, 4].shuffled()
-                
-                switch count {
-                case 1:
-                    guard let priority1Slot = priority1Slots.popLast(), let slot = vertexSlots.filter({ $0.slot == priority1Slot }).shuffled().first else { continue }
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot))
-                    
-                case 2:
-                    guard let slot1 = vertexSlots.filter({ $0.slot == 0 }).shuffled().first, let slot2 = vertexSlots.filter({ $0.slot == 4 }).shuffled().first else { continue }
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot1))
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot2))
-                    
-                default:
-                    continue
-                }
-                
-                // Remove slots
-                vertexSlots.removeAll(where: { priority1Slots.contains($0.slot) })
-                
-                // Remove unavailable slots
-                let priority1Lines: [UInt] = [1, 2, 16, 17, 19, 20, 34, 35]
-                
-                for vertex in vertexes {
-                    guard priority1Lines.contains(vertex.slot.line) else { continue }
-                    
-                    for offset in [34, 35, 1, 2] {
-                        let unavailableLine = (Int(vertex.slot.line) + offset) % 36
-                        vertexSlots.removeAll(where: { $0.line == unavailableLine })
-                    }
-                }
-                
-                
+        
+        let priorityCounts = priorities
+        let totalCount = priorityCounts.reduce(0) { $0 + $1 }
+        
+        switch totalCount {
+        case 6:
+        // TODO:
+          break
+        
+        case 7:
+            let emptySlot = [1, 3, 5, 7].randomElement() ?? 1
+            switch emptySlot {
             case 1:
-                let priority2Slots: [UInt] = [1, 3, 5, 7].shuffled()
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 2)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 2, line: 7)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 3, line: 12)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 17)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 5, line: 22)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 6, line: 27)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 7, line: 32)))
                 
-                switch count {
-                case 1...3:
-                    for priority2Slot in Array(priority2Slots[0..<Int(count)]) {
-                        let filtered = vertexSlots.filter { $0.slot == priority2Slot }
-                        
-                        guard let slot = (priority2Slot == 7 ? filtered.last : filtered.first) else { continue }
-                        vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot))
-                    }
-                 
-                default:
-                    continue
-                }
+            case 3:
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 16)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 5, line: 21)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 6, line: 26)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 7, line: 31)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 1)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 1, line: 6)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 2, line: 11)))
                 
-                // Remove slots
-                vertexSlots.removeAll(where: { priority2Slots.contains($0.slot) })
+            case 5:
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 20)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 6, line: 25)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 7, line: 30)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 35)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 1, line: 5)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 2, line: 10)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 3, line: 14)))
                 
-                // Remove unavailable slots
-                let priority2Lines: [UInt] = [3, 4, 5, 6, 12, 13, 14, 15, 21, 22, 23, 24, 30, 31, 32, 33]
-                
-                for vertex in vertexes {
-                    guard priority2Lines.contains(vertex.slot.line) else { continue }
-                    
-                    for offset in [34, 35, 1, 2] {
-                        let unavailableLine = (Int(vertex.slot.line) + offset) % 36
-                        vertexSlots.removeAll(where: { $0.line == unavailableLine })
-                    }
-                }
-                
-                
-            case 2:
-                var priority2Slots: [UInt] = [2, 6].shuffled()
-                
-                switch count {
-                case 1:
-                    guard let priority2Slot = priority2Slots.popLast(), let slot = vertexSlots.filter({ $0.slot == priority2Slot }).shuffled().first else { continue }
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot))
-                    
-                case 2:
-                    guard let slot1 = vertexSlots.filter({ $0.slot == 2 }).shuffled().first, let slot2 = vertexSlots.filter({ $0.slot == 6 }).shuffled().first else { continue }
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot1))
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot2))
-                    
-                case 3:
-                    let slot2s = vertexSlots.filter { $0.slot == 2 }
-                    let slot6s = vertexSlots.filter { $0.slot == 6 }
-                    
-                    var slots = [slot2s, slot6s]
-                    
-                    guard let affodableSlots = (slot2s.count < slot6s.count ? slots.popLast() : slots.removeFirst()), let placelessSlots = slots.popLast() else { continue }
-                  
-                    guard let slot1 = placelessSlots.shuffled().first else { continue }
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot1))
-
-                    guard let first = affodableSlots.first, let last = affodableSlots.last else { continue }
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: first))
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: last))
-                    
-                default:
-                    continue
-                }
+            case 7:
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 34)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 1, line: 4)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 2, line: 8)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 3, line: 13)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 18)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 5, line: 24)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 6, line: 29)))
                 
             default:
-                continue
+                break
+            }
+        
+        
+        case 8:
+            let emptySlot = [1, 3, 5, 7].randomElement() ?? 1
+            switch emptySlot {
+            case 1:
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 2)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 2, line: 7)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 3, line: 12)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 16)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 5, line: 21)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 6, line: 25)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 6, line: 29)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 7, line: 33)))
+                
+            case 3:
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 16)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 5, line: 21)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 6, line: 25)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 6, line: 29)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 7, line: 33)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 2)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 1, line: 6)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 2, line: 11)))
+                
+            case 5:
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 20)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 6, line: 25)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 7, line: 30)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 34)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 1, line: 3)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 2, line: 7)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 2, line: 11)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 3, line: 15)))
+                
+            case 7:
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 34)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 1, line: 3)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 2, line: 7)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 2, line: 11)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 3, line: 15)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 20)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 5, line: 24)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 6, line: 29)))
+                
+            default:
+                break
+            }
+          
+            
+        default:
+            for (priority, count) in priorityCounts.enumerated() {
+                switch priority {
+                case 0:
+                    var priority1Slots: [UInt] = [0, 4].shuffled()
+                    
+                    switch count {
+                    case 1:
+                        guard let priority1Slot = priority1Slots.popLast(), let slot = vertexSlots.filter({ $0.slot == priority1Slot }).shuffled().first else { continue }
+                        vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot))
+                        
+                    case 2:
+                        guard let slot1 = vertexSlots.filter({ $0.slot == 0 }).shuffled().first, let slot2 = vertexSlots.filter({ $0.slot == 4 }).shuffled().first else { continue }
+                        vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot1))
+                        vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot2))
+                        
+                    default:
+                        continue
+                    }
+                    
+                    // Remove slots
+                    vertexSlots.removeAll(where: { priority1Slots.contains($0.slot) })
+                    
+                    // Remove unavailable slots
+                    let priority1Lines: [UInt] = [1, 2, 16, 17, 19, 20, 34, 35]
+                    
+                    for vertex in vertexes {
+                        guard priority1Lines.contains(vertex.slot.line) else { continue }
+                        
+                        for offset in [34, 35, 1, 2] {
+                            let unavailableLine = (Int(vertex.slot.line) + offset) % 36
+                            vertexSlots.removeAll(where: { $0.line == unavailableLine })
+                        }
+                    }
+                    
+                    
+                case 1:
+                    let priority2Slots: [UInt] = [1, 3, 5, 7].shuffled()
+                    
+                    switch count {
+                    case 1...3:
+                        for priority2Slot in Array(priority2Slots[0..<Int(count)]) {
+                            let filtered = vertexSlots.filter { $0.slot == priority2Slot }
+                            
+                            guard let slot = (priority2Slot == 7 ? filtered.last : filtered.first) else { continue }
+                            vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot))
+                        }
+                     
+                    default:
+                        continue
+                    }
+                    
+                    // Remove slots
+                    vertexSlots.removeAll(where: { priority2Slots.contains($0.slot) })
+                    
+                    // Remove unavailable slots
+                    let priority2Lines: [UInt] = [3, 4, 5, 6, 12, 13, 14, 15, 21, 22, 23, 24, 30, 31, 32, 33]
+                    
+                    for vertex in vertexes {
+                        guard priority2Lines.contains(vertex.slot.line) else { continue }
+                        
+                        for offset in [34, 35, 1, 2] {
+                            let unavailableLine = (Int(vertex.slot.line) + offset) % 36
+                            vertexSlots.removeAll(where: { $0.line == unavailableLine })
+                        }
+                    }
+                    
+                    
+                case 2:
+                    var priority2Slots: [UInt] = [2, 6].shuffled()
+                    
+                    switch count {
+                    case 1:
+                        guard let priority2Slot = priority2Slots.popLast(), let slot = vertexSlots.filter({ $0.slot == priority2Slot }).shuffled().first else { continue }
+                        vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot))
+                        
+                    case 2:
+                        guard let slot1 = vertexSlots.filter({ $0.slot == 2 }).shuffled().first, let slot2 = vertexSlots.filter({ $0.slot == 6 }).shuffled().first else { continue }
+                        vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot1))
+                        vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot2))
+                        
+                    case 3:
+                        let slot2s = vertexSlots.filter { $0.slot == 2 }
+                        let slot6s = vertexSlots.filter { $0.slot == 6 }
+                        
+                        var slots = [slot2s, slot6s]
+                        
+                        guard let affodableSlots = (slot2s.count < slot6s.count ? slots.popLast() : slots.removeFirst()), let placelessSlots = slots.popLast() else { continue }
+                      
+                        guard let slot1 = placelessSlots.shuffled().first else { continue }
+                        vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot1))
+
+                        guard let first = affodableSlots.first, let last = affodableSlots.last else { continue }
+                        vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: first))
+                        vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: last))
+                        
+                    default:
+                        continue
+                    }
+                    
+                default:
+                    continue
+                }
             }
         }
         

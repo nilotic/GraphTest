@@ -72,6 +72,7 @@ struct Graph4View: View {
             
             Text("Total: \(data.priorityCounts.reduce(0) { $0 + $1 })")
                 .offset(x: 10, y: -48)
+                .frame(width: 90, alignment: .leading)
         }
         .offset(y: -300)
     }
