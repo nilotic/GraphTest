@@ -26,6 +26,8 @@ struct Graph4View: View {
     var body: some View {
         GeometryReader { proxy in
             ZStack {
+                countView
+                
                 if !data.isGuideHidden {
                     guideLine
                 }
@@ -47,6 +49,33 @@ struct Graph4View: View {
     }
     
     // MARK: Private
+    private var countView: some View {
+        HStack(alignment: .bottom, spacing: 20) {
+            VStack {
+                AccountVertexView(data: AccountVertex(id: "0", name: "Oliver", imageName: "memoji1", slot: VertexSlot(slot: 0, line: 0)))
+                Text("\(data.priorityCounts[0])")
+            }
+            
+            VStack {
+                AccountVertexView(data: AccountVertex(id: "1", name: "Jake", imageName: "memoji2", slot: VertexSlot(slot: 1, line: 0)))
+                    .offset(y: -8)
+                
+                Text("\(data.priorityCounts[1])")
+            }
+        
+            VStack {
+                AccountVertexView(data: AccountVertex(id: "2", name: "Noah", imageName: "memoji3", slot: VertexSlot(slot: 2, line: 0)))
+                    .offset(y: -12)
+                
+                Text("\(data.priorityCounts[2])")
+            }
+            
+            Text("Total: \(data.priorityCounts.reduce(0) { $0 + $1 })")
+                .offset(x: 10, y: -48)
+        }
+        .offset(y: -300)
+    }
+    
     private var guideLine1: some View {
         GeometryReader { proxy in
             ZStack(alignment: .center) {

@@ -13,6 +13,8 @@ final class Graph4Data: ObservableObject {
     // MARK: Public
     @Published var vertexes = [AccountVertex]()
     @Published var isGuideHidden = false
+    @Published var priorityCounts: [UInt] = [0, 0, 0]
+    
     
     // MARK: Private
     private var id: String {
@@ -36,16 +38,14 @@ final class Graph4Data: ObservableObject {
     // MARK: - Function
     // MARK: Public
     func request() {
-        var priorityCounts: [UInt] {
+        var priorities: [UInt] {
             let totalCount = 8
         
-            let priority1Count = (1...4).randomElement() ?? 1
-            let priority2Count = (1...(totalCount - priority1Count)).randomElement() ?? 1
+            let priority1Count = (1...2).randomElement() ?? 1
+            let priority2Count = (1...3).randomElement() ?? 1
             
             let remainder = totalCount - (priority1Count + priority2Count)
             let priority3Count = (0...remainder).randomElement() ?? 0
-            
-            log(.info, [UInt(priority1Count), UInt(priority2Count), UInt(priority3Count)])
             return [UInt(priority1Count), UInt(priority2Count), UInt(priority3Count)]
         }
         
@@ -65,6 +65,8 @@ final class Graph4Data: ObservableObject {
             }
         }
         
+        let priorityCounts = priorities
+        
         // 2nd. Set vertexes
         var vertexes = [AccountVertex]()
         for (priority, count) in priorityCounts.enumerated() {
@@ -82,29 +84,6 @@ final class Graph4Data: ObservableObject {
                     vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot1))
                     vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot2))
                     
-                case 3:
-                    guard let priority1Slot1 = priority1Slots.popLast(), let slot1 = vertexSlots.filter({ $0.slot == priority1Slot1 }).shuffled().first else { continue }
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot1))
-
-                    guard let priority1Slot2 = priority1Slots.popLast() else { continue }
-                    let slots = (vertexSlots.filter { $0.slot == priority1Slot2 })
-                    
-                    guard let first = slots.first, let last = slots.last else { continue }
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: first))
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: last))
-                    
-                case 4:
-                    var slots = (vertexSlots.filter { $0.slot == 0 })
-                    
-                    guard let slot1First = slots.first, let slot1Last = slots.last else { continue }
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot1First))
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot1Last))
-                    
-                    slots = (vertexSlots.filter { $0.slot == 4 })
-                    guard let slot2First = slots.first, let slot2Last = slots.last else { continue }
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot2First))
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot2Last))
-                    
                 default:
                     continue
                 }
@@ -113,25 +92,14 @@ final class Graph4Data: ObservableObject {
                 vertexSlots.removeAll(where: { priority1Slots.contains($0.slot) })
                 
                 // Remove unavailable slots
+                let priority1Lines: [UInt] = [1, 2, 16, 17, 19, 20, 34, 35]
+                
                 for vertex in vertexes {
-                    if (vertex.slot.line == 1 || vertex.slot.line == 2) {
-                        let line = [5, 6].randomElement() ?? 5
-                        vertexSlots.removeAll(where: { $0.line == 3  || $0.line == 4 || $0.line == line })
-                    }
+                    guard priority1Lines.contains(vertex.slot.line) else { continue }
                     
-                    if (vertex.slot.line == 16 || vertex.slot.line == 17) {
-                        let line = [12, 13].randomElement() ?? 12
-                        vertexSlots.removeAll(where: { $0.line == 14 || $0.line == 15 || $0.line == line })
-                    }
-                    
-                    if (vertex.slot.line == 19 || vertex.slot.line == 20) {
-                        let line = [23, 24].randomElement() ?? 23
-                        vertexSlots.removeAll(where: { $0.line == 21 || $0.line == 22 || $0.line == line })
-                    }
-                    
-                    if (vertex.slot.line == 34 || vertex.slot.line == 35) {
-                        let line = [30, 31].randomElement() ?? 30
-                        vertexSlots.removeAll(where: { $0.line == 32 || $0.line == 33 || $0.line == line})
+                    for offset in [34, 35, 1, 2] {
+                        let unavailableLine = (Int(vertex.slot.line) + offset) % 36
+                        vertexSlots.removeAll(where: { $0.line == unavailableLine })
                     }
                 }
                 
@@ -140,38 +108,14 @@ final class Graph4Data: ObservableObject {
                 let priority2Slots: [UInt] = [1, 3, 5, 7].shuffled()
                 
                 switch count {
-                case 1...4:
+                case 1...3:
                     for priority2Slot in Array(priority2Slots[0..<Int(count)]) {
-                        guard let slot = vertexSlots.filter({ $0.slot == priority2Slot }).shuffled().first else { continue }
+                        let filtered = vertexSlots.filter { $0.slot == priority2Slot }
+                        
+                        guard let slot = (priority2Slot == 7 ? filtered.last : filtered.first) else { continue }
                         vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot))
                     }
-                    
-                case 5...8:
-                    var filteredSlots = vertexSlots.filter({ priority2Slots.contains($0.slot) })
-                    var availableSlots = [VertexSlot]()
-                    
-                    // distribute equally
-                    for slot in priority2Slots {
-                        guard let index = filteredSlots.firstIndex(where: { $0.slot == slot }) else { continue }
-                        availableSlots.append(filteredSlots[index])
-                        filteredSlots.remove(at: index)
-                    }
-                    
-                    for slot in priority2Slots {
-                        guard let index = filteredSlots.lastIndex(where: { $0.slot == slot }) else { continue }
-                        availableSlots.append(filteredSlots[index])
-                        filteredSlots.remove(at: index)
-                    }
-                    
-                    for i in 0..<count {
-                        guard let slot = availableSlots.popLast() else {
-                            log(.error, "Failed to get a slot. total slots: \(filteredSlots.count) | index: \(i)")
-                            continue
-                        }
-                            
-                        vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot))
-                    }
-                    
+                 
                 default:
                     continue
                 }
@@ -180,11 +124,15 @@ final class Graph4Data: ObservableObject {
                 vertexSlots.removeAll(where: { priority2Slots.contains($0.slot) })
                 
                 // Remove unavailable slots
+                let priority2Lines: [UInt] = [3, 4, 5, 6, 12, 13, 14, 15, 21, 22, 23, 24, 30, 31, 32, 33]
+                
                 for vertex in vertexes {
-                    if vertex.slot.line == 6    { vertexSlots.removeAll(where: { $0.line == 7 }) }
-                    if vertex.slot.line == 12   { vertexSlots.removeAll(where: { $0.line == 11 }) }
-                    if vertex.slot.line == 24   { vertexSlots.removeAll(where: { $0.line == 25 }) }
-                    if vertex.slot.line == 30   { vertexSlots.removeAll(where: { $0.line == 29 }) }
+                    guard priority2Lines.contains(vertex.slot.line) else { continue }
+                    
+                    for offset in [34, 35, 1, 2] {
+                        let unavailableLine = (Int(vertex.slot.line) + offset) % 36
+                        vertexSlots.removeAll(where: { $0.line == unavailableLine })
+                    }
                 }
                 
                 
@@ -202,36 +150,19 @@ final class Graph4Data: ObservableObject {
                     vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot2))
                     
                 case 3:
-                    guard let priority2Slot1 = priority2Slots.popLast(), let slot1 = vertexSlots.filter({ $0.slot == priority2Slot1 }).shuffled().first else { continue }
+                    let slot2s = vertexSlots.filter { $0.slot == 2 }
+                    let slot6s = vertexSlots.filter { $0.slot == 6 }
+                    
+                    var slots = [slot2s, slot6s]
+                    
+                    guard let affodableSlots = (slot2s.count < slot6s.count ? slots.popLast() : slots.removeFirst()), let placelessSlots = slots.popLast() else { continue }
+                  
+                    guard let slot1 = placelessSlots.shuffled().first else { continue }
                     vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot1))
 
-                    guard let priority2Slot2 = priority2Slots.popLast() else { continue }
-                    let slots = (vertexSlots.filter { $0.slot == priority2Slot2 })
-                    
-                    guard let first = slots.first, let last = slots.last else { continue }
+                    guard let first = affodableSlots.first, let last = affodableSlots.last else { continue }
                     vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: first))
                     vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: last))
-                    
-                case 4:
-                    var slots = vertexSlots.filter({ $0.slot == 2 })
-                    
-                    // Divide equally
-                    if slots.count == 4, let first = Array(slots[0...1]).shuffled().first, let last = Array(slots[2...3]).shuffled().last {
-                        slots = [first, last]
-                    }
-                    
-                    guard let slot1First = slots.first, let slot1Last = slots.last else { continue }
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot1First))
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot1Last))
-                    
-                    slots = vertexSlots.filter({ $0.slot == 6 })
-                    if slots.count == 4, let first = Array(slots[0...1]).shuffled().first, let last = Array(slots[2...3]).shuffled().last {
-                        slots = [first, last]
-                    }
-                    
-                    guard let slot2First = slots.first, let slot2Last = slots.last else { continue }
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot2First))
-                    vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: slot2Last))
                     
                 default:
                     continue
@@ -242,6 +173,10 @@ final class Graph4Data: ObservableObject {
             }
         }
         
-        DispatchQueue.main.async { self.vertexes = vertexes }
+        
+        DispatchQueue.main.async {
+            self.vertexes       = vertexes
+            self.priorityCounts = priorityCounts
+        }
     }
 }
