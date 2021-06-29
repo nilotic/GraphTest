@@ -12,6 +12,7 @@ final class Graph4Data: ObservableObject {
     // MARK: - Value
     // MARK: Public
     @Published var vertexes = [AccountVertex]()
+    @Published var isGuideHidden = false
     
     // MARK: Private
     private var id: String {

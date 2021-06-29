@@ -26,9 +26,15 @@ struct Graph4View: View {
     var body: some View {
         GeometryReader { proxy in
             ZStack {
-                guideLine
+                if !data.isGuideHidden {
+                    guideLine
+                }
+                
                 vertexView
                 userVertextView
+                
+                guideButton
+                    .offset(x: proxy.size.width / 2 - 48 , y: proxy.size.height / 2 - 170)
                 
                 changeButton
                     .offset(x: proxy.size.width / 2 - 48 , y: proxy.size.height / 2 - 110)
@@ -146,10 +152,20 @@ struct Graph4View: View {
     }
     
     private var vertexView: some View {
-        ZStack {
-            ForEach(data.vertexes) {
-                AccountVertexView(data: $0)
-                    .offset(x: $0.slot.point.x, y: $0.slot.point.y)
+        GeometryReader { proxy in
+            ZStack {
+                ForEach(data.vertexes) { vertex in
+                    // Path
+                    Path { path in
+                        path.move(to: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2))
+                        path.addLine(to: CGPoint(x: vertex.slot.point.x + proxy.size.width / 2, y: vertex.slot.point.y + proxy.size.height / 2))
+                    }
+                    .stroke(Color.white, lineWidth: 1.5)
+                    
+                    // Vertex
+                    AccountVertexView(data: vertex)
+                        .offset(x: vertex.slot.point.x, y: vertex.slot.point.y)
+                }
             }
         }
     }
@@ -173,6 +189,24 @@ struct Graph4View: View {
             .clipped()
         }
         .zIndex(1)
+    }
+    
+    private var guideButton: some View {
+        Button(action: { data.isGuideHidden.toggle() }) {
+            ZStack {
+                // Background
+                Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1))
+                
+                // Image
+                Image(systemName: data.isGuideHidden ? "squareshape.squareshape.dashed" : "squareshape.dashed.squareshape")
+                    .scaleEffect(1.5)
+                    .foregroundColor(.white)
+            }
+            .frame(width: 48, height: 48)
+            .cornerRadius(24)
+        }
+        .buttonStyle(ButtonStyle1())
+        .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 30))
     }
     
     private var changeButton: some View {
