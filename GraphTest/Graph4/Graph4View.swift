@@ -77,43 +77,6 @@ struct Graph4View: View {
         .offset(y: -300)
     }
     
-    private var guideLine1: some View {
-        GeometryReader { proxy in
-            ZStack(alignment: .center) {
-                ArcShape(startAngle: .degrees(240), endAngle: .degrees(300))
-                    .fill(Color(#colorLiteral(red: 0.5333333333, green: 0.5, blue: 0.9686274529, alpha: 0.7)))
-                    .frame(width: 360, height: 360)
-  
-                ArcShape(startAngle: .degrees(60), endAngle: .degrees(120))
-                    .fill(Color(#colorLiteral(red: 0.5333333333, green: 0.5, blue: 0.9686274529, alpha: 0.7)))
-                    .frame(width: 360, height: 360)
-                
-                
-                // Orbit
-                ForEach(6..<10) { i in
-                    Path {
-                        $0.addArc(center: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2), radius: CGFloat(i) * 20,
-                                  startAngle: .radians(0), endAngle: .radians(2 * .pi), clockwise: true)
-                    }
-                    .stroke(i == 6 ? Color(#colorLiteral(red: 0.09860403091, green: 0.6555238366, blue: 0.5823600888, alpha: 1)) : (i == 9 ? Color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)) : Color(#colorLiteral(red: 0.4893481731, green: 0.2662789822, blue: 0.9991762042, alpha: 1))), lineWidth: i == 9 ? 1 : 3)
-                }
-                        
-                
-                // Degree
-                ForEach(1..<36) {
-                    Path {
-                        $0.move(to: CGPoint(x: proxy.size.width / 2 - 180, y: proxy.size.height / 2))
-                        $0.addLine(to: CGPoint(x: proxy.size.width / 2 + 180, y: proxy.size.height / 2))
-                    }
-                    .stroke(($0 % 9 == 0) ? Color.clear : Color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)))
-                    .rotationEffect(.radians(.pi / 18 * Double($0)))
-                }
-            }
-            .frame(width: proxy.size.width, height: proxy.size.height)
-            .opacity(0.5)
-        }
-    }
-    
     private var guideLine: some View {
         GeometryReader { proxy in
             ZStack(alignment: .center) {
@@ -128,7 +91,7 @@ struct Graph4View: View {
                 
                 
                 // Blue
-                ArcShape(startAngle: .degrees(290), endAngle: .degrees(330))
+                ArcShape(startAngle: .degrees(300), endAngle: .degrees(330))
                     .stroke(Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), lineWidth: 5)
                     .frame(width: 320, height: 320)
   

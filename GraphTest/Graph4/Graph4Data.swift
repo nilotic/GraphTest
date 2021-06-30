@@ -39,8 +39,7 @@ final class Graph4Data: ObservableObject {
     // MARK: Public
     func request() {
         var priorities: [UInt] {
-            // let totalCount = (1...8).randomElement() ?? 1
-            let totalCount = 6
+            let totalCount = (1...8).randomElement() ?? 1
             
             let priority1Count = min(2, totalCount)
             let priority2Count = max(0, min(3, totalCount - priority1Count))
@@ -71,12 +70,115 @@ final class Graph4Data: ObservableObject {
         let totalCount = priorityCounts.reduce(0) { $0 + $1 }
         
         switch totalCount {
-        case 6:
-        // TODO:
-          break
+        case 3:
+            let emptySlot = [1, 5].randomElement() ?? 1
+            switch emptySlot {
+            case 1:
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 1)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 16)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 5, line: 24)))
+            
+            case 5:
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 34)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 1, line: 6)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 19)))
+                
+            default:
+                break
+            }
+            
         
-        case 7:
+        case 4:
+            vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 34)))
+            vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 1, line: 6)))
+            vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 16)))
+            vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 5, line: 24)))
+        
+            
+        case 5:
+            // Priority 1
             let emptySlot = [1, 3, 5, 7].randomElement() ?? 1
+            
+            switch emptySlot {
+            case 1:
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 2)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 3, line: 12)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 19)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 5, line: 24)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 7, line: 31)))
+                
+            case 3:
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 16)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 5, line: 24)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 7, line: 30)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 35)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 1, line: 6)))
+                
+            case 5:
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 20)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 7, line: 30)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 35)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 1, line: 6)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 3, line: 13)))
+                
+            case 7:
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 34)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 1, line: 5)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 3, line: 12)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 19)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 5, line: 24)))
+                
+            default:
+                break
+            }
+        
+            
+        case 6:
+            // (Priority1, Priority2)
+            let emptySlot = [(1, 6), (3, 6), (5, 2), (7, 2)].randomElement() ?? (1, 6)
+            
+            switch emptySlot {
+            case (1, 6):
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 1)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 2, line: 7)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 3, line: 12)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 19)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 5, line: 24)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 7, line: 30)))
+                
+            case (3, 6):
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 35)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 1, line: 6)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 2, line: 11)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 17)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 5, line: 23)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 7, line: 29)))
+            
+            case (5, 2):
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 1)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 1, line: 6)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 3, line: 12)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 19)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 6, line: 25)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 7, line: 31)))
+            
+            case (7, 2):
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 35)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 1, line: 5)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 3, line: 12)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 17)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 5, line: 23)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 6, line: 29)))
+                
+            default:
+                break
+            }
+            
+            
+        case 7:
+            // Priority 1
+            let emptySlot = [1, 3, 5, 7].randomElement() ?? 1
+            
             switch emptySlot {
             case 1:
                 vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 0, line: 2)))
@@ -110,7 +212,7 @@ final class Graph4Data: ObservableObject {
                 vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 1, line: 4)))
                 vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 2, line: 8)))
                 vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 3, line: 13)))
-                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 18)))
+                vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 4, line: 19)))
                 vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 5, line: 24)))
                 vertexes.append(AccountVertex(id: id, name: name, imageName: imageName, slot: VertexSlot(slot: 6, line: 29)))
                 
