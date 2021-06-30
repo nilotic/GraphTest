@@ -15,7 +15,7 @@ struct VertexSlot {
 extension VertexSlot {
     
     var point: CGPoint {
-        CGPoint(x: radius * cos(radian), y: radius * sin(radian))
+        CGPoint(x: radius * cos(angle), y: radius * sin(angle))
     }
     
     var priority: UInt {
@@ -27,7 +27,7 @@ extension VertexSlot {
         }
     }
     
-    var radian: CGFloat {
+    var angle: CGFloat {
         return CGFloat(line) * (.pi / 18)
     }
     

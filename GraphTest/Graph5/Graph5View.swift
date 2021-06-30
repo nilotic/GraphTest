@@ -36,8 +36,16 @@ struct Graph5View: View {
     var body: some View {
         GeometryReader { proxy in
             ZStack {
-                guideLine
+                countView
+                
+                if !data.isGuideHidden {
+                    guideLine
+                }
+                
                 vertexView
+                
+                guideButton
+                    .offset(x: proxy.size.width / 2 - 48 , y: proxy.size.height / 2 - 170)
                 
                 changeButton
                     .offset(x: proxy.size.width / 2 - 48 , y: proxy.size.height / 2 - 110)
@@ -50,27 +58,72 @@ struct Graph5View: View {
     }
     
     // MARK: Private
+    private var countView: some View {
+        HStack(alignment: .bottom, spacing: 20) {
+            VStack {
+                AccountVertexView2(data: AccountVertex2(id: "0", name: "Oliver", imageName: "memoji1", priority: 0, slot: .placeholder))
+                Text("\(data.priorityCounts[0])")
+            }
+            
+            VStack {
+                AccountVertexView2(data: AccountVertex2(id: "1", name: "Jake", imageName: "memoji2", priority: 1, slot: .placeholder))
+                    .offset(y: -8)
+                
+                Text("\(data.priorityCounts[1])")
+            }
+        
+            VStack {
+                AccountVertexView2(data: AccountVertex2(id: "2", name: "Noah", imageName: "memoji3", priority: 2, slot: .placeholder))
+                    .offset(y: -12)
+                
+                Text("\(data.priorityCounts[2])")
+            }
+            
+            Text("Total: \(data.priorityCounts.reduce(0) { $0 + $1 })")
+                .offset(x: 10, y: -48)
+                .frame(width: 90, alignment: .leading)
+        }
+        .offset(y: -300)
+    }
+    
     private var guideLine: some View {
         GeometryReader { proxy in
             ZStack(alignment: .center) {
+                // Purple Top, Bottom
                 ArcShape(startAngle: .degrees(240), endAngle: .degrees(300))
-                    .fill(Color(#colorLiteral(red: 0.5333333333, green: 0.5, blue: 0.9686274529, alpha: 0.7)))
+                    .stroke(Color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)), lineWidth: 5)
                     .frame(width: 360, height: 360)
   
                 ArcShape(startAngle: .degrees(60), endAngle: .degrees(120))
-                    .fill(Color(#colorLiteral(red: 0.5333333333, green: 0.5, blue: 0.9686274529, alpha: 0.7)))
+                    .stroke(Color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)), lineWidth: 5)
                     .frame(width: 360, height: 360)
+  
+
+                // Purple Left, Right
+                ArcShape(startAngle: .degrees(130), endAngle: .degrees(230))
+                    .stroke(Color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)), lineWidth: 5)
+                    .frame(width: 320, height: 320)
+  
+                ArcShape(startAngle: .degrees(310), endAngle: .degrees(50))
+                    .stroke(Color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)), lineWidth: 5)
+                    .frame(width: 320, height: 320)
+                
+                
+                // Green
+                ArcShape(startAngle: .degrees(0), endAngle: .degrees(360))
+                    .stroke(Color(#colorLiteral(red: 0.09860403091, green: 0.6555238366, blue: 0.5823600888, alpha: 1)), lineWidth: 5)
+                    .frame(width: 280, height: 280)
                 
                 
                 // Orbit
-                ForEach(6..<10) { i in
+                ForEach(7..<10) { i in
                     Path {
                         $0.addArc(center: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2), radius: CGFloat(i) * 20,
                                   startAngle: .radians(0), endAngle: .radians(2 * .pi), clockwise: true)
                     }
-                    .stroke(i == 6 ? Color(#colorLiteral(red: 0.09860403091, green: 0.6555238366, blue: 0.5823600888, alpha: 1)) : (i == 9 ? Color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)) : Color(#colorLiteral(red: 0.4893481731, green: 0.2662789822, blue: 0.9991762042, alpha: 1))), lineWidth: i == 9 ? 1 : 3)
+                    .stroke(Color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)), lineWidth: 1)
                 }
-                        
+                
                 
                 // Degree
                 ForEach(1..<36) {
@@ -87,73 +140,6 @@ struct Graph5View: View {
         }
     }
     
-    private var guideLine2: some View {
-        GeometryReader { proxy in
-            ZStack(alignment: .center) {
-                // Yellow
-                ArcShape(startAngle: .degrees(250), endAngle: .degrees(290))
-                    .fill(Color(#colorLiteral(red: 1, green: 0.8724767566, blue: 0.3582777977, alpha: 1)))
-                    .frame(width: 360, height: 360)
-  
-                ArcShape(startAngle: .degrees(70), endAngle: .degrees(110))
-                    .fill(Color(#colorLiteral(red: 1, green: 0.8724767566, blue: 0.3582777977, alpha: 1)))
-                    .frame(width: 360, height: 360)
-                
-                
-                // Blue
-                ArcShape(startAngle: .degrees(290), endAngle: .degrees(330))
-                    .fill(Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)))
-                    .frame(width: 320, height: 320)
-  
-                ArcShape(startAngle: .degrees(30), endAngle: .degrees(70))
-                    .fill(Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)))
-                    .frame(width: 320, height: 320)
-                
-                ArcShape(startAngle: .degrees(110), endAngle: .degrees(150))
-                    .fill(Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)))
-                    .frame(width: 320, height: 320)
-  
-                ArcShape(startAngle: .degrees(210), endAngle: .degrees(250))
-                    .fill(Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)))
-                    .frame(width: 320, height: 320)
-                
-                
-                // Purple
-                ArcShape(startAngle: .degrees(330), endAngle: .degrees(30))
-                    .fill(Color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)))
-                    .frame(width: 280, height: 280)
-  
-                ArcShape(startAngle: .degrees(150), endAngle: .degrees(210))
-                    .fill(Color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)))
-                    .frame(width: 280, height: 280)
-                
-                
-                
-                // Orbit
-                ForEach(7..<10) { i in
-                    Path {
-                        $0.addArc(center: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2), radius: CGFloat(i) * 20,
-                                  startAngle: .radians(0), endAngle: .radians(2 * .pi), clockwise: true)
-                    }
-                    .stroke(Color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)), lineWidth: 2)
-                }
-                        
-                
-                // Degree
-                ForEach(1..<36) {
-                    Path {
-                        $0.move(to: CGPoint(x: proxy.size.width / 2 - 180, y: proxy.size.height / 2))
-                        $0.addLine(to: CGPoint(x: proxy.size.width / 2 + 180, y: proxy.size.height / 2))
-                    }
-                    .stroke(lineColor($0), lineWidth: lineWidth($0))
-                    .rotationEffect(.radians(.pi / 18 * Double($0)))
-                }
-            }
-            .frame(width: proxy.size.width, height: proxy.size.height)
-            .opacity(0.5)
-        }
-    }
-    
     private var vertexView: some View {
         ZStack {
             ForEach(data.vertexes) {
@@ -161,6 +147,24 @@ struct Graph5View: View {
                     .offset(x: $0.slot.point.x, y: $0.slot.point.y)
             }
         }
+    }
+    
+    private var guideButton: some View {
+        Button(action: { data.isGuideHidden.toggle() }) {
+            ZStack {
+                // Background
+                Color(#colorLiteral(red: 0.4929926395, green: 0.2711846232, blue: 0.9990822673, alpha: 1))
+                
+                // Image
+                Image(systemName: data.isGuideHidden ? "squareshape.squareshape.dashed" : "squareshape.dashed.squareshape")
+                    .scaleEffect(1.5)
+                    .foregroundColor(.white)
+            }
+            .frame(width: 48, height: 48)
+            .cornerRadius(24)
+        }
+        .buttonStyle(ButtonStyle1())
+        .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 30))
     }
     
     private var changeButton: some View {

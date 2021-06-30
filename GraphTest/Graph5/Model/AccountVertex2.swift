@@ -11,6 +11,7 @@ struct AccountVertex2: Identifiable {
     let id: String
     let name: String
     let imageName: String
+    let priority: UInt
     let slot: VertexSlot2
 }
 
@@ -32,7 +33,7 @@ extension AccountVertex2: Equatable {
 extension AccountVertex2 {
     
     static var placeholder: AccountVertex2 {
-        AccountVertex2(id: "0", name: "Oliver", imageName: "memoji1", slot: .placeholder)
+        AccountVertex2(id: "0", name: "Oliver", imageName: "memoji1", priority: 0, slot: .placeholder)
     }
 }
 #endif

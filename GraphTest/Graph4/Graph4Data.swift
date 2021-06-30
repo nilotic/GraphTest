@@ -15,7 +15,6 @@ final class Graph4Data: ObservableObject {
     @Published var isGuideHidden = false
     @Published var priorityCounts: [UInt] = [0, 0, 0]
     
-    
     // MARK: Private
     private var id: String {
         "\((0...100000).randomElement() ?? 0)"

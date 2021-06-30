@@ -12,6 +12,8 @@ final class Graph5Data: ObservableObject {
     // MARK: - Value
     // MARK: Public
     @Published var vertexes = [AccountVertex2]()
+    @Published var isGuideHidden = false
+    @Published var priorityCounts: [UInt] = [0, 0, 0]
     
     // MARK: Private
     private var id: String {
@@ -35,27 +37,100 @@ final class Graph5Data: ObservableObject {
     // MARK: - Function
     // MARK: Public
     func request() {
-        var vertexes = [AccountVertex2]()
-        
-        for i in 0..<8 {
-            let priority = UInt((0...2).randomElement() ?? 2)
+        var priorities: [UInt] {
+            let totalCount = (1...8).randomElement() ?? 1
             
-            var offset: Int {
-                switch i {
-                case 1...8:
-                    switch vertexes[i - 1].slot.priority {
-                    case 3:     return 2
-                    default:    return priority == 3 ? 2 : ((1...3).randomElement() ?? 1)
+            let priority1Count = min(2, totalCount)
+            let priority2Count = max(0, min(3, totalCount - priority1Count))
+            let priority3Count = max(0, min(3, totalCount - priority1Count - priority2Count))
+            return [UInt(priority1Count), UInt(priority2Count), UInt(priority3Count)]
+        }
+        
+        // 1st. Set all available slots
+        var vertexSlots = [[VertexSlot2]]()
+        let slots: [UInt] = [0, 1, 2, 3, 4, 5, 6, 7]
+        
+        for slot in slots {
+            var section: [VertexSlot2] {
+                switch slot {
+                case 0:
+                    return [34, 35, 1, 2].reduce([VertexSlot2]()) {
+                        $0 + [VertexSlot2(slot: slot, orbit: 0, line: UInt($1)), VertexSlot2(slot: slot, orbit: 1, line: UInt($1))]
+                    }
+                        
+                case 1:
+                    return [3, 4, 5, 6].reduce([VertexSlot2]()) {
+                        let orbit = UInt($1 == 6 ? 2 : 1)
+                        return $0 + [VertexSlot2(slot: slot, orbit: 0, line: UInt($1)), VertexSlot2(slot: slot, orbit: orbit, line: UInt($1))]
+                    }
+                        
+                case 2:
+                    return [7, 8, 10, 11].reduce([VertexSlot2]()) {
+                        $0 + [VertexSlot2(slot: slot, orbit: 0, line: UInt($1)), VertexSlot2(slot: slot, orbit: 2, line: UInt($1))]
+                    }
+                    
+                case 3:
+                    return [12, 13, 14, 15].reduce([VertexSlot2]()) {
+                        let orbit = UInt($1 == 12 ? 2 : 1)
+                        return $0 + [VertexSlot2(slot: slot, orbit: 0, line: UInt($1)), VertexSlot2(slot: slot, orbit: orbit, line: UInt($1))]
+                    }
+                    
+                case 4:
+                    return [16, 17, 19, 20].reduce([VertexSlot2]()) {
+                        $0 + [VertexSlot2(slot: slot, orbit: 0, line: UInt($1)), VertexSlot2(slot: slot, orbit: 1, line: UInt($1))]
+                    }
+                    
+                case 5:
+                    return [21, 22, 23, 24].reduce([VertexSlot2]()) {
+                        let orbit =  UInt($1 == 24 ? 2 : 1)
+                        return $0 + [VertexSlot2(slot: slot, orbit: 0, line: UInt($1)), VertexSlot2(slot: slot, orbit: orbit, line: UInt($1))]
+                    }
+                    
+                case 6:
+                    return [25, 26, 28, 29].reduce([VertexSlot2]()) {
+                        $0 + [VertexSlot2(slot: slot, orbit: 0, line: UInt($1)), VertexSlot2(slot: slot, orbit: 2, line: UInt($1))]
+                    }
+                    
+                case 7:
+                    return [30, 31, 32, 33].reduce([VertexSlot2]()) {
+                        let orbit = UInt($1 == 30 ? 2 : 1)
+                        return $0 + [VertexSlot2(slot: slot, orbit: 0, line: UInt($1)), VertexSlot2(slot: slot, orbit: orbit, line: UInt($1))]
                     }
                     
                 default:
-                    return (0...2).randomElement() ?? 0
+                    return []
                 }
             }
             
-            vertexes.append(AccountVertex2(id: id, name: name, imageName: imageName, slot: VertexSlot2(slot: UInt(i), offset: offset, priority: priority)))
+            vertexSlots.append(section)
         }
         
-        DispatchQueue.main.async { self.vertexes = vertexes }
+        vertexSlots.shuffle()
+            
+        
+        // 2nd. Set vertexes
+        let priorityCounts = priorities
+        var vertexes = [AccountVertex2]()
+        
+        for (priority, count) in priorityCounts.enumerated() {
+            var vertetSlot: VertexSlot2? {
+                switch priority {
+                case 0:     return vertexSlots.popLast()?.filter({ $0.orbit == 0 }).shuffled().first
+                case 1:     return vertexSlots.popLast()?.filter({ $0.orbit == 0 }).shuffled().first
+                case 2:     return vertexSlots.popLast()?.filter({ $0.orbit == 1 || $0.orbit == 2 }).shuffled().first
+                default:    return nil
+                }
+            }
+               
+            for _ in 0..<count {
+                guard let slot = vertetSlot else { continue }
+                vertexes.append(AccountVertex2(id: id, name: name, imageName: imageName, priority: UInt(priority), slot: slot))
+            }
+        }
+        
+        DispatchQueue.main.async {
+            self.vertexes       = vertexes
+            self.priorityCounts = priorityCounts
+        }
     }
 }

@@ -15,7 +15,7 @@ struct AccountVertexView2: View {
     
     // MARK: Private
     private var radius: CGFloat {
-        switch data.slot.priority {
+        switch data.priority {
         case 0:     return 64
         case 1:     return 48
         case 2:     return 40
@@ -24,7 +24,7 @@ struct AccountVertexView2: View {
     }
     
     private var imageSize: CGSize {
-        switch data.slot.priority {
+        switch data.priority {
         case 0:     return CGSize(width: 40, height: 40)
         case 1:     return CGSize(width: 30, height: 30)
         case 2:     return CGSize(width: 22, height: 22)
@@ -33,7 +33,7 @@ struct AccountVertexView2: View {
     }
     
     private var font: Font {
-        switch data.slot.priority {
+        switch data.priority {
         case 0:     return .system(size: 13, weight: .bold)
         case 1:     return .system(size: 11, weight: .semibold)
         case 2:     return .system(size: 9,  weight: .semibold)
@@ -42,7 +42,7 @@ struct AccountVertexView2: View {
     }
     
     private var color: Color {
-        switch data.slot.priority {
+        switch data.priority {
         case 0:     return Color(#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1))
         case 1:     return Color(#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1))
         case 2:     return Color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1))
@@ -80,9 +80,9 @@ struct AccountVertexView2_Previews: PreviewProvider {
     
     static var previews: some View {
         let view = VStack(spacing: 20) {
-            AccountVertexView2(data: AccountVertex2(id: "0", name: "Oliver", imageName: "memoji1", slot: VertexSlot2(slot: 0, offset: 0, priority: 0)))
-            AccountVertexView2(data: AccountVertex2(id: "1", name: "Jake", imageName: "memoji2", slot: VertexSlot2(slot: 1, offset: 0, priority: 1)))
-            AccountVertexView2(data: AccountVertex2(id: "2", name: "Noah", imageName: "memoji3", slot: VertexSlot2(slot: 2, offset: 0, priority: 2)))
+            AccountVertexView2(data: AccountVertex2(id: "0", name: "Oliver", imageName: "memoji1", priority: 0, slot: .placeholder))
+            AccountVertexView2(data: AccountVertex2(id: "1", name: "Jake", imageName: "memoji2", priority: 1, slot: .placeholder))
+            AccountVertexView2(data: AccountVertex2(id: "2", name: "Noah", imageName: "memoji3", priority: 2, slot: .placeholder))
         }
         
         Group {
