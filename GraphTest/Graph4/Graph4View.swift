@@ -52,19 +52,19 @@ struct Graph4View: View {
     private var countView: some View {
         HStack(alignment: .bottom, spacing: 20) {
             VStack {
-                AccountVertexView(data: AccountVertex(id: "0", name: "Oliver", imageName: "memoji1", slot: VertexSlot(slot: 0, line: 0)))
+                AccountVertexView(data: AccountVertex(id: "0", name: "Oliver", imageName: "memoji1", slot: VertexSlot(id: 0, line: 0)))
                 Text("\(data.priorityCounts[0])")
             }
             
             VStack {
-                AccountVertexView(data: AccountVertex(id: "1", name: "Jake", imageName: "memoji2", slot: VertexSlot(slot: 1, line: 0)))
+                AccountVertexView(data: AccountVertex(id: "1", name: "Jake", imageName: "memoji2", slot: VertexSlot(id: 1, line: 0)))
                     .offset(y: -8)
                 
                 Text("\(data.priorityCounts[1])")
             }
         
             VStack {
-                AccountVertexView(data: AccountVertex(id: "2", name: "Noah", imageName: "memoji3", slot: VertexSlot(slot: 2, line: 0)))
+                AccountVertexView(data: AccountVertex(id: "2", name: "Noah", imageName: "memoji3", slot: VertexSlot(id: 2, line: 0)))
                     .offset(y: -12)
                 
                 Text("\(data.priorityCounts[2])")

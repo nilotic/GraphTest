@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct VertexSlot {
-    let slot: UInt
+    let id: UInt
     let line: UInt
 }
 
@@ -19,7 +19,7 @@ extension VertexSlot {
     }
     
     var priority: UInt {
-        switch slot {
+        switch id {
         case 0, 4:          return 0
         case 1, 3, 5, 7:    return 1
         case 2, 6:          return 2
@@ -34,7 +34,7 @@ extension VertexSlot {
     var radius: CGFloat {
         let unit: CGFloat = 20
         
-        switch slot {
+        switch id {
         case 0, 4:          return unit * 7
         case 1, 3, 5, 7:    return unit * 8
         case 2, 6:          return unit * 9
@@ -47,7 +47,7 @@ extension VertexSlot {
 extension VertexSlot {
 
     static var placeholder: VertexSlot {
-        VertexSlot(slot: 0, line: 1)
+        VertexSlot(id: 0, line: 1)
     }
 }
 #endif

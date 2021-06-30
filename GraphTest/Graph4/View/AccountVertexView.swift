@@ -79,9 +79,9 @@ struct AccountVertexView: View {
 struct AccountVertexView_Previews: PreviewProvider {
     static var previews: some View {
         let view = VStack(spacing: 20) {
-            AccountVertexView(data: AccountVertex(id: "0", name: "Oliver", imageName: "memoji1", slot: VertexSlot(slot: 0, line: 0)))
-            AccountVertexView(data: AccountVertex(id: "1", name: "Jake", imageName: "memoji2", slot: VertexSlot(slot: 1, line: 0)))
-            AccountVertexView(data: AccountVertex(id: "2", name: "Noah", imageName: "memoji3", slot: VertexSlot(slot: 2, line: 0)))
+            AccountVertexView(data: AccountVertex(id: "0", name: "Oliver", imageName: "memoji1", slot: VertexSlot(id: 0, line: 0)))
+            AccountVertexView(data: AccountVertex(id: "1", name: "Jake", imageName: "memoji2", slot: VertexSlot(id: 1, line: 0)))
+            AccountVertexView(data: AccountVertex(id: "2", name: "Noah", imageName: "memoji3", slot: VertexSlot(id: 2, line: 0)))
         }
         
         Group {

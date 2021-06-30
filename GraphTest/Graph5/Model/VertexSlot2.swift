@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct VertexSlot2 {
-    let slot: UInt
+    let id: UInt
     let orbit: UInt
     let line: UInt
 }
@@ -39,7 +39,7 @@ extension VertexSlot2 {
 extension VertexSlot2 {
     
     static var placeholder: VertexSlot2 {
-        VertexSlot2(slot: 0, orbit: 0, line: 0)
+        VertexSlot2(id: 0, orbit: 0, line: 0)
     }
 }
 #endif
