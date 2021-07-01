@@ -28,15 +28,18 @@ struct Graph4View: View {
             ZStack {
                 countView
                 
-                if !data.isGuideHidden {
-                    guideLine
+                Group{
+                    if !data.isGuideHidden {
+                        guideLine
+                    }
+                    
+                    vertexView
+                    userVertextView
                 }
-                
-                vertexView
-                userVertextView
+                .offset(y: 20)
                 
                 guideButton
-                    .offset(x: proxy.size.width / 2 - 48 , y: proxy.size.height / 2 - 170)
+                    .offset(x: 64 - proxy.size.width / 2 , y: proxy.size.height / 2 - 110)
                 
                 changeButton
                     .offset(x: proxy.size.width / 2 - 48 , y: proxy.size.height / 2 - 110)
@@ -50,31 +53,45 @@ struct Graph4View: View {
     
     // MARK: Private
     private var countView: some View {
-        HStack(alignment: .bottom, spacing: 20) {
-            VStack {
-                AccountVertexView(data: AccountVertex(id: "0", name: "Oliver", imageName: "memoji1", slot: VertexSlot(id: 0, line: 0)))
-                Text("\(data.priorityCounts[0])")
+        VStack(alignment: .center, spacing: 40) {
+            HStack(alignment: .bottom, spacing: 20) {
+                VStack {
+                    AccountVertexView(data: AccountVertex(id: "0", name: "Oliver", imageName: "memoji1", slot: VertexSlot(id: 0, line: 0)))
+                    Text("\(data.priorityCounts[0])")
+                }
+                
+                VStack {
+                    AccountVertexView(data: AccountVertex(id: "1", name: "Jake", imageName: "memoji2", slot: VertexSlot(id: 1, line: 0)))
+                        .offset(y: -8)
+                    
+                    Text("\(data.priorityCounts[1])")
+                }
+            
+                VStack {
+                    AccountVertexView(data: AccountVertex(id: "2", name: "Noah", imageName: "memoji3", slot: VertexSlot(id: 2, line: 0)))
+                        .offset(y: -12)
+                    
+                    Text("\(data.priorityCounts[2])")
+                }
+                
+                VStack(alignment: .center) {
+                    Text("Total: \(data.totalCount)")
+                        .padding(.leading, 20)
+                    
+                    Stepper("", value: $data.totalCount, in: 1...8, step: 1)
+                        .frame(width: 120)
+                }
+                .frame(width: 120, alignment: .center)
             }
             
-            VStack {
-                AccountVertexView(data: AccountVertex(id: "1", name: "Jake", imageName: "memoji2", slot: VertexSlot(id: 1, line: 0)))
-                    .offset(y: -8)
-                
-                Text("\(data.priorityCounts[1])")
+            // Toggle
+            VStack(alignment: .trailing) {
+                Text("Random")
+                Toggle("", isOn: $data.isRandom)
             }
-        
-            VStack {
-                AccountVertexView(data: AccountVertex(id: "2", name: "Noah", imageName: "memoji3", slot: VertexSlot(id: 2, line: 0)))
-                    .offset(y: -12)
-                
-                Text("\(data.priorityCounts[2])")
-            }
-            
-            Text("Total: \(data.priorityCounts.reduce(0) { $0 + $1 })")
-                .offset(x: 10, y: -48)
-                .frame(width: 90, alignment: .leading)
+            .padding(.trailing, 50)
         }
-        .offset(y: -300)
+        .offset(y: -280)
     }
     
     private var guideLine: some View {

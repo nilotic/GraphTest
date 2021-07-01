@@ -38,14 +38,18 @@ struct Graph5View: View {
             ZStack {
                 countView
                 
-                if !data.isGuideHidden {
-                    guideLine
+                Group{
+                    if !data.isGuideHidden {
+                        guideLine
+                    }
+                    
+                    vertexView
+                    userVertextView
                 }
-                
-                vertexView
+                .offset(y: 20)
                 
                 guideButton
-                    .offset(x: proxy.size.width / 2 - 48 , y: proxy.size.height / 2 - 170)
+                    .offset(x: 64 - proxy.size.width / 2 , y: proxy.size.height / 2 - 110)
                 
                 changeButton
                     .offset(x: proxy.size.width / 2 - 48 , y: proxy.size.height / 2 - 110)
@@ -59,31 +63,45 @@ struct Graph5View: View {
     
     // MARK: Private
     private var countView: some View {
-        HStack(alignment: .bottom, spacing: 20) {
-            VStack {
-                AccountVertexView2(data: AccountVertex2(id: "0", name: "Oliver", imageName: "memoji1", priority: 0, slot: .placeholder))
-                Text("\(data.priorityCounts[0])")
+        VStack(alignment: .center, spacing: 40) {
+            HStack(alignment: .bottom, spacing: 20) {
+                VStack {
+                    AccountVertexView2(data: AccountVertex2(id: "0", name: "Oliver", imageName: "memoji1", priority: 0, slot: .placeholder))
+                    Text("\(data.priorityCounts[0])")
+                }
+                
+                VStack {
+                    AccountVertexView2(data: AccountVertex2(id: "1", name: "Jake", imageName: "memoji2", priority: 1, slot: .placeholder))
+                        .offset(y: -8)
+                    
+                    Text("\(data.priorityCounts[1])")
+                }
+                
+                VStack {
+                    AccountVertexView2(data: AccountVertex2(id: "2", name: "Noah", imageName: "memoji3", priority: 2, slot: .placeholder))
+                        .offset(y: -12)
+                    
+                    Text("\(data.priorityCounts[2])")
+                }
+                
+                VStack(alignment: .center) {
+                    Text("Total: \(data.totalCount)")
+                        .padding(.leading, 20)
+                    
+                    Stepper("", value: $data.totalCount, in: 1...8, step: 1)
+                        .frame(width: 120)
+                }
+                .frame(width: 120, alignment: .center)
             }
             
-            VStack {
-                AccountVertexView2(data: AccountVertex2(id: "1", name: "Jake", imageName: "memoji2", priority: 1, slot: .placeholder))
-                    .offset(y: -8)
-                
-                Text("\(data.priorityCounts[1])")
+            // Toggle
+            VStack(alignment: .trailing) {
+                Text("Random")
+                Toggle("", isOn: $data.isRandom)
             }
-        
-            VStack {
-                AccountVertexView2(data: AccountVertex2(id: "2", name: "Noah", imageName: "memoji3", priority: 2, slot: .placeholder))
-                    .offset(y: -12)
-                
-                Text("\(data.priorityCounts[2])")
-            }
-            
-            Text("Total: \(data.priorityCounts.reduce(0) { $0 + $1 })")
-                .offset(x: 10, y: -48)
-                .frame(width: 90, alignment: .leading)
+            .padding(.trailing, 50)
         }
-        .offset(y: -300)
+        .offset(y: -280)
     }
     
     private var guideLine: some View {
@@ -141,12 +159,43 @@ struct Graph5View: View {
     }
     
     private var vertexView: some View {
-        ZStack {
-            ForEach(data.vertexes) {
-                AccountVertexView2(data: $0)
-                    .offset(x: $0.slot.point.x, y: $0.slot.point.y)
+        GeometryReader { proxy in
+            ZStack {
+                ForEach(data.vertexes) { vertex in
+                    // Path
+                    Path { path in
+                        path.move(to: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2))
+                        path.addLine(to: CGPoint(x: vertex.slot.point.x + proxy.size.width / 2, y: vertex.slot.point.y + proxy.size.height / 2))
+                    }
+                    .stroke(Color.white, lineWidth: 1.5)
+                    
+                    // Vertex
+                    AccountVertexView2(data: vertex)
+                        .offset(x: vertex.slot.point.x, y: vertex.slot.point.y)
+                }
             }
         }
+    }
+    
+    private var userVertextView: some View {
+        ZStack {
+            Circle()
+                .stroke(Color(#colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1)), lineWidth: 1)
+                .background(Circle().foregroundColor(Color.black))
+                .frame(width: 112, height: 112)
+                
+            VStack(spacing: 0) {
+                Image("memoji27")
+                    .resizable()
+                    .frame(width: 70, height: 70)
+                    
+                Text("\(Int(112))")
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(Color(#colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1)))
+            }
+            .clipped()
+        }
+        .zIndex(1)
     }
     
     private var guideButton: some View {

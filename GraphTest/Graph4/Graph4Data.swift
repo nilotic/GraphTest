@@ -14,6 +14,8 @@ final class Graph4Data: ObservableObject {
     @Published var vertexes = [AccountVertex]()
     @Published var isGuideHidden = false
     @Published var priorityCounts: [UInt] = [0, 0, 0]
+    @Published var totalCount: UInt = 1
+    @Published var isRandom = false
     
     // MARK: Private
     private var id: String {
@@ -38,8 +40,8 @@ final class Graph4Data: ObservableObject {
     // MARK: Public
     func request() {
         var priorities: [UInt] {
-            let totalCount = (1...8).randomElement() ?? 1
-            
+            let totalCount = isRandom ? ((1...8).randomElement() ?? 1) : self.totalCount
+             
             let priority1Count = min(2, totalCount)
             let priority2Count = max(0, min(3, totalCount - priority1Count))
             let priority3Count = max(0, min(3, totalCount - priority1Count - priority2Count))
@@ -376,6 +378,7 @@ final class Graph4Data: ObservableObject {
         
         
         DispatchQueue.main.async {
+            self.totalCount     = priorityCounts.reduce(0) { $0 + $1 }
             self.vertexes       = vertexes
             self.priorityCounts = priorityCounts
         }

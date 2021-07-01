@@ -14,6 +14,8 @@ final class Graph5Data: ObservableObject {
     @Published var vertexes = [AccountVertex2]()
     @Published var isGuideHidden = false
     @Published var priorityCounts: [UInt] = [0, 0, 0]
+    @Published var totalCount: UInt = 1
+    @Published var isRandom = false
     
     // MARK: Private
     private var id: String {
@@ -37,17 +39,31 @@ final class Graph5Data: ObservableObject {
     // MARK: - Function
     // MARK: Public
     func request() {
-        var priorities: [UInt] {
-//            let totalCount = (1...8).randomElement() ?? 1
-            let totalCount = 8
+        var vertexPriorities: [UInt] {
+            let totalCount = isRandom ? ((1...8).randomElement() ?? 1) : self.totalCount
+            
             let priority1Count = min(2, totalCount)
             let priority2Count = max(0, min(3, totalCount - priority1Count))
             let priority3Count = max(0, min(3, totalCount - priority1Count - priority2Count))
-            return [UInt(priority1Count), UInt(priority2Count), UInt(priority3Count)]
+            
+            var priorities = [UInt]()
+            for _ in 0..<priority1Count {
+                priorities.append(0)
+            }
+            
+            for _ in 0..<priority2Count {
+                priorities.append(1)
+            }
+            
+            for _ in 0..<priority3Count {
+                priorities.append(2)
+            }
+            
+            return priorities.shuffled()
         }
         
         // 1st. Set all available slots
-        var vertexSlots = [[VertexSlot2]]()
+        var vertexSlots = [VertexSlot2]()
         let slots: [UInt] = [0, 1, 2, 3, 4, 5, 6, 7]
         
         for slot in slots {
@@ -102,69 +118,74 @@ final class Graph5Data: ObservableObject {
                 }
             }
             
-            vertexSlots.append(section)
+            vertexSlots.append(contentsOf: section)
         }
         
         vertexSlots.shuffle()
             
         
         // 2nd. Set vertexes
-        let priorityCounts = priorities
-        var vertexes = [AccountVertex2]()
-        var selectedSlot: VertexSlot2? = nil
+        let lines: [UInt] = [1,  2,  3,  4,  5,  6,  7,  8,
+                             10, 11, 12, 13, 14, 15, 16, 17,
+                             19, 20, 21, 22, 23, 24, 25, 26,
+                             28, 29, 30, 31, 32, 33, 34, 35]
         
-        for (priority, count) in priorityCounts.enumerated() {
-            for _ in 0..<count {
-                selectedSlot = nil
-                
-                switch priority {
-                case 0...1:
-                    guard let index = vertexSlots.firstIndex(where: { $0.first?.orbit == 0 }), let slot = vertexSlots[index].shuffled().first else { continue }
-                    vertexes.append(AccountVertex2(id: id, name: name, imageName: imageName, priority: UInt(priority), slot: slot))
-                    vertexSlots.remove(at: index)
-                    
-                    selectedSlot = slot
-                    
-                case 2:
-                    guard let slot = vertexSlots.popLast()?.shuffled().first else { continue }
-                    vertexes.append(AccountVertex2(id: id, name: name, imageName: imageName, priority: UInt(priority), slot: slot))
-                    
-                default:
+        var line: UInt = lines.randomElement() ?? 1
+        
+        var vertexes = [AccountVertex2]()
+        var priorityCounts: [UInt] = [0, 0, 0]
+        let priorities = vertexPriorities
+        
+        for priority in priorities {
+            switch priority {
+            case 0:
+                guard let slot = vertexSlots.filter({ $0.line == line && $0.orbit == 0 }).shuffled().first else {
+                    log(.error, "Failed to get a slot.")
                     continue
                 }
                 
-                log(.info, "count: \(vertexSlots.count)")
+                vertexes.append(AccountVertex2(id: id, name: name, imageName: imageName, priority: UInt(priority), slot: slot))
                 
-                // Remove unavailable slots
-                guard let slot = selectedSlot else { continue }
-                let nextID     = (slot.id + 1) % 8
-                let previousID = (slot.id + 7) % 8
+                let offset = UInt((priorityCounts[0] == 0 ? 5 : 4) + (8 - priorities.count))
+                line = (line + offset) % 36
                 
-                if let nextIndex = vertexSlots.firstIndex(where: { $0.first?.id == nextID }) {
-                    log(.info, "--------------------------------------------------")
-                    log(.info, "next: \(nextID) \(vertexSlots[nextIndex].map { $0.line })" )
-                    
-                    let unavailableLines = [1, 2, 3].map { (UInt(slot.line) + $0) % 36 }
-                    vertexSlots[nextIndex].removeAll(where: { unavailableLines.contains($0.line) })
-                    
-                    log(.info, "next: \(nextID) \(vertexSlots[nextIndex].map { $0.line })" )
-                    log(.info, "--------------------------------------------------")
+                priorityCounts[0] += 1
+                                    
+            case 1:
+                guard let slot = vertexSlots.filter({ $0.line == line && $0.orbit == 0 }).shuffled().first else {
+                    log(.error, "Failed to get a slot.")
+                    continue
                 }
                 
-                if let previousIndex = vertexSlots.firstIndex(where: { $0.first?.id == previousID }) {
-                    log(.info, "--------------------------------------------------")
-                    log(.info, "previous: \(previousID) \(vertexSlots[previousIndex].map { $0.line })")
-                    
-                    let unavailableLines = [33, 34, 35].map { (UInt(slot.line) + $0) % 36 }
-                    vertexSlots[previousIndex].removeAll(where: { unavailableLines.contains($0.line) })
-                    
-                    log(.info, "previous: \(previousID) \(vertexSlots[previousIndex].map { $0.line })")
-                    log(.info, "--------------------------------------------------")
+                vertexes.append(AccountVertex2(id: id, name: name, imageName: imageName, priority: UInt(priority), slot: slot))
+                
+                let offset = UInt(12 - priorities.count)
+                line = (line + offset) % 36
+            
+                priorityCounts[1] += 1
+                
+            case 2:
+                guard let slot = vertexSlots.filter({ $0.line == line && ($0.orbit == 1 || $0.orbit == 2) }).shuffled().first else {
+                    log(.error, "Failed to get a slot.")
+                    continue
                 }
+                
+                vertexes.append(AccountVertex2(id: id, name: name, imageName: imageName, priority: UInt(priority), slot: slot))
+                
+                let offset = UInt(12 - priorities.count)
+                line = (line + offset) % 36
+                
+                priorityCounts[2] += 1
+
+            default:
+                continue
             }
+            
+            line = line % 9 == 0 ? line + 1 : line
         }
         
         DispatchQueue.main.async {
+            self.totalCount     = priorityCounts.reduce(0) { $0 + $1 }
             self.vertexes       = vertexes
             self.priorityCounts = priorityCounts
         }
